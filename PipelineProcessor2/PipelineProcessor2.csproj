@@ -63,10 +63,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\AsyncServer.cs" />
+    <Compile Include="Server\Exceptions\ResponseNotFoundException.cs" />
+    <Compile Include="Server\Exceptions\ServerException.cs" />
     <Compile Include="Server\ResponseFactory.cs" />
+    <Compile Include="Server\Responses\UpdateNodeGraph.cs" />
     <Compile Include="Server\Responses\AvailableNodes.cs" />
     <Compile Include="Server\IResponse.cs" />
-    <Compile Include="Types.cs" />
+    <Compile Include="JsonTypes\Node.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

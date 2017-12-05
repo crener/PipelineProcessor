@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Reflection;
+using PipelineProcessor2.Server.Exceptions;
 using PipelineProcessor2.Server.Responses;
 
 namespace PipelineProcessor2.Server
@@ -36,11 +37,9 @@ namespace PipelineProcessor2.Server
         public string BuildResponse(HttpListenerRequest request)
         {
             if (responses.ContainsKey(request.RawUrl))
-            {
-                return responses[request.RawUrl].Response();
-            }
+                return responses[request.RawUrl].Response(request);
 
-            return "";
+            throw new ResponseNotFoundException();
         }
     }
 }

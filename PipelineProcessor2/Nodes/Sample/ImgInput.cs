@@ -34,15 +34,15 @@ namespace PipelineProcessor2.Nodes
             }
         }
 
-        public string PluginInformation(pluginInformationRequests request, int index)
+        public string PluginInformation(PluginInformationRequests request, int index)
         {
-            if (request == pluginInformationRequests.Name) return "Image Import";
-            else if (request == pluginInformationRequests.description) return "Imports all images of a given path";
-            else if (request == pluginInformationRequests.outputName)
+            if (request == PluginInformationRequests.Name) return "Image Import";
+            else if (request == PluginInformationRequests.Description) return "Imports all images of a given path";
+            else if (request == PluginInformationRequests.OutputName)
             {
                 if (index == 0) return "image";
             }
-            else if (request == pluginInformationRequests.outputType)
+            else if (request == PluginInformationRequests.OutputType)
             {
                 if (index == 0) return "jpg";
             }

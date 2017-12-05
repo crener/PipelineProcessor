@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net;
+using Newtonsoft.Json;
 using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Server.Responses
@@ -7,7 +8,7 @@ namespace PipelineProcessor2.Server.Responses
     {
         public AvailableNodes() { }
 
-        public string Response()
+        public string Response(HttpListenerRequest request)
         {
             return JsonConvert.SerializeObject(PluginStore.AvailableNodes());
         }

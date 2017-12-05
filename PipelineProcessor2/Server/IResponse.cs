@@ -1,8 +1,10 @@
-﻿namespace PipelineProcessor2.Server
+﻿using System.Net;
+
+namespace PipelineProcessor2.Server
 {
     interface IResponse
     {
-        string Response();
+        string Response(HttpListenerRequest request);
         string EndpointLocation();
     }
 }

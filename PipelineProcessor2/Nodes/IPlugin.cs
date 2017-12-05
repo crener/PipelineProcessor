@@ -11,18 +11,18 @@ namespace PipelineProcessor2.Nodes
         int InputQty { get; }
         int OutputQty { get; }
 
-        string PluginInformation(pluginInformationRequests request, int index);
+        string PluginInformation(PluginInformationRequests request, int index);
     }
 
-    public enum pluginInformationRequests
+    public enum PluginInformationRequests
     {
         Name = 0,
-        inputQty = 1,
-        outputQty = 2,
-        description = 3,
-        inputName = 4,
-        inputType = 4,
-        outputName = 4,
-        outputType = 4,
-    };
+        InputQty = 1,
+        OutputQty = 2,
+        Description = 3,
+        InputName = 4,
+        InputType = 4,
+        OutputName = 4,
+        OutputType = 4,
+    }
 }

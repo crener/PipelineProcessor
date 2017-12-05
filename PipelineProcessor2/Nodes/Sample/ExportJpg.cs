@@ -11,15 +11,15 @@ namespace PipelineProcessor2.Nodes.Sample
         public int InputQty => 1;
         public int OutputQty => 0;
 
-        public string PluginInformation(pluginInformationRequests request, int index)
+        public string PluginInformation(PluginInformationRequests request, int index)
         {
-            if (request == pluginInformationRequests.Name) return "Jpg Export";
-            else if (request == pluginInformationRequests.description) return "Saves image data to disk";
-            else if (request == pluginInformationRequests.inputName)
+            if (request == PluginInformationRequests.Name) return "Jpg Export";
+            else if (request == PluginInformationRequests.Description) return "Saves image data to disk";
+            else if (request == PluginInformationRequests.InputName)
             {
                 if (index == 0) return "Jpg Image";
             }
-            else if (request == pluginInformationRequests.inputType)
+            else if (request == PluginInformationRequests.InputType)
             {
                 if (index == 0) return "jpg";
             }

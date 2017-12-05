@@ -28,7 +28,7 @@ namespace PipelineProcessor2.PluginImporter
                         if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                            Console.WriteLine("Adding Plugin: " + plugin.PluginInformation(pluginInformationRequests.Name, 0));
+                            Console.WriteLine("Adding Plugin: " + plugin.PluginInformation(PluginInformationRequests.Name, 0));
                             AddPlugin(plugin);
                         }
                     }
@@ -40,8 +40,8 @@ namespace PipelineProcessor2.PluginImporter
         public static void AddPlugin(IPlugin plugin)
         {
             Node nodeData = new Node(
-                plugin.PluginInformation(pluginInformationRequests.Name, 0),
-                plugin.PluginInformation(pluginInformationRequests.description, 0),
+                plugin.PluginInformation(PluginInformationRequests.Name, 0),
+                plugin.PluginInformation(PluginInformationRequests.Description, 0),
                 "C#");
 
             if (plugin is IInputPlugin) nodeData.category = "Input";
@@ -60,8 +60,8 @@ namespace PipelineProcessor2.PluginImporter
             for (int i = 0; i < plugin.InputQty; i++)
             {
                 NodeInputOutput inOut = new NodeInputOutput();
-                inOut.name = plugin.PluginInformation(pluginInformationRequests.inputName, i);
-                inOut.type = plugin.PluginInformation(pluginInformationRequests.inputType, i);
+                inOut.name = plugin.PluginInformation(PluginInformationRequests.InputName, i);
+                inOut.type = plugin.PluginInformation(PluginInformationRequests.InputType, i);
 
                 nodeData.input.Add(inOut);
             }
@@ -69,8 +69,8 @@ namespace PipelineProcessor2.PluginImporter
             for (int i = 0; i < plugin.OutputQty; i++)
             {
                 NodeInputOutput inOut = new NodeInputOutput();
-                inOut.name = plugin.PluginInformation(pluginInformationRequests.outputName, i);
-                inOut.type = plugin.PluginInformation(pluginInformationRequests.outputType, i);
+                inOut.name = plugin.PluginInformation(PluginInformationRequests.OutputName, i);
+                inOut.type = plugin.PluginInformation(PluginInformationRequests.OutputType, i);
 
                 nodeData.output.Add(inOut);
             }

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using PipelineProcessor2.Server.Exceptions;
 using static System.String;
 
 namespace PipelineProcessor2.Server
@@ -12,14 +14,14 @@ namespace PipelineProcessor2.Server
     {
         static HttpListener listener = new HttpListener();
 
-        private const int port = 9980;
+        private const int Port = 9980;
         private static Task listenThread;
         private static ResponseFactory responses = null;
 
         public static void StartListening()
         {
             if (listener.IsListening) listener.Stop();
-            listener.Prefixes.Add("http://*:" + port + "/");
+            listener.Prefixes.Add("http://*:" + Port + "/");
 
             listener.Start();
 
@@ -41,15 +43,15 @@ namespace PipelineProcessor2.Server
                 {
                     string result = responses.BuildResponse(context.Request);
 
-                    if (IsNullOrWhiteSpace(result)) context.Response.StatusCode = 404;
-                    else
-                    {
-                        byte[] data = Encoding.ASCII.GetBytes(result);
-                        context.Response.ContentLength64 = data.Length;
+                    byte[] data = Encoding.ASCII.GetBytes(result);
+                    context.Response.ContentLength64 = data.Length;
 
-                        using (Stream content = context.Response.OutputStream)
-                            content.Write(data, 0, data.Length);
-                    }
+                    using (Stream content = context.Response.OutputStream)
+                        content.Write(data, 0, data.Length);
+                }
+                catch (ResponseNotFoundException)
+                {
+                    context.Response.StatusCode = 404;
                 }
                 catch (Exception ex)
                 {

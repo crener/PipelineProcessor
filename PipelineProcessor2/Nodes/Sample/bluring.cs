@@ -10,23 +10,23 @@ namespace PipelineProcessor2.Nodes
         public int InputQty => 1;
         public int OutputQty => 1;
 
-        public string PluginInformation(pluginInformationRequests request, int index)
+        public string PluginInformation(PluginInformationRequests request, int index)
         {
-            if (request == pluginInformationRequests.Name) return "Image Blur";
-            else if (request == pluginInformationRequests.description) return "Applies blurring to an image";
-            else if (request == pluginInformationRequests.inputName)
+            if (request == PluginInformationRequests.Name) return "Image Blur";
+            else if (request == PluginInformationRequests.Description) return "Applies blurring to an image";
+            else if (request == PluginInformationRequests.InputName)
             {
                 if (index == 0) return "image";
             }
-            else if (request == pluginInformationRequests.inputType)
+            else if (request == PluginInformationRequests.InputType)
             {
                 if (index == 0) return "jpg";
             }
-            else if (request == pluginInformationRequests.outputName)
+            else if (request == PluginInformationRequests.OutputName)
             {
                 if (index == 0) return "image";
             }
-            else if (request == pluginInformationRequests.outputType)
+            else if (request == PluginInformationRequests.OutputType)
             {
                 if (index == 0) return "jpg";
             }
