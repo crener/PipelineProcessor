@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PipelineProcessor2.PluginImporter;
 using PipelineProcessor2.Server;
 
 namespace PipelineProcessor2
@@ -15,6 +16,8 @@ namespace PipelineProcessor2
         {
             Console.WriteLine("Starting Listener");
             AsyncServer.StartListening();
+
+            PluginStore.Init();
 
             while (AsyncServer.IsListening) Thread.Sleep(1000);
         }

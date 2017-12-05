@@ -1,31 +1,15 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Server.Responses
 {
     internal class AvailableNodes : IResponse
     {
-        public AvailableNodes()
-        {
-
-        }
+        public AvailableNodes() { }
 
         public string Response()
         {
-            List<Node> nodes = new List<Node>();
-
-            {
-                Node tempNode = new Node("Node from C#", "TestNode1", "C#");
-                tempNode.menuName = "Test";
-                nodes.Add(tempNode);
-            }
-
-            {
-                Node tempNode = new Node("Other C# option", "TestNode2", "C#");
-                nodes.Add(tempNode);
-            }
-
-            return JsonConvert.SerializeObject(nodes);
+            return JsonConvert.SerializeObject(PluginStore.AvailableNodes());
         }
 
         public string EndpointLocation()

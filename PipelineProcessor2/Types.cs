@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 namespace PipelineProcessor2
 {
     [JsonConverter(typeof(NodeSerializer))]
-    struct Node
+    public struct Node
     {
         public string title;
         [JsonProperty("desc")]
@@ -45,7 +45,7 @@ namespace PipelineProcessor2
         }
     }
 
-    struct NodeInputOutput
+    public struct NodeInputOutput
     {
         public string name, type;
 
