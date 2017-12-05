@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonTypes\NodeLink.cs" />
     <Compile Include="Nodes\IOutputPlugin.cs" />
     <Compile Include="Nodes\Sample\bluring.cs" />
     <Compile Include="Nodes\IInputPlugin.cs" />

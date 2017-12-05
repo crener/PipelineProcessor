@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace PipelineProcessor2
+namespace PipelineProcessor2.JsonTypes
 {
     [JsonConverter(typeof(NodeSerializer))]
     public struct Node
@@ -54,7 +54,7 @@ namespace PipelineProcessor2
         }
     }
 
-    public class NodeSerializer : JsonConverter
+    class NodeSerializer : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
