@@ -61,7 +61,9 @@
     <Compile Include="Nodes\Sample\ImgInput.cs" />
     <Compile Include="Nodes\IPlugin.cs" />
     <Compile Include="Nodes\IProcessPlugin.cs" />
+    <Compile Include="Pipeline\Exceptions.cs" />
     <Compile Include="Pipeline\PipelineState.cs" />
+    <Compile Include="Pipeline\PipelineExecutor.cs" />
     <Compile Include="PluginImporter\PluginStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

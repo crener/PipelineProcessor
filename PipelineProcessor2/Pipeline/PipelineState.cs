@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using PipelineProcessor2.JsonTypes;
 
 namespace PipelineProcessor2.Pipeline
@@ -26,10 +27,16 @@ namespace PipelineProcessor2.Pipeline
                 if (!usedIds.Contains(link.TargetId)) usedIds.Add(link.TargetId);
             }
 
-            List<GraphNode> output = new List<GraphNode>((int)(graphNodes.Length * 1.4f));
-            foreach (GraphNode node in graphNodes) if (usedIds.Contains(node.id)) output.Add(node);
+            //List<GraphNode> output = new List<GraphNode>((int)(graphNodes.Length * 1.4f));
+            Dictionary<int, GraphNode> output = new Dictionary<int, GraphNode>((int)(graphNodes.Length * 1.4f));
+            foreach (GraphNode node in graphNodes) if (usedIds.Contains(node.id)) output.Add(node.id, node);
 
-            return output.ToArray();
+            //ensure all links connections have been satisfied
+            foreach (int id in usedIds)
+                if (!output.ContainsKey(id))
+                    throw new MissingNodeException(id + " is used by a link but does not have a node defined!");
+
+            return output.Values.ToArray();
         }
 
         public static void ClearAll()
