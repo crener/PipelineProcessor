@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PipelineProcessor2.JsonTypes
 {
@@ -8,7 +10,6 @@ namespace PipelineProcessor2.JsonTypes
     public struct Node
     {
         public string title;
-        [JsonProperty("desc")]
         public string description;
         public string category;
         public string menuName;
@@ -71,9 +72,6 @@ namespace PipelineProcessor2.JsonTypes
             writer.WritePropertyName("category");
             serializer.Serialize(writer, node.title);
 
-            writer.WritePropertyName("category");
-            serializer.Serialize(writer, node.title);
-
             writer.WritePropertyName("type");
             serializer.Serialize(writer, node.getTypeVal());
 
@@ -91,14 +89,20 @@ namespace PipelineProcessor2.JsonTypes
             throw new NotImplementedException();
             //todo http://blog.maskalik.com/asp-net/json-net-implement-custom-serialization/
 
-            /*JObject jsonObject = JObject.Load(reader);
+            JObject jsonObject = JObject.Load(reader);
             var properties = jsonObject.Properties().ToList();
-            return new Node();
-            {
-                category = properties[]
-                Name = properties[0].Name.Replace("$", ""),
-                Value = (string)properties[0].Value
-            };*/
+            Node node = new Node();
+
+            node.title = properties[1].ToString();
+            //node.Id = properties[0].Value.ToObject<int>();
+            node.input = properties[6].ToObject<List<NodeInputOutput>>();
+            node.output = properties[7].ToObject<List<NodeInputOutput>>();
+
+            string[] type = properties[2].Value.ToString().Split('/');
+            node.category = type[0];
+            node.menuName = type[1];
+
+            return node;
         }
 
         public override bool CanConvert(Type objectType)

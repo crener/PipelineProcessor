@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PipelineProcessor2.Nodes
+namespace PipelineProcessor2.Nodes.Sample
 {
     public class ImgInput : IInputPlugin
     {

@@ -9,10 +9,16 @@ namespace PipelineProcessor2.PluginImporter
     public static class PluginStore
     {
         static Dictionary<string, IPlugin> plugins = new Dictionary<string, IPlugin>();
+        static Dictionary<string, IInputPlugin> input = new Dictionary<string, IInputPlugin>();
+        static Dictionary<string, IProcessPlugin> processor = new Dictionary<string, IProcessPlugin>();
+        static Dictionary<string, IOutputPlugin> export = new Dictionary<string, IOutputPlugin>();
         static List<Node> nodes = new List<Node>();
 
         private static object pluginLock = new object(),
-            nodeLock = new object();
+            nodeLock = new object(),
+            inputLock = new object(),
+            processorLock = new object(),
+            outputLock = new object();
 
         public static void Init()
         {
@@ -72,8 +78,19 @@ namespace PipelineProcessor2.PluginImporter
                 nodeData.output.Add(inOut);
             }
 
+            string type = nodeData.getTypeVal();
+
             lock (nodeLock) nodes.Add(nodeData);
-            lock (pluginLock) plugins.Add(nodeData.getTypeVal(), plugin);
+            lock (pluginLock) plugins.Add(type, plugin);
+
+            if(plugin.GetType() == typeof(IInputPlugin))
+                lock(inputLock) input.Add(type, (IInputPlugin)plugin);
+
+            if(plugin.GetType() == typeof(IProcessPlugin))
+                lock(processorLock) processor.Add(type, (IProcessPlugin)plugin);
+
+            if(plugin.GetType() == typeof(IOutputPlugin))
+                lock(outputLock) export.Add(type, (IOutputPlugin)plugin);
         }
 
         public static Node[] AvailableNodes()

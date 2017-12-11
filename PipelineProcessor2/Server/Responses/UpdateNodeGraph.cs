@@ -26,6 +26,8 @@ namespace PipelineProcessor2.Server.Responses
                 links.AddRange(dic.Values);
             }
 
+            GraphNode[] nodes =
+                JsonConvert.DeserializeObject<GraphNode[]>(information["nodes"].ToString());
 
             return "";
         }

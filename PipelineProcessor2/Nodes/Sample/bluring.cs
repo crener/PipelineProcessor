@@ -3,7 +3,7 @@ using System.IO;
 using ImageProcessor;
 using ImageProcessor.Imaging.Formats;
 
-namespace PipelineProcessor2.Nodes
+namespace PipelineProcessor2.Nodes.Sample
 {
     public class bluring : IProcessPlugin
     {
@@ -15,21 +15,13 @@ namespace PipelineProcessor2.Nodes
             if (request == PluginInformationRequests.Name) return "Image Blur";
             else if (request == PluginInformationRequests.Description) return "Applies blurring to an image";
             else if (request == PluginInformationRequests.InputName)
-            {
                 if (index == 0) return "image";
-            }
             else if (request == PluginInformationRequests.InputType)
-            {
                 if (index == 0) return "jpg";
-            }
             else if (request == PluginInformationRequests.OutputName)
-            {
                 if (index == 0) return "image";
-            }
             else if (request == PluginInformationRequests.OutputType)
-            {
                 if (index == 0) return "jpg";
-            }
 
             return "";
         }
