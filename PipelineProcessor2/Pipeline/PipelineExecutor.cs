@@ -34,10 +34,9 @@ namespace PipelineProcessor2.Pipeline
             foreach (NodeLinkInfo info in links)
             {
                 DependencyGraph[info.OriginId].AddDependent(info.TargetId);
-                DependencyGraph[info.TargetId].AddDependency(info.TargetId);
+                DependencyGraph[info.TargetId].AddDependency(info.OriginId);
             }
         }
-
     }
 
     public class DependentNode
@@ -64,12 +63,12 @@ namespace PipelineProcessor2.Pipeline
 
         public void AddDependency(int id)
         {
-            if (dependencies.Contains(id)) dependencies.Add(id);
+            if (!dependencies.Contains(id)) dependencies.Add(id);
         }
 
         public void AddDependent(int id)
         {
-            if (dependents.Contains(id)) dependents.Add(id);
+            if (!dependents.Contains(id)) dependents.Add(id);
         }
     }
 }

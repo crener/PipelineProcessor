@@ -67,12 +67,15 @@ namespace PipelineTests.Pipeline
             //check all nodes have dependencies set correctly
             foreach (KeyValuePair<int, DependentNode> node in graph)
             {
+                bool valid1 = false, valid2 = false;
+
                 if (node.Value.Dependents.Length > 0)
                 {
                     int[] dependents = node.Value.Dependents;
                     foreach (int depId in dependents)
                         Assert.IsTrue(graph[depId].Dependencies.Contains(node.Key));
                 }
+                else valid1 = true;
 
                 if (node.Value.Dependencies.Length > 0)
                 {
@@ -80,6 +83,9 @@ namespace PipelineTests.Pipeline
                     foreach (int depId in dependencies)
                         Assert.IsTrue(graph[depId].Dependents.Contains(node.Key));
                 }
+                else valid2 = true;
+
+                if (valid1 && valid2) Assert.Fail("Node " + node.Key + " does not have any dependencies or dependents!");
             }
         }
     }
