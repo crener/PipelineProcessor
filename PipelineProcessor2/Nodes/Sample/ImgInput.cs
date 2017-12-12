@@ -34,6 +34,18 @@ namespace PipelineProcessor2.Nodes.Sample
             }
         }
 
+        public int InputDataQuantity(string path)
+        {
+            if(!Directory.Exists(path)) return 0;
+
+            string[] files = Directory.GetFiles(path);
+            int validCount = 0;
+            foreach(string file in files)
+                if(file.EndsWith(".jpg")) validCount++;
+
+            return validCount;
+        }
+
         public string PluginInformation(PluginInformationRequests request, int index)
         {
             if (request == PluginInformationRequests.Name) return "Image Import";

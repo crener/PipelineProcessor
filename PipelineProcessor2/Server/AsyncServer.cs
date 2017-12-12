@@ -20,6 +20,8 @@ namespace PipelineProcessor2.Server
 
         public static void StartListening()
         {
+            if (responses == null) responses = new ResponseFactory();
+
             if (listener.IsListening) listener.Stop();
             listener.Prefixes.Add("http://*:" + Port + "/");
 
@@ -27,8 +29,6 @@ namespace PipelineProcessor2.Server
 
             listenThread = new Task(Listen);
             listenThread.Start();
-
-            if (responses == null) responses = new ResponseFactory();
         }
 
         private static void Listen()

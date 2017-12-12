@@ -26,4 +26,18 @@ namespace PipelineProcessor2.Pipeline
         public MissingLinkException(string message) : base(message) { }
         public MissingLinkException(string message, Exception innerException) : base(message, innerException) { }
     }
+
+    public class MissingPluginException : PipelineException
+    {
+        public MissingPluginException() { }
+        public MissingPluginException(string message) : base(message) { }
+        public MissingPluginException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class InputPluginQuantityMismatchException : PipelineException
+    {
+        public InputPluginQuantityMismatchException() { }
+        public InputPluginQuantityMismatchException(string message) : base(message) { }
+        public InputPluginQuantityMismatchException(string message, Exception innerException) : base(message, innerException) { }
+    }
 }

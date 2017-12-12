@@ -2,8 +2,9 @@
 
 namespace PipelineProcessor2.Nodes
 {
-    interface IInputPlugin : IPlugin
+    public interface IInputPlugin : IPlugin
     {
         IEnumerable RetrieveData(string path);
+        int InputDataQuantity(string path);
     }
 }

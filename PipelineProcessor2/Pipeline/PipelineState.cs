@@ -8,6 +8,7 @@ namespace PipelineProcessor2.Pipeline
     {
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
+        public static PipelineExecutor PipelineExecutor { get; private set; }
 
         private static GraphNode[] nodes = new GraphNode[0];
         private static NodeLinkInfo[] links = new NodeLinkInfo[0];
@@ -16,6 +17,8 @@ namespace PipelineProcessor2.Pipeline
         {
             links = graphLinks;
             nodes = StripUnusedNodes(graphNodes, graphLinks);
+
+            PipelineExecutor = new PipelineExecutor();
         }
 
         private static GraphNode[] StripUnusedNodes(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
@@ -27,7 +30,6 @@ namespace PipelineProcessor2.Pipeline
                 if (!usedIds.Contains(link.TargetId)) usedIds.Add(link.TargetId);
             }
 
-            //List<GraphNode> output = new List<GraphNode>((int)(graphNodes.Length * 1.4f));
             Dictionary<int, GraphNode> output = new Dictionary<int, GraphNode>((int)(graphNodes.Length * 1.4f));
             foreach (GraphNode node in graphNodes) if (usedIds.Contains(node.id)) output.Add(node.id, node);
 

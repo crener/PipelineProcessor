@@ -4,6 +4,7 @@ using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PipelineProcessor2.JsonTypes;
+using PipelineProcessor2.Pipeline;
 
 namespace PipelineProcessor2.Server.Responses
 {
@@ -28,6 +29,8 @@ namespace PipelineProcessor2.Server.Responses
 
             GraphNode[] nodes =
                 JsonConvert.DeserializeObject<GraphNode[]>(information["nodes"].ToString());
+
+            PipelineState.UpdateActiveGraph(nodes, links.ToArray());
 
             return "";
         }
