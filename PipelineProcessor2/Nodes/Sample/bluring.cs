@@ -26,7 +26,7 @@ namespace PipelineProcessor2.Nodes.Sample
             return "";
         }
 
-        public byte[] ProcessData(List<byte[]> input)
+        public List<byte[]> ProcessData(List<byte[]> input)
         {
             if (input.Count == 0) return null;
 
@@ -42,7 +42,9 @@ namespace PipelineProcessor2.Nodes.Sample
                         .Save(outStream);
                 }
 
-                byte[] output = outStream.GetBuffer();
+                List<byte[]> output = new List<byte[]>();
+                output.Add(outStream.GetBuffer());
+
                 return output;
             }
         }

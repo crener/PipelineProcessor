@@ -9,16 +9,17 @@ namespace PipelineProcessor2.Pipeline
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
         public static PipelineExecutor PipelineExecutor { get; private set; }
+        public static string InputDirectory = "", OutputDirectory = "";
 
-        private static GraphNode[] nodes = new GraphNode[0];
-        private static NodeLinkInfo[] links = new NodeLinkInfo[0];
+        private static GraphNode[] nodes;
+        private static NodeLinkInfo[] links;
 
         public static void UpdateActiveGraph(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
         {
             links = graphLinks;
             nodes = StripUnusedNodes(graphNodes, graphLinks);
 
-            PipelineExecutor = new PipelineExecutor();
+            PipelineExecutor = new PipelineExecutor(InputDirectory, OutputDirectory);
         }
 
         private static GraphNode[] StripUnusedNodes(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)

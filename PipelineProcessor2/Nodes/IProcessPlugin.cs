@@ -4,6 +4,6 @@ namespace PipelineProcessor2.Nodes
 {
     public interface IProcessPlugin : IPlugin
     {
-        byte[] ProcessData(List<byte[]> input);
+        List<byte[]> ProcessData(List<byte[]> input);
     }
 }

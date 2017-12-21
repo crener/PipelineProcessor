@@ -27,10 +27,16 @@ namespace PipelineProcessor2.Server.Responses
                 links.AddRange(dic.Values);
             }
 
+            string input = information["input"].ToObject<string>();
+            PipelineState.InputDirectory = input;
+            string output = information["output"].ToObject<string>();
+            PipelineState.OutputDirectory = output;
+
             GraphNode[] nodes =
                 JsonConvert.DeserializeObject<GraphNode[]>(information["nodes"].ToString());
 
             PipelineState.UpdateActiveGraph(nodes, links.ToArray());
+            PipelineState.PipelineExecutor.Start();
 
             return "";
         }

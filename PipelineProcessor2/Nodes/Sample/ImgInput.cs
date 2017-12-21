@@ -10,7 +10,7 @@ namespace PipelineProcessor2.Nodes.Sample
         public int InputQty => 0;
         public int OutputQty => 1;
 
-        public IEnumerable RetrieveData(string path)
+        public IEnumerable<List<byte[]>> RetrieveData(string path)
         {
             if (!Directory.Exists(path)) yield break;
 

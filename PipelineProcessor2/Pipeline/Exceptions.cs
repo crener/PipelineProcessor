@@ -40,4 +40,18 @@ namespace PipelineProcessor2.Pipeline
         public InputPluginQuantityMismatchException(string message) : base(message) { }
         public InputPluginQuantityMismatchException(string message, Exception innerException) : base(message, innerException) { }
     }
+
+    public class MissingPluginDataException : PipelineException
+    {
+        public MissingPluginDataException() { }
+        public MissingPluginDataException(string message) : base(message) { }
+        public MissingPluginDataException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class DataSlotAlreadyInUse : PipelineException
+    {
+        public DataSlotAlreadyInUse() { }
+        public DataSlotAlreadyInUse(string message) : base(message) { }
+        public DataSlotAlreadyInUse(string message, Exception innerException) : base(message, innerException) { }
+    }
 }

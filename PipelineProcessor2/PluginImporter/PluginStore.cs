@@ -83,14 +83,14 @@ namespace PipelineProcessor2.PluginImporter
             lock (nodeLock) nodes.Add(nodeData);
             lock (pluginLock) plugins.Add(type, plugin);
 
-            if (plugin.GetType() == typeof(IInputPlugin))
-                lock (inputLock) input.Add(type, (IInputPlugin)plugin);
+            if (plugin is IInputPlugin)
+                lock (inputLock) input.Add(type, plugin as IInputPlugin);
 
-            if (plugin.GetType() == typeof(IProcessPlugin))
-                lock (processorLock) processor.Add(type, (IProcessPlugin)plugin);
+            if (plugin is IProcessPlugin)
+                lock (processorLock) processor.Add(type, plugin as IProcessPlugin);
 
-            if (plugin.GetType() == typeof(IOutputPlugin))
-                lock (outputLock) export.Add(type, (IOutputPlugin)plugin);
+            if (plugin is IOutputPlugin)
+                lock (outputLock) export.Add(type, plugin as IOutputPlugin);
         }
 
         public static Node[] AvailableNodes()
@@ -100,12 +100,22 @@ namespace PipelineProcessor2.PluginImporter
                 return nodes.ToArray();
             }
         }
+
         public static IInputPlugin getInputPlugin(string pluginName)
         {
             lock (inputLock)
             {
                 if(!input.ContainsKey(pluginName)) return null;
                 return input[pluginName];
+            }
+        }
+
+        public static IPlugin getPlugin(string pluginName)
+        {
+            lock (pluginLock)
+            {
+                if(!plugins.ContainsKey(pluginName)) return null;
+                return plugins[pluginName];
             }
         }
 
