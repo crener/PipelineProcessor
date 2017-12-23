@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,28 @@ namespace PipelineProcessor2.Nodes.Sample
 
         public bool ExportData(string path, List<byte[]> saveData)
         {
-            throw new NotImplementedException();
+            try
+            {
+                path = path + (path.EndsWith(Path.DirectorySeparatorChar.ToString()) ? "" : Path.DirectorySeparatorChar.ToString());
+                Random rand = new Random();
+                string file;
+                for (int i = 0; i < saveData.Count; i++)
+                {
+                    do
+                    {
+                        file = path + rand.Next() + ".jpg";
+                    } while (File.Exists(file));
+
+                    using (var stream = new FileStream(file, FileMode.Create))
+                        stream.Write(saveData[i], 0, saveData[i].Length);
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace PipelineProcessor2.Pipeline
         private Dictionary<int, DependentNode> dependencyGraph;
         private int[] inputIds;
         private IEnumerator<List<byte[]>>[] dataInputs;
-        private string inputData, outputData;
+        private string inputDirectory, outputDirectory;
         private DataStore data = new DataStore();
 
         public PipelineExecutor(string input = "", string output = "")
@@ -26,8 +26,8 @@ namespace PipelineProcessor2.Pipeline
             BuildDependencyGraph(PipelineState.ActiveNodes, PipelineState.ActiveLinks);
             inputIds = FindStartLocations();
 
-            inputData = input;
-            outputData = output;
+            inputDirectory = input;
+            outputDirectory = output;
         }
 
         public PipelineExecutor(GraphNode[] nodes, NodeLinkInfo[] links, string input = "", string output = "")
@@ -35,8 +35,8 @@ namespace PipelineProcessor2.Pipeline
             BuildDependencyGraph(nodes, links);
             inputIds = FindStartLocations();
 
-            inputData = input;
-            outputData = output;
+            inputDirectory = input;
+            outputDirectory = output;
         }
 
         public void Start()
@@ -56,11 +56,11 @@ namespace PipelineProcessor2.Pipeline
                 //since there are multiple start locations make sure that there is an 
                 //equal amount of data to process for each one
 
-                int inputAmount = inputPlugins[0].InputDataQuantity(inputData);
+                int inputAmount = inputPlugins[0].InputDataQuantity(inputDirectory);
 
                 for (int i = 1; i < inputIds.Length; i++)
                 {
-                    int pluginAmount = inputPlugins[i].InputDataQuantity(inputData);
+                    int pluginAmount = inputPlugins[i].InputDataQuantity(inputDirectory);
                     if (inputAmount != pluginAmount) throw new InputPluginQuantityMismatchException();
                 }
             }
@@ -70,7 +70,7 @@ namespace PipelineProcessor2.Pipeline
             bool quit = false;
             for (var i = 0; i < inputIds.Length; i++)
             {
-                dataInputs[i] = inputPlugins[i].RetrieveData(inputData).GetEnumerator();
+                dataInputs[i] = inputPlugins[i].RetrieveData(inputDirectory).GetEnumerator();
                 dataInputs[i].MoveNext();
 
                 if (dataInputs[i].Current == null)
@@ -83,36 +83,43 @@ namespace PipelineProcessor2.Pipeline
             }
 
             if (quit) return;
-            
-            //start the first set of tasks
-            List<int> started = new List<int>();
+
             for (int i = 0; i < inputIds.Length; i++)
+                TriggerDependencies(inputIds[i]);
+        }
+
+        public void TriggerDependencies(int id)
+        {
+            //start the first set of tasks
+            foreach (NodeSlot slot in dependencyGraph[id].Dependents)
             {
-                foreach (NodeSlot slot in dependencyGraph[inputIds[i]].Dependents)
-                {
-                    if(started.Contains(slot.NodeId)) continue;
+                string name = dependencyGraph[slot.NodeId].Type;
+                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[slot.NodeId], data, this);
 
-                    string name = dependencyGraph[slot.NodeId].Type;
-                    TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[slot.NodeId], data);
-
-                    Task task = pluginTask.getTask();
-                    if(task == null) continue;
-                    task.Start();
-
-                    started.Add(slot.NodeId);
-                }
+                Task task = pluginTask.getTask();
+                if (task == null) continue;
+                task.Start();
             }
         }
 
         private void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
         {
             dependencyGraph = new Dictionary<int, DependentNode>();
+            List<int> validLinks = new List<int>();
+
             foreach (GraphNode node in nodes)
                 if (!DependencyGraph.ContainsKey(node.id))
+                {
                     DependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
 
-            foreach (NodeLinkInfo info in links)
+                    for (int i = 0; i < node.outputs.Length; i++)
+                        validLinks.AddRange(node.outputs[i].LinkIds);
+                }
+
+            foreach (int validLink in validLinks)
             {
+                NodeLinkInfo info = links[validLink];
+
                 DependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
                 DependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
             }
@@ -185,7 +192,8 @@ namespace PipelineProcessor2.Pipeline
         public void AddDependency(int originId, int originSlot, int targetSlot)
         {
             NodeSlot nodeSlot = new NodeSlot(originId, originSlot);
-            if (dependencies.ContainsKey(targetSlot)) throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + "has already need assigned");
+            if (dependencies.ContainsKey(targetSlot))
+                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already need assigned");
 
             dependencies.Add(targetSlot, nodeSlot);
         }
@@ -193,6 +201,8 @@ namespace PipelineProcessor2.Pipeline
         public void AddDependent(int targetId, int targetSlot, int originSlot)
         {
             NodeSlot nodeSlot = new NodeSlot(targetId, targetSlot);
+            if (dependents.ContainsKey(originSlot))
+                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already need assigned");
 
             dependents.Add(originSlot, nodeSlot);
         }

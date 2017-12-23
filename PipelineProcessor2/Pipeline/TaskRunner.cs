@@ -13,12 +13,14 @@ namespace PipelineProcessor2.Pipeline
         private IPlugin plugin;
         private DependentNode link;
         private DataStore resultData;
+        private PipelineExecutor executor;
 
-        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData)
+        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, PipelineExecutor pipe)
         {
             this.plugin = plugin;
             link = node;
             this.resultData = resultData;
+            executor = pipe;
         }
 
         //start the plugin task
@@ -37,8 +39,9 @@ namespace PipelineProcessor2.Pipeline
             foreach (NodeSlot id in link.Dependencies)
             {
                 byte[] dependencyData = resultData.getData(id);
-                if(dependencyData == null)
-                    throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " + id.SlotPos + " for node " + link.Id);
+                if (dependencyData == null)
+                    throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " +
+                                                         id.SlotPos + " for node " + link.Id);
 
                 input.Add(dependencyData);
             }
@@ -49,6 +52,12 @@ namespace PipelineProcessor2.Pipeline
                 {
                     data = (plugin as IProcessPlugin).ProcessData(input);
                 }
+                else if (plugin is IOutputPlugin)
+                {
+                    bool success = (plugin as IOutputPlugin).ExportData(PipelineState.OutputDirectory, input);
+                    if (!success) Console.WriteLine(plugin.PluginInformation(PluginInformationRequests.Name, 0) + " failed");
+                }
+                else Console.WriteLine("Unknown plugin type");
             }
             catch (Exception e)
             {
@@ -56,9 +65,12 @@ namespace PipelineProcessor2.Pipeline
                 throw;
             }
 
-            resultData.StoreResults(data, link.Id);
-
-            //TODO trigger next wave of nodes to begin execution
+            //post processing actions
+            if (data != null)
+            {
+                resultData.StoreResults(data, link.Id);
+                executor.TriggerDependencies(link.Id);
+            }
         }
 
         public bool HasFulfilledDependency()
