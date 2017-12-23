@@ -66,11 +66,8 @@ namespace PipelineProcessor2.Pipeline
             }
 
             //post processing actions
-            if (data != null)
-            {
-                resultData.StoreResults(data, link.Id);
-                executor.TriggerDependencies(link.Id);
-            }
+            if (data != null) resultData.StoreResults(data, link.Id);
+            executor.TriggerDependencies(link.Id);
         }
 
         public bool HasFulfilledDependency()

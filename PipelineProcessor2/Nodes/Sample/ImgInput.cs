@@ -17,7 +17,7 @@ namespace PipelineProcessor2.Nodes.Sample
             foreach (string filePath in Directory.EnumerateFiles(path))
             {
                 string fileName = Path.GetFileName(filePath);
-                if (fileName.EndsWith(".jpg"))
+                if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg"))
                 {
                     List<byte[]> output = new List<byte[]>();
                     try

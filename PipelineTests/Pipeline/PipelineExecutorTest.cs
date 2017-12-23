@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,32 +61,68 @@ namespace PipelineTests.Pipeline
 
         private void DependencyTest()
         {
-            PipelineExecutor testobject = new PipelineExecutor();
-
-            Dictionary<int, DependentNode> graph = testobject.DependencyGraph;
+            Dictionary<int, DependentNode> graph = PipelineState.DependencyGraph;
+            IEqualityComparer<DependentNode> comparer = new IdComparer();
 
             //check all nodes have dependencies set correctly
             foreach (KeyValuePair<int, DependentNode> node in graph)
             {
-                bool valid1 = false, valid2 = false;
+                bool invalid1 = false, invalid2 = false;
 
                 if (node.Value.Dependents.Length > 0)
                 {
-                    int[] dependents = node.Value.Dependents;
-                    foreach (int depId in dependents)
-                        Assert.IsTrue(graph[depId].Dependencies.Contains(node.Key));
+                    NodeSlot[] dependents = node.Value.Dependents;
+                    foreach (NodeSlot depId in dependents)
+                    {
+                        bool found = false;
+                        for (int i = 0; i < graph[depId.NodeId].Dependencies.Length; i++)
+                        {
+                            if (graph[depId.NodeId].Dependencies[i].NodeId == node.Key)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        Assert.IsTrue(found);
+                    }
                 }
-                else valid1 = true;
+                else invalid1 = true;
 
                 if (node.Value.Dependencies.Length > 0)
                 {
-                    int[] dependencies = node.Value.Dependencies;
-                    foreach (int depId in dependencies)
-                        Assert.IsTrue(graph[depId].Dependents.Contains(node.Key));
-                }
-                else valid2 = true;
+                    NodeSlot[] dependencies = node.Value.Dependencies;
+                    foreach (NodeSlot depId in dependencies)
+                    {
+                        bool found = false;
+                        for (int i = 0; i < graph[depId.NodeId].Dependencies.Length; i++)
+                        {
+                            if (graph[depId.NodeId].Dependencies[i].NodeId == node.Key)
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
 
-                if (valid1 && valid2) Assert.Fail("Node " + node.Key + " does not have any dependencies or dependents!");
+                        Assert.IsTrue(found);
+                    }
+                }
+                else invalid2 = true;
+
+                if (invalid1 && invalid2) Assert.Fail("Node " + node.Key + " does not have any dependencies or dependents!");
+            }
+        }
+
+        private class IdComparer : IEqualityComparer<DependentNode>
+        {
+            public bool Equals(DependentNode x, DependentNode y)
+            {
+                return x.Id == y.Id;
+            }
+
+            public int GetHashCode(DependentNode obj)
+            {
+                throw new NotImplementedException();
             }
         }
     }

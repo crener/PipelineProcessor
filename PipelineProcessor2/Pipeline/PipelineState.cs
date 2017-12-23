@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PipelineProcessor2.JsonTypes;
+using PipelineProcessor2.Nodes;
+using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Pipeline
 {
     public static class PipelineState
     {
+        public static Dictionary<int, DependentNode> DependencyGraph => dependencyGraph;
+
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
         public static PipelineExecutor PipelineExecutor { get; private set; }
@@ -14,12 +19,82 @@ namespace PipelineProcessor2.Pipeline
         private static GraphNode[] nodes;
         private static NodeLinkInfo[] links;
 
+        private static Dictionary<int, DependentNode> dependencyGraph;
+        private static int[] inputIds;
+
         public static void UpdateActiveGraph(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
         {
             links = graphLinks;
             nodes = StripUnusedNodes(graphNodes, graphLinks);
 
-            PipelineExecutor = new PipelineExecutor(InputDirectory, OutputDirectory);
+            BuildDependencyGraph(ActiveNodes, ActiveLinks);
+            inputIds = FindStartLocations();
+        }
+
+        public static void Start()
+        {
+            if (inputIds.Length == 0)
+            {
+                Console.WriteLine("No start locations could be found");
+                return;
+            }
+            else Console.WriteLine("Starting Processing...");
+
+            IInputPlugin[] inputPlugins = new IInputPlugin[inputIds.Length];
+            for (var i = 0; i < inputIds.Length; i++)
+                inputPlugins[i] = PluginStore.getInputPlugin(dependencyGraph[inputIds[i]].Type);
+
+            int inputAmount = inputPlugins[0].InputDataQuantity(InputDirectory);
+            Console.WriteLine(inputAmount + " valid files found!");
+
+            if (inputIds.Length > 1)
+            {
+                //Ensure that each start has an equal amount of outputs
+                for (int i = 1; i < inputIds.Length; i++)
+                {
+                    int pluginAmount = inputPlugins[i].InputDataQuantity(InputDirectory);
+                    if (inputAmount != pluginAmount) throw new InputPluginQuantityMismatchException();
+                }
+            }
+
+            //create a pipline executor for each 
+            PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
+            for (int i = 0; i < inputAmount; i++)
+                pipes[i] = new PipelineExecutor(dependencyGraph, i, InputDirectory, OutputDirectory);
+
+            //get the enumerators for the data and populate starting data
+            IEnumerator<List<byte[]>>[] dataInputs = new IEnumerator<List<byte[]>>[inputIds.Length];
+            bool quit = false;
+
+            for (var i = 0; i < inputIds.Length; i++)
+                dataInputs[i] = inputPlugins[i].RetrieveData(InputDirectory).GetEnumerator();
+
+            if (quit) return;
+
+            //store the input data
+            for (int p = 0; p < pipes.Length; p++)
+                for (int d = 0; d < dataInputs.Length; d++)
+                {
+                    if (!dataInputs[d].MoveNext())
+                    {
+                        Console.WriteLine("Premature end of data!!");
+                        break;
+                    }
+                    pipes[p].StoreInputData(dataInputs[d].Current, inputIds[d]);
+                }
+            
+            //Dispose of the input enumerators
+            for (int i = 0; i < dataInputs.Length; i++)
+                dataInputs[i].Dispose();
+            dataInputs = null;
+            GC.Collect();
+
+            //start the first wave of dependencies
+            Console.WriteLine("Starting processing tasks");
+            Console.WriteLine("");
+            for (int p = 0; p < pipes.Length; p++)
+                for (int i = 0; i < inputIds.Length; i++)
+                    pipes[p].TriggerDependencies(inputIds[i]);
         }
 
         private static GraphNode[] StripUnusedNodes(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
@@ -40,6 +115,49 @@ namespace PipelineProcessor2.Pipeline
                     throw new MissingNodeException(id + " is used by a link but does not have a node defined!");
 
             return output.Values.ToArray();
+        }
+
+        private static void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
+        {
+            dependencyGraph = new Dictionary<int, DependentNode>();
+            List<int> validLinks = new List<int>();
+            Dictionary<int, NodeLinkInfo> linkLookup = new Dictionary<int, NodeLinkInfo>();
+
+            for (int i = 0; i < links.Length; i++)
+                linkLookup.Add(links[i].Id, links[i]);
+
+            foreach (GraphNode node in nodes)
+                if (!dependencyGraph.ContainsKey(node.id))
+                {
+                    dependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
+
+                    for (int i = 0; i < node.outputs.Length; i++)
+                        validLinks.AddRange(node.outputs[i].LinkIds);
+                }
+
+            foreach (int validLink in validLinks)
+            {
+                NodeLinkInfo info = linkLookup[validLink];
+
+                dependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
+                dependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
+            }
+        }
+
+        private static int[] FindStartLocations()
+        {
+            List<int> inputNodes = new List<int>();
+
+            foreach (KeyValuePair<int, DependentNode> node in dependencyGraph)
+            {
+                if (!PluginStore.isRegisteredPlugin(node.Value.Type))
+                    throw new MissingPluginException(node.Value.Type + " could not be found");
+
+                if (node.Value.Dependencies.Length == 0 && PluginStore.isInputPlugin(node.Value.Type))
+                    inputNodes.Add(node.Key);
+            }
+
+            return inputNodes.ToArray();
         }
 
         public static void ClearAll()

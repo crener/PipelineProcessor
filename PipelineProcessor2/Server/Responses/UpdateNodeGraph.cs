@@ -36,7 +36,7 @@ namespace PipelineProcessor2.Server.Responses
                 JsonConvert.DeserializeObject<GraphNode[]>(information["nodes"].ToString());
 
             PipelineState.UpdateActiveGraph(nodes, links.ToArray());
-            PipelineState.PipelineExecutor.Start();
+            PipelineState.Start();
 
             return "";
         }

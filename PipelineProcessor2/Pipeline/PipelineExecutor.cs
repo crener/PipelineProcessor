@@ -5,91 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PipelineProcessor2.JsonTypes;
-using PipelineProcessor2.Nodes;
 using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Pipeline
 {
     public class PipelineExecutor
     {
-        public Dictionary<int, DependentNode> DependencyGraph => dependencyGraph;
-
-        private Dictionary<int, DependentNode> dependencyGraph;
-        private int[] inputIds;
-        private IEnumerator<List<byte[]>>[] dataInputs;
+        private readonly Dictionary<int, DependentNode> dependencyGraph;
+        private readonly DataStore data = new DataStore();
         private string inputDirectory, outputDirectory;
-        private DataStore data = new DataStore();
+        private int run;
 
-        public PipelineExecutor(string input = "", string output = "")
+        public PipelineExecutor(Dictionary<int, DependentNode> nodes, int depth, string input = "", string output = "")
         {
-            BuildDependencyGraph(PipelineState.ActiveNodes, PipelineState.ActiveLinks);
-            inputIds = FindStartLocations();
+            dependencyGraph = nodes;
 
             inputDirectory = input;
             outputDirectory = output;
-        }
-
-        public PipelineExecutor(GraphNode[] nodes, NodeLinkInfo[] links, string input = "", string output = "")
-        {
-            BuildDependencyGraph(nodes, links);
-            inputIds = FindStartLocations();
-
-            inputDirectory = input;
-            outputDirectory = output;
-        }
-
-        public void Start()
-        {
-            if (inputIds.Length == 0)
-            {
-                Console.WriteLine("No start locations could be found");
-                return;
-            }
-
-            IInputPlugin[] inputPlugins = new IInputPlugin[inputIds.Length];
-            for (var i = 0; i < inputIds.Length; i++)
-                inputPlugins[i] = PluginStore.getInputPlugin(dependencyGraph[inputIds[i]].Type);
-
-            if (inputIds.Length > 1)
-            {
-                //since there are multiple start locations make sure that there is an 
-                //equal amount of data to process for each one
-
-                int inputAmount = inputPlugins[0].InputDataQuantity(inputDirectory);
-
-                for (int i = 1; i < inputIds.Length; i++)
-                {
-                    int pluginAmount = inputPlugins[i].InputDataQuantity(inputDirectory);
-                    if (inputAmount != pluginAmount) throw new InputPluginQuantityMismatchException();
-                }
-            }
-
-            //get the enumerators for the data and populate starting data
-            dataInputs = new IEnumerator<List<byte[]>>[inputIds.Length];
-            bool quit = false;
-            for (var i = 0; i < inputIds.Length; i++)
-            {
-                dataInputs[i] = inputPlugins[i].RetrieveData(inputDirectory).GetEnumerator();
-                dataInputs[i].MoveNext();
-
-                if (dataInputs[i].Current == null)
-                {
-                    Console.WriteLine("No input data from " +
-                                      inputPlugins[i].PluginInformation(PluginInformationRequests.Name, 0));
-                    quit = true;
-                }
-                else data.StoreResults(dataInputs[i].Current, inputIds[i]);
-            }
-
-            if (quit) return;
-
-            for (int i = 0; i < inputIds.Length; i++)
-                TriggerDependencies(inputIds[i]);
+            run = depth;
         }
 
         public void TriggerDependencies(int id)
         {
+            Console.WriteLine("Finished node " + id + " of run " + run + " type " + dependencyGraph[id].Type + " starting dependencies");
+
             //start the first set of tasks
             foreach (NodeSlot slot in dependencyGraph[id].Dependents)
             {
@@ -98,47 +37,17 @@ namespace PipelineProcessor2.Pipeline
 
                 Task task = pluginTask.getTask();
                 if (task == null) continue;
+
+                Console.WriteLine("Starting node " + slot.NodeId + " of run " + run + " type " + dependencyGraph[slot.NodeId].Type);
                 task.Start();
             }
+
+            GC.Collect();
         }
 
-        private void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
+        internal void StoreInputData(List<byte[]> current, int inputId)
         {
-            dependencyGraph = new Dictionary<int, DependentNode>();
-            List<int> validLinks = new List<int>();
-
-            foreach (GraphNode node in nodes)
-                if (!DependencyGraph.ContainsKey(node.id))
-                {
-                    DependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
-
-                    for (int i = 0; i < node.outputs.Length; i++)
-                        validLinks.AddRange(node.outputs[i].LinkIds);
-                }
-
-            foreach (int validLink in validLinks)
-            {
-                NodeLinkInfo info = links[validLink];
-
-                DependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
-                DependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
-            }
-        }
-
-        private int[] FindStartLocations()
-        {
-            List<int> inputNodes = new List<int>();
-
-            foreach (KeyValuePair<int, DependentNode> node in dependencyGraph)
-            {
-                if (!PluginStore.isRegisteredPlugin(node.Value.Type))
-                    throw new MissingPluginException(node.Value.Type + " could not be found");
-
-                if (node.Value.Dependencies.Length == 0 && PluginStore.isInputPlugin(node.Value.Type))
-                    inputNodes.Add(node.Key);
-            }
-
-            return inputNodes.ToArray();
+            data.StoreResults(current, inputId);
         }
     }
 
