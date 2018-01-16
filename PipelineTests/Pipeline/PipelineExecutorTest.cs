@@ -14,14 +14,33 @@ namespace PipelineTests.Pipeline
     [TestFixture]
     public class PipelineExecutorTest
     {
+        [OneTimeSetUp]
+        public void Setup()
+        {
+
+        }
+
         [Test]
         public void BasicGraphValidityTest()
         {
             List<GraphNode> nodes = new List<GraphNode>();
-            nodes.Add(new GraphNode { id = 0, title = "used" });
-            nodes.Add(new GraphNode { id = 1, title = "used" });
-            nodes.Add(new GraphNode { id = 2, title = "used" });
-            nodes.Add(new GraphNode { id = 3, title = "unused" });
+            nodes.Add(new GraphNode { id = 0, title = "used",
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "o" } }
+            });
+            nodes.Add(new GraphNode { id = 1, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "o" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "p" } }
+            });
+            nodes.Add(new GraphNode { id = 2, title = "used",
+                inputs = new[] {
+                    new GraphLinkReference { Name = "in1", Type = "p" },
+                    new GraphLinkReference { Name = "in1", Type = "p" } },
+                outputs = new[]{ new GraphLinkReference { Name = "out2", Type = "q" } }
+            });
+            nodes.Add(new GraphNode { id = 3, title = "unused",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "p" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "" } }
+            });
 
             List<NodeLinkInfo> links = new List<NodeLinkInfo>();
             links.Add(new NodeLinkInfo(0, 0, 0, 1, 0));
@@ -49,9 +68,9 @@ namespace PipelineTests.Pipeline
             links.Add(new NodeLinkInfo(1, 2, 0, 1, 0));
             links.Add(new NodeLinkInfo(2, 2, 0, 0, 0));
             links.Add(new NodeLinkInfo(0, 1, 0, 3, 0));
-            links.Add(new NodeLinkInfo(8, 0, 0, 3, 0));
+            links.Add(new NodeLinkInfo(8, 0, 0, 3, 1));
             links.Add(new NodeLinkInfo(4, 0, 0, 5, 0));
-            links.Add(new NodeLinkInfo(7, 3, 0, 5, 0));
+            links.Add(new NodeLinkInfo(7, 3, 0, 5, 1));
             links.Add(new NodeLinkInfo(6, 5, 0, 7, 0));
             links.Add(new NodeLinkInfo(5, 7, 0, 6, 0));
 
@@ -69,6 +88,7 @@ namespace PipelineTests.Pipeline
             {
                 bool invalid1 = false, invalid2 = false;
 
+                //check node dependents
                 if (node.Value.Dependents.Length > 0)
                 {
                     NodeSlot[] dependents = node.Value.Dependents;
@@ -89,15 +109,16 @@ namespace PipelineTests.Pipeline
                 }
                 else invalid1 = true;
 
+                //check node dependencies
                 if (node.Value.Dependencies.Length > 0)
                 {
                     NodeSlot[] dependencies = node.Value.Dependencies;
                     foreach (NodeSlot depId in dependencies)
                     {
                         bool found = false;
-                        for (int i = 0; i < graph[depId.NodeId].Dependencies.Length; i++)
+                        for (int i = 0; i < graph[depId.NodeId].Dependents.Length; i++)
                         {
-                            if (graph[depId.NodeId].Dependencies[i].NodeId == node.Key)
+                            if (graph[depId.NodeId].Dependents[i].NodeId == node.Key)
                             {
                                 found = true;
                                 break;
@@ -109,6 +130,7 @@ namespace PipelineTests.Pipeline
                 }
                 else invalid2 = true;
 
+                //Nodes in the graph should always be connected to other nodes
                 if (invalid1 && invalid2) Assert.Fail("Node " + node.Key + " does not have any dependencies or dependents!");
             }
         }

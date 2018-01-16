@@ -60,9 +60,15 @@ namespace PipelineProcessor2.Pipeline
         {
             get
             {
-                NodeSlot[] deps = new NodeSlot[dependents.Count];
-                foreach (KeyValuePair<int, NodeSlot> dependent in dependents)
-                    deps[dependent.Key] = dependent.Value;
+                NodeSlot[] deps = new NodeSlot[totalDependents];
+
+                int i = 0;
+                foreach (KeyValuePair<int, List<NodeSlot>> slot in dependents)
+                    foreach (NodeSlot nodeSlot in slot.Value)
+                    {
+                        deps[i] = nodeSlot;
+                        i++;
+                    }
 
                 return deps;
             }
@@ -75,11 +81,7 @@ namespace PipelineProcessor2.Pipeline
         {
             get
             {
-                NodeSlot[] deps = new NodeSlot[dependencies.Count];
-                foreach (KeyValuePair<int, NodeSlot> dependency in dependencies)
-                    deps[dependency.Key] = dependency.Value;
-
-                return deps;
+                return dependencies.Values.ToArray();
             }
         }
 
@@ -87,14 +89,16 @@ namespace PipelineProcessor2.Pipeline
         public string Type { get; private set; }
 
         //private List<NodeSlot> dependents, dependencies;
-        private Dictionary<int, NodeSlot> dependents, dependencies;
+        private Dictionary<int, NodeSlot> dependencies;
+        private Dictionary<int, List<NodeSlot>> dependents;
+        private int totalDependents = 0;
 
         public DependentNode(int id, string type)
         {
             Id = id;
             Type = type;
 
-            dependents = new Dictionary<int, NodeSlot>();
+            dependents = new Dictionary<int, List<NodeSlot>>();
             dependencies = new Dictionary<int, NodeSlot>();
         }
 
@@ -102,7 +106,7 @@ namespace PipelineProcessor2.Pipeline
         {
             NodeSlot nodeSlot = new NodeSlot(originId, originSlot);
             if (dependencies.ContainsKey(targetSlot))
-                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already need assigned");
+                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already been assigned");
 
             dependencies.Add(targetSlot, nodeSlot);
         }
@@ -110,10 +114,18 @@ namespace PipelineProcessor2.Pipeline
         public void AddDependent(int targetId, int targetSlot, int originSlot)
         {
             NodeSlot nodeSlot = new NodeSlot(targetId, targetSlot);
-            if (dependents.ContainsKey(originSlot))
-                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already need assigned");
 
-            dependents.Add(originSlot, nodeSlot);
+            if (!dependents.ContainsKey(originSlot)) dependents.Add(originSlot, new List<NodeSlot>());
+            if (dependents[originSlot].Contains(nodeSlot))
+            {
+                //clean up unused slot
+                if (dependents[originSlot].Count == 0) dependents.Remove(originSlot);
+
+                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already been assigned");
+            }
+
+            dependents[originSlot].Add(nodeSlot);
+            totalDependents++;
         }
     }
 }

@@ -83,9 +83,9 @@ namespace PipelineTests.Pipeline
             links.Add(new NodeLinkInfo(1, 2, 0, 1, 0));
             links.Add(new NodeLinkInfo(2, 2, 0, 0, 0));
             links.Add(new NodeLinkInfo(0, 1, 0, 3, 0));
-            links.Add(new NodeLinkInfo(8, 0, 0, 3, 0));
+            links.Add(new NodeLinkInfo(8, 0, 0, 3, 1));
             links.Add(new NodeLinkInfo(4, 0, 0, 5, 0));
-            links.Add(new NodeLinkInfo(7, 3, 0, 5, 0));
+            links.Add(new NodeLinkInfo(7, 3, 0, 5, 1));
             links.Add(new NodeLinkInfo(6, 5, 0, 7, 0));
             links.Add(new NodeLinkInfo(5, 7, 0, 6, 0));
 

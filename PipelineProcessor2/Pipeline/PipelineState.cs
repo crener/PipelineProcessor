@@ -107,7 +107,8 @@ namespace PipelineProcessor2.Pipeline
             }
 
             Dictionary<int, GraphNode> output = new Dictionary<int, GraphNode>((int)(graphNodes.Length * 1.4f));
-            foreach (GraphNode node in graphNodes) if (usedIds.Contains(node.id)) output.Add(node.id, node);
+            foreach (GraphNode node in graphNodes)
+                if (usedIds.Contains(node.id)) output.Add(node.id, node);
 
             //ensure all links connections have been satisfied
             foreach (int id in usedIds)
@@ -120,27 +121,25 @@ namespace PipelineProcessor2.Pipeline
         private static void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
         {
             dependencyGraph = new Dictionary<int, DependentNode>();
-            List<int> validLinks = new List<int>();
-            Dictionary<int, NodeLinkInfo> linkLookup = new Dictionary<int, NodeLinkInfo>();
 
-            for (int i = 0; i < links.Length; i++)
-                linkLookup.Add(links[i].Id, links[i]);
-
+            //add valid nodes
             foreach (GraphNode node in nodes)
                 if (!dependencyGraph.ContainsKey(node.id))
-                {
                     dependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
 
-                    for (int i = 0; i < node.outputs.Length; i++)
-                        validLinks.AddRange(node.outputs[i].LinkIds);
-                }
-
-            foreach (int validLink in validLinks)
+            //setup dependencies
+            foreach(NodeLinkInfo info in links)
             {
-                NodeLinkInfo info = linkLookup[validLink];
+                if(dependencyGraph.ContainsKey(info.OriginId) && 
+                    dependencyGraph.ContainsKey(info.TargetId))
+                {
+                    //todo check if slot types are compatible with the actual plugin
+                    
+                    //todo check if a node has X slot before adding
 
-                dependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
-                dependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
+                    dependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
+                    dependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
+                }
             }
         }
 
