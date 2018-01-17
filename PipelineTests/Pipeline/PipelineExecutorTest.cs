@@ -55,14 +55,35 @@ namespace PipelineTests.Pipeline
         public void AdvancedGraphValidityTest()
         {
             List<GraphNode> nodes = new List<GraphNode>();
-            nodes.Add(new GraphNode { id = 6, title = "used" });
-            nodes.Add(new GraphNode { id = 3, title = "used" });
-            nodes.Add(new GraphNode { id = 5, title = "used" });
-            nodes.Add(new GraphNode { id = 1, title = "used" });
-            nodes.Add(new GraphNode { id = 2, title = "used" });
-            nodes.Add(new GraphNode { id = 0, title = "used" });
+            nodes.Add(new GraphNode { id = 6, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "f" } }
+            });
+            nodes.Add(new GraphNode { id = 3, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "b" },
+                    new GraphLinkReference { Name = "in2", Type = "a" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "d" } }
+            });
+            nodes.Add(new GraphNode { id = 5, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "a" },
+                    new GraphLinkReference { Name = "in2", Type = "d" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "e" } }
+            });
+            nodes.Add(new GraphNode { id = 1, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "c" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "b" } }
+            });
+            nodes.Add(new GraphNode { id = 2, title = "used",
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "c" } }
+            });
+            nodes.Add(new GraphNode { id = 0, title = "used",
+                inputs = new [] { new GraphLinkReference { Name = "in1", Type = "c" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "a" } }
+            });
             nodes.Add(new GraphNode { id = 4, title = "unused" });
-            nodes.Add(new GraphNode { id = 7, title = "used" });
+            nodes.Add(new GraphNode { id = 7, title = "used",
+                inputs = new[] { new GraphLinkReference { Name = "in1", Type = "e" } },
+                outputs = new[] { new GraphLinkReference { Name = "out1", Type = "f" } }
+            });
 
             List<NodeLinkInfo> links = new List<NodeLinkInfo>();
             links.Add(new NodeLinkInfo(1, 2, 0, 1, 0));

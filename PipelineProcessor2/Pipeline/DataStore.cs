@@ -14,6 +14,9 @@ namespace PipelineProcessor2.Pipeline
         }
     }
 
+    /// <summary>
+    /// Responsible for storing data from a pipeline executor
+    /// </summary>
     public class DataStore
     {
         private Dictionary<NodeSlot, byte[]> data = new Dictionary<NodeSlot, byte[]>();

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes;
+using PipelineProcessor2.Pipeline.Exceptions;
 
 namespace PipelineProcessor2.Pipeline
 {
@@ -36,6 +37,7 @@ namespace PipelineProcessor2.Pipeline
             List<byte[]> data = null;
             List<byte[]> input = new List<byte[]>();
 
+            //gather input data
             foreach (NodeSlot id in link.Dependencies)
             {
                 byte[] dependencyData = resultData.getData(id);
@@ -46,6 +48,7 @@ namespace PipelineProcessor2.Pipeline
                 input.Add(dependencyData);
             }
 
+            // execute plugin task
             try
             {
                 if (plugin is IProcessPlugin)
@@ -65,7 +68,7 @@ namespace PipelineProcessor2.Pipeline
                 throw;
             }
 
-            //post processing actions
+            //post processing actions (triggering dependency, storing results)
             if (data != null) resultData.StoreResults(data, link.Id);
             executor.TriggerDependencies(link.Id);
         }

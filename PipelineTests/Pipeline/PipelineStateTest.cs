@@ -4,6 +4,7 @@ using NUnit.Framework;
 using PipelineProcessor2;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Pipeline;
+using PipelineProcessor2.Pipeline.Exceptions;
 
 namespace PipelineTests.Pipeline
 {
@@ -17,7 +18,7 @@ namespace PipelineTests.Pipeline
         }
 
         [Test]
-        public void StripTest()
+        public void Simple()
         {
             List<GraphNode> nodes = new List<GraphNode>();
             nodes.Add(new GraphNode { id = 0, title = "used" });
@@ -40,7 +41,7 @@ namespace PipelineTests.Pipeline
         }
 
         [Test]
-        public void StripOneLinkToMany()
+        public void OneLinkToMany()
         {
             List<GraphNode> nodes = new List<GraphNode>();
             nodes.Add(new GraphNode { id = 0, title = "used" });
@@ -67,7 +68,7 @@ namespace PipelineTests.Pipeline
         }
 
         [Test]
-        public void StripUnorderedIds()
+        public void UnorderedIds()
         {
             List<GraphNode> nodes = new List<GraphNode>();
             nodes.Add(new GraphNode { id = 6, title = "used" });
@@ -99,7 +100,7 @@ namespace PipelineTests.Pipeline
         }
 
         [Test]
-        public void StripUnreferencedNode()
+        public void UnreferencedNode()
         {
             List<GraphNode> nodes = new List<GraphNode>();
             nodes.Add(new GraphNode { id = 6, title = "used" });
@@ -120,7 +121,7 @@ namespace PipelineTests.Pipeline
             links.Add(new NodeLinkInfo(6, 5, 0, 7, 0));
             links.Add(new NodeLinkInfo(5, 7, 0, 6, 0));
 
-            //nodes[7] does not exist and should throw an exception
+            //nodes[7] does not exist and should throw an exception as it is referenced in the links
 
             try
             {
@@ -135,7 +136,7 @@ namespace PipelineTests.Pipeline
 
 
         [Test]
-        public void StripTestNoNodes()
+        public void NoNodes()
         {
             List<GraphNode> nodes = new List<GraphNode>();
             List<NodeLinkInfo> links = new List<NodeLinkInfo>();

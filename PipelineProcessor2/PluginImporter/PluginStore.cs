@@ -22,6 +22,7 @@ namespace PipelineProcessor2.PluginImporter
 
         public static void Init()
         {
+            // get all available plugins defined within the assembly
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (Type type in assembly.GetTypes())

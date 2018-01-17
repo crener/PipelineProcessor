@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
+using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Pipeline
