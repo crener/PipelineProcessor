@@ -66,6 +66,7 @@
     <Compile Include="Pipeline\Exceptions.cs" />
     <Compile Include="Pipeline\PipelineState.cs" />
     <Compile Include="Pipeline\PipelineExecutor.cs" />
+    <Compile Include="Pipeline\SlotStructs.cs" />
     <Compile Include="Pipeline\TaskRunner.cs" />
     <Compile Include="PluginImporter\PluginStore.cs" />
     <Compile Include="Program.cs" />

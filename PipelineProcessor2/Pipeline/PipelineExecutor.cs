@@ -13,7 +13,7 @@ namespace PipelineProcessor2.Pipeline
     public class PipelineExecutor
     {
         private readonly Dictionary<int, DependentNode> dependencyGraph;
-        private readonly DataStore data = new DataStore();
+        private readonly DataStore data;
         private string inputDirectory, outputDirectory;
         private int run;
 
@@ -27,6 +27,8 @@ namespace PipelineProcessor2.Pipeline
         public PipelineExecutor(Dictionary<int, DependentNode> nodes, int depth, string input = "", string output = "")
         {
             dependencyGraph = nodes;
+            data = new DataStore(depth, output);
+
 
             inputDirectory = input;
             outputDirectory = output;
@@ -55,7 +57,7 @@ namespace PipelineProcessor2.Pipeline
 
         internal void StoreInputData(List<byte[]> current, int inputId)
         {
-            data.StoreResults(current, inputId);
+            data.StoreResults(current, inputId, true);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace PipelineProcessor2.Pipeline
                 }
             }
 
-            //create a pipline executor for each 
+            //create a pipeline executor for each 
             PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
             for (int i = 0; i < inputAmount; i++)
                 pipes[i] = new PipelineExecutor(dependencyGraph, i, InputDirectory, OutputDirectory);
@@ -68,7 +68,10 @@ namespace PipelineProcessor2.Pipeline
             bool quit = false;
 
             for (var i = 0; i < inputIds.Length; i++)
+            {
                 dataInputs[i] = inputPlugins[i].RetrieveData(InputDirectory).GetEnumerator();
+                if (dataInputs[i] == null) quit = true;
+            }
 
             if (quit) return;
 
@@ -83,7 +86,7 @@ namespace PipelineProcessor2.Pipeline
                     }
                     pipes[p].StoreInputData(dataInputs[d].Current, inputIds[d]);
                 }
-            
+
             //Dispose of the input enumerators
             for (int i = 0; i < dataInputs.Length; i++)
                 dataInputs[i].Dispose();
@@ -129,13 +132,13 @@ namespace PipelineProcessor2.Pipeline
                     dependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
 
             //setup dependencies
-            foreach(NodeLinkInfo info in links)
+            foreach (NodeLinkInfo info in links)
             {
-                if(dependencyGraph.ContainsKey(info.OriginId) && 
+                if (dependencyGraph.ContainsKey(info.OriginId) &&
                     dependencyGraph.ContainsKey(info.TargetId))
                 {
                     //todo check if slot types are compatible with the actual plugin
-                    
+
                     //todo check if a node has X slot before adding
 
                     dependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);
