@@ -37,18 +37,15 @@ namespace PipelineProcessor2.Pipeline
 
         public void TriggerDependencies(int id)
         {
-            Console.WriteLine("Finished node " + id + " of run " + run + " type " + dependencyGraph[id].Type + " starting dependencies");
-
             //start the first set of tasks
             foreach (NodeSlot slot in dependencyGraph[id].Dependents)
             {
                 string name = dependencyGraph[slot.NodeId].Type;
-                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[slot.NodeId], data, this);
+                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[slot.NodeId], data, this, slot, run);
 
                 Task task = pluginTask.getTask();
                 if (task == null) continue;
 
-                Console.WriteLine("Starting node " + slot.NodeId + " of run " + run + " type " + dependencyGraph[slot.NodeId].Type);
                 task.Start();
             }
 
