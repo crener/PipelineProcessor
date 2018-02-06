@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
+using PipelineProcessor2.Nodes.Internal;
 
 namespace PipelineProcessor2.PluginImporter
 {
@@ -12,13 +13,15 @@ namespace PipelineProcessor2.PluginImporter
         static Dictionary<string, IInputPlugin> input = new Dictionary<string, IInputPlugin>();
         static Dictionary<string, IProcessPlugin> processor = new Dictionary<string, IProcessPlugin>();
         static Dictionary<string, IOutputPlugin> export = new Dictionary<string, IOutputPlugin>();
+        static List<string> internalPlugins = new List<string>();
         static List<Node> nodes = new List<Node>();
 
         private static object pluginLock = new object(),
             nodeLock = new object(),
             inputLock = new object(),
             processorLock = new object(),
-            outputLock = new object();
+            outputLock = new object(),
+            internalLock = new object();
 
         public static void Init()
         {
@@ -32,6 +35,16 @@ namespace PipelineProcessor2.PluginImporter
                         if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
                         {
                             IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+
+                            Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
+                            bool internalPlugin = internalAttribute != null && !((InternalNode)internalAttribute).ShowExternal;
+
+                            if(internalPlugin)
+                            {
+                                AddInternal(plugin);
+                                continue;
+                            }
+
                             Console.WriteLine("Adding Plugin: " + plugin.PluginInformation(PluginInformationRequests.Name, 0));
                             AddPlugin(plugin);
                         }
@@ -94,6 +107,16 @@ namespace PipelineProcessor2.PluginImporter
                 lock (outputLock) export.Add(type, plugin as IOutputPlugin);
         }
 
+        public static void AddInternal(IPlugin plugin)
+        {
+            string name = "";
+
+            if(plugin is IRawPlugin) name = (plugin as IRawPlugin).FullName;
+            else name = "internal/" + plugin.PluginInformation(PluginInformationRequests.Name);
+
+            internalPlugins.Add(name);
+        }
+
         public static Node[] AvailableNodes()
         {
             lock (nodeLock)
@@ -125,10 +148,16 @@ namespace PipelineProcessor2.PluginImporter
 #if DEBUG
             if(pluginType == "") return true;
 #endif
-            lock (pluginLock)
-            {
-                return plugins.ContainsKey(pluginType);
-            }
+
+            lock (pluginLock) if(plugins.ContainsKey(pluginType)) return true;
+            if(internalPlugins.Contains(pluginType)) return true;
+
+            return false;
+        }
+
+        public static bool isInternalPlugin(string pluginType)
+        {
+            return internalPlugins.Contains(pluginType);
         }
 
         public static bool isInputPlugin(string pluginType)
@@ -139,6 +168,16 @@ namespace PipelineProcessor2.PluginImporter
             lock (inputLock)
             {
                 return input.ContainsKey(pluginType);
+            }
+        }
+        public static bool isOutputPlugin(string pluginType)
+        {
+#if DEBUG
+            if (pluginType.StartsWith("end")) return true;
+#endif
+            lock (outputLock)
+            {
+                return export.ContainsKey(pluginType);
             }
         }
     }

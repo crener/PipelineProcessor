@@ -27,6 +27,13 @@ namespace PipelineProcessor2.Pipeline.Exceptions
         public MissingLinkException(string message, System.Exception innerException) : base(message, innerException) { }
     }
 
+    public class InvalidNodeException : PipelineException
+    {
+        public InvalidNodeException() { }
+        public InvalidNodeException(string message) : base(message) { }
+        public InvalidNodeException(string message, System.Exception innerException) : base(message, innerException) { }
+    }
+
     public class MissingPluginException : PipelineException
     {
         public MissingPluginException() { }

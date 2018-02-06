@@ -54,6 +54,11 @@
   <ItemGroup>
     <Compile Include="JsonTypes\GraphNode.cs" />
     <Compile Include="JsonTypes\NodeLink.cs" />
+    <Compile Include="Nodes\InternalNode.cs" />
+    <Compile Include="Nodes\Internal\IRawPlugin.cs" />
+    <Compile Include="Nodes\Internal\LoopStart.cs" />
+    <Compile Include="Nodes\Internal\LoopEnd.cs" />
+    <Compile Include="Nodes\Internal\LoopDurationLimit.cs" />
     <Compile Include="Nodes\IOutputPlugin.cs" />
     <Compile Include="Nodes\Sample\bluring.cs" />
     <Compile Include="Nodes\IInputPlugin.cs" />

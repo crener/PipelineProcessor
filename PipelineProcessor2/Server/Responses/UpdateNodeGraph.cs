@@ -19,6 +19,7 @@ namespace PipelineProcessor2.Server.Responses
             using (StreamReader stream = new StreamReader(request.InputStream))
                 data = stream.ReadToEnd();
 
+
             JObject information = JObject.Parse(data);
 
             List<NodeLinkInfo> links = new List<NodeLinkInfo>();
