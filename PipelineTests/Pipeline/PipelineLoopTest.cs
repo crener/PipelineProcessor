@@ -49,7 +49,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -93,7 +93,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -117,7 +117,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(0, loops.Count, "incorrect amount of loops detected");
         }
@@ -178,7 +178,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -216,7 +216,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(outerLoopEnd, end, 0, 0);
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(1, loops[0].Depth);
@@ -280,7 +280,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -320,7 +320,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(loopEnd2, end2, 0, 0);
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -374,7 +374,7 @@ namespace PipelineTests.Pipeline
             }
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
-            List<PipelineExecutor.LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
