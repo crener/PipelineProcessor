@@ -25,6 +25,8 @@ namespace PipelineProcessor2.Pipeline
         //special nodes
         private List<LoopPair> loopPairs = new List<LoopPair>();
 
+        private int loopIdCount = 0;
+
         /// <summary>
         /// Initializes a standard Pipeline executor
         /// </summary>
@@ -55,10 +57,9 @@ namespace PipelineProcessor2.Pipeline
             for (int i = nodes.Length - 1; i >= 0; i--)
             {
                 DependentNode node = nodes[i];
-                if (PluginStore.isOutputPlugin(node.Type)) FindLoopEnd(node, ref done); //FindLoopPairs(node, 0);
+                if (PluginStore.isOutputPlugin(node.Type))
+                    FindLoopEnd(node, ref done); //FindLoopPairs(node, 0);
             }
-
-            //if (done.Count > 0) BuildLoopPairs(done);
         }
 
         private void FindLoopEnd(DependentNode node, ref List<int> done)
@@ -68,16 +69,19 @@ namespace PipelineProcessor2.Pipeline
             foreach (NodeSlot slot in node.Dependencies)
             {
                 DependentNode testNode = dependencyGraph[slot.NodeId];
-                if (testNode.Type == LoopEnd.TypeName) FindLoopPairs(testNode);
+                if(done.Contains(testNode.Id)) continue;
+
+                if (testNode.Type == LoopEnd.TypeName) FindLoopPairs(testNode, ref done);
                 else FindLoopEnd(testNode, ref done);
             }
 
             done.Add(node.Id);
         }
 
-        private void FindLoopPairs(DependentNode loopEnd, int depth = 0)
+        private void FindLoopPairs(DependentNode loopEnd, ref List<int> foundEnds, int depth = 0)
         {
             LoopPair instance = new LoopPair();
+            instance.Id = loopIdCount++;
 
             if (loopEnd.Type == LoopEnd.TypeName)
             {
@@ -91,25 +95,71 @@ namespace PipelineProcessor2.Pipeline
                     dependencyGraph[testNode.NodeId].Type != LoopEnd.TypeName).Any())
                     throw new InvalidNodeException("Loop Start Link (slot 0) cannot link to anything but a Loop End");
 
-                if (loopStart.Dependents.Where((testNode, b) => testNode.SlotPos == 0).Count() > 1)
+                int loopCount = loopStart.Dependents.Where((testNode, b) => testNode.SlotPos == 0).Count();
+                if (loopCount > 1)
                 {
                     //multiple nodes linked so there must be nested loops sharing this start position
+                    int[] ids = new int[loopCount];
+                    for (int i = 0, c = 0; i < loopStart.Dependents.Length; i++)
+                        if (loopStart.Dependents[i].SlotPos == 0)
+                            ids[c++] = loopStart.Dependents[i].NodeId;
+
+                    //check if co dependent
+                    List<int> dependencies = new List<int>();
+                    for(int a = 0; a < ids.Length; a++)
+                    {
+                        for(int b = 0; b < ids.Length; b++)
+                        {
+                            if(a == b) continue;
+
+                            bool aTob = NodeDependentOn(ids[a], ids[b]),
+                                bToa = NodeDependentOn(ids[b], ids[a]);
+
+                            if (aTob && bToa) throw new CoDependentLoopException
+                                    ("Node " + ids[a] + " and " + ids[b] + "Are dependent on each other and can't loop!");
+
+                            if(aTob && !dependencies.Contains(a)) dependencies.Add(ids[a]);
+                        }
+                    }
+
+                    //check non dependent nodes for internal loops
+                    foreach(int id in ids)
+                    {
+                        if(dependencies.Contains(id)) continue;
+
+                        LoopPair subPair = new LoopPair();
+                        subPair.Id = loopIdCount++;
+                        subPair.Depth = depth;
+                        subPair.Start = new LoopStart(loopEnd.Dependencies[0].NodeId);
+                        subPair.End = new LoopEnd(dependencyGraph[id].Id);
+
+                        int foundEnd;
+                        if (ContainsLoop(instance, out foundEnd))
+                            //contains internal loop
+                            FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, subPair.Depth + 1);
+
+                        foundEnds.Add(subPair.End.NodeId);
+                        loopPairs.Add(subPair);
+                    }
+
+                    //go back and handel the nodes which are dependent on each other
+                    //todo
                 }
                 else
                 {
-                    NodeSlot link;
-                    try { link = loopStart.Dependents.First(nodeSlot => nodeSlot.SlotPos == 0); }
+                    NodeSlot startLink;
+                    try { startLink = loopStart.Dependents.First(nodeSlot => nodeSlot.SlotPos == 0); }
                     catch (Exception ex) { throw new MissingLinkException("No link for loop start specified", ex); }
 
-                    if (link.NodeId != loopEnd.Id)
+                    if (startLink.NodeId != loopEnd.Id)
                         throw new MissingLinkException("Loop start and loop end only partly referencing each other!");
 
-                    if (ContainsLoop(ref instance))
-                    {
+                    int foundEnd;
+                    if (ContainsLoop(instance, out foundEnd))
                         //contains internal loop
+                        FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, instance.Depth + 1);
 
-                    }
-
+                    foundEnds.Add(instance.End.NodeId);
                     loopPairs.Add(instance);
                 }
             }
@@ -118,17 +168,56 @@ namespace PipelineProcessor2.Pipeline
                 if (instance.End == null) return;
         }
 
-        private bool ContainsLoop(ref LoopPair instance)
+        private bool ContainsLoop(LoopPair instance, out int foundId)
         {
-            int foundId;
-            if (CheckDependenciesFor(dependencyGraph[instance.End.NodeId], out foundId, new List<int>(),
-                LoopEnd.TypeName, LoopStart.TypeName))
+            foundId = -1;
+            List<int> ignore = new List<int>();
+            ignore.AddRange(new[] { instance.Start.NodeId });
+
+            if (CheckDependenciesFor(dependencyGraph[instance.End.NodeId], out foundId, ignore,
+                LoopEnd.TypeName))
             {
                 if (foundId != instance.Start.NodeId)
                     //must have an internal loop
                     return true;
 
                 return false;
+            }
+            return false;
+        }
+
+        private bool NodeDependentOn(int search, int target)
+        {
+            DependentNode node = dependencyGraph[search];
+            List<int> checkedNodes = new List<int>();
+
+            for (int i = 0; i < node.Dependencies.Length; i++)
+            {
+                int nodeId = node.Dependencies[i].NodeId;
+                if (checkedNodes.Contains(nodeId)) continue;
+
+                if (nodeId == target) return true;
+                if (NodeDependentOn(nodeId, target, ref checkedNodes)) return true;
+
+                checkedNodes.Add(nodeId);
+            }
+
+            return false;
+        }
+
+        private bool NodeDependentOn(int search, int target, ref List<int> checkedNodes)
+        {
+            DependentNode node = dependencyGraph[search];
+
+            for (int i = 0; i < node.Dependencies.Length; i++)
+            {
+                int nodeId = node.Dependencies[i].NodeId;
+                if(checkedNodes.Contains(nodeId)) continue;
+
+                if (nodeId == target && NodeDependentOn(nodeId, target, ref checkedNodes)) return true;
+                if (NodeDependentOn(nodeId, target, ref checkedNodes)) return true;
+
+                checkedNodes.Add(nodeId);
             }
 
             return false;
@@ -155,7 +244,7 @@ namespace PipelineProcessor2.Pipeline
                 DependentNode testNode = dependencyGraph[slot.NodeId];
 
                 for (int i = 0; i < types.Length; i++)
-                    if (testNode.Type == types[i])
+                    if (testNode.Type == types[i] && !tested.Contains(testNode.Id))
                     {
                         matchedNode = testNode.Id;
                         return true;

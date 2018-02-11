@@ -55,10 +55,17 @@ namespace PipelineProcessor2.Pipeline.Exceptions
         public MissingPluginDataException(string message, System.Exception innerException) : base(message, innerException) { }
     }
 
-    public class DataSlotAlreadyInUse : PipelineException
+    public class DataSlotAlreadyInUseException : PipelineException
     {
-        public DataSlotAlreadyInUse() { }
-        public DataSlotAlreadyInUse(string message) : base(message) { }
-        public DataSlotAlreadyInUse(string message, System.Exception innerException) : base(message, innerException) { }
+        public DataSlotAlreadyInUseException() { }
+        public DataSlotAlreadyInUseException(string message) : base(message) { }
+        public DataSlotAlreadyInUseException(string message, System.Exception innerException) : base(message, innerException) { }
+    }
+
+    public class CoDependentLoopException : PipelineException
+    {
+        public CoDependentLoopException() { }
+        public CoDependentLoopException(string message) : base(message) { }
+        public CoDependentLoopException(string message, System.Exception innerException) : base(message, innerException) { }
     }
 }

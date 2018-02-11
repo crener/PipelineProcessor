@@ -62,7 +62,7 @@ namespace PipelineProcessor2.Pipeline
         {
             NodeSlot nodeSlot = new NodeSlot(originId, originSlot);
             if (dependencies.ContainsKey(targetSlot))
-                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already been assigned");
+                throw new DataSlotAlreadyInUseException("Slot " + targetSlot + " of node " + Id + " has already been assigned");
 
             dependencies.Add(targetSlot, nodeSlot);
         }
@@ -77,7 +77,7 @@ namespace PipelineProcessor2.Pipeline
                 //clean up unused slot
                 if (dependents[originSlot].Count == 0) dependents.Remove(originSlot);
 
-                throw new DataSlotAlreadyInUse("Slot " + targetSlot + " of node " + Id + " has already been assigned");
+                throw new DataSlotAlreadyInUseException("Slot " + targetSlot + " of node " + Id + " has already been assigned");
             }
 
             dependents[originSlot].Add(nodeSlot);
