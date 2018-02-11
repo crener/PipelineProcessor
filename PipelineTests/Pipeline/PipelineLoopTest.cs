@@ -210,7 +210,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(start, outerLoopStart, 0, 0);
             MatchSlots(outerLoopStart, outerLoopEnd, 0, 0);
             MatchSlots(innerLoopStart, innerLoopEnd, 0, 0);
-            MatchSlots(innerLoopStart, process, 0, 1);
+            MatchSlots(innerLoopStart, process, 1, 0);
             MatchSlots(innerLoopEnd, outerLoopEnd, 1, 1);
             MatchSlots(process, innerLoopEnd, 0, 1);
             MatchSlots(outerLoopEnd, end, 0, 0);

@@ -65,8 +65,17 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
                 DependentNode loopStart = dependencyGraph[loopEnd.Dependencies[0].NodeId];
 
-                if (loopStart.Dependents.Where((testNode, b) => testNode.SlotPos == 0 &&
-                    dependencyGraph[testNode.NodeId].Type != LoopEnd.TypeName).Any())
+                //ensure that only the start and end nodes are linked
+                if (loopStart.Dependents.Where((testSlot, b) =>
+                {
+                    bool incorrectType = dependencyGraph[testSlot.NodeId].Type != LoopEnd.TypeName;
+
+                    foreach (NodeSlot slot in dependencyGraph[testSlot.NodeId].Dependencies)
+                        if (slot.NodeId == loopStart.Id && slot.SlotPos == 0)
+                            if (incorrectType) return true;
+
+                    return false;
+                }).Any())
                     throw new InvalidNodeException("Loop Start Link (slot 0) cannot link to anything but a Loop End");
 
                 int loopCount = loopStart.Dependents.Where((testNode, b) => testNode.SlotPos == 0).Count();

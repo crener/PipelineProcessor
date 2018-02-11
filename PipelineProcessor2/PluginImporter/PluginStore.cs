@@ -39,7 +39,7 @@ namespace PipelineProcessor2.PluginImporter
                             Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
                             bool internalPlugin = internalAttribute != null && !((InternalNode)internalAttribute).ShowExternal;
 
-                            if(internalPlugin)
+                            if (internalPlugin)
                             {
                                 AddInternal(plugin);
                                 continue;
@@ -111,7 +111,7 @@ namespace PipelineProcessor2.PluginImporter
         {
             string name = "";
 
-            if(plugin is IRawPlugin) name = (plugin as IRawPlugin).FullName;
+            if (plugin is IRawPlugin) name = (plugin as IRawPlugin).FullName;
             else name = "internal/" + plugin.PluginInformation(PluginInformationRequests.Name);
 
             internalPlugins.Add(name);
@@ -129,7 +129,7 @@ namespace PipelineProcessor2.PluginImporter
         {
             lock (inputLock)
             {
-                if(!input.ContainsKey(pluginName)) return null;
+                if (!input.ContainsKey(pluginName)) return null;
                 return input[pluginName];
             }
         }
@@ -138,7 +138,7 @@ namespace PipelineProcessor2.PluginImporter
         {
             lock (pluginLock)
             {
-                if(!plugins.ContainsKey(pluginName)) return null;
+                if (!plugins.ContainsKey(pluginName)) return null;
                 return plugins[pluginName];
             }
         }
@@ -146,11 +146,11 @@ namespace PipelineProcessor2.PluginImporter
         public static bool isRegisteredPlugin(string pluginType)
         {
 #if DEBUG
-            if(pluginType == "") return true;
+            if (pluginType == "") return true;
 #endif
 
-            lock (pluginLock) if(plugins.ContainsKey(pluginType)) return true;
-            if(internalPlugins.Contains(pluginType)) return true;
+            lock (pluginLock) if (plugins.ContainsKey(pluginType)) return true;
+            if (internalPlugins.Contains(pluginType)) return true;
 
             return false;
         }

@@ -7,11 +7,14 @@ using System.Threading.Tasks;
 
 namespace PipelineProcessor2.Nodes.Internal
 {
-    [InternalNode(ShowExternal = true)]
-    public class LoopDurationLimit : IPlugin
+    [InternalNode(ShowExternal = false)]
+    public class LoopDurationLimit : IRawPlugin
     {
+        public const string TypeName = "Special/LoopLimit";
+
         public int InputQty => 1;
         public int OutputQty => 1;
+        public string FullName => TypeName;
 
         public string PluginInformation(PluginInformationRequests request, int index)
         {
