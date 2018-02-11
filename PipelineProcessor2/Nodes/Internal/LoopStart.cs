@@ -17,6 +17,11 @@ namespace PipelineProcessor2.Nodes.Internal
 
         public int NodeId { get; }
 
+        public LoopStart()
+        {
+            NodeId = -1;
+        }
+
         public LoopStart(int nodeId)
         {
             this.NodeId = nodeId;
