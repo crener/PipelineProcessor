@@ -14,6 +14,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
         private Dictionary<int, DependentNode> dependencyGraph;
         private List<LoopPair> loopPairs = new List<LoopPair>();
         private int loopIdCount = 0;
+        private Dictionary<int, LoopStart> loopStarts = new Dictionary<int, LoopStart>();
 
         public LoopDetector(Dictionary<int, DependentNode> dependencyGraph)
         {
@@ -59,9 +60,17 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
             if (loopEnd.Type == LoopEnd.TypeName)
             {
-                instance.End = new LoopEnd(loopEnd.Id);
-                instance.Start = new LoopStart(loopEnd.Dependencies[0].NodeId);
+                instance.End = new LoopEnd(loopEnd, instance);
                 instance.Depth = depth;
+
+                //try to keep one instance per unique loop start node Id
+                if (loopStarts.ContainsKey(loopEnd.Dependencies[0].NodeId))
+                    instance.Start = loopStarts[loopEnd.Dependencies[0].NodeId];
+                else
+                {
+                    instance.Start = new LoopStart(dependencyGraph[loopEnd.Dependencies[0].NodeId]);
+                    loopStarts.Add(loopEnd.Dependencies[0].NodeId, instance.Start);
+                }
 
                 DependentNode loopStart = dependencyGraph[loopEnd.Dependencies[0].NodeId];
 
@@ -78,16 +87,36 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 }).Any())
                     throw new InvalidNodeException("Loop Start Link (slot 0) cannot link to anything but a Loop End");
 
-                int loopCount = loopStart.Dependents.Where((testNode, b) => testNode.SlotPos == 0).Count();
+                //find out how many loops the "LoopStart" node is directly responsible for
+                int loopCount;
+                {
+                    List<int> matched = new List<int>();
+                    loopCount = loopStart.Dependents.Where((testSlot, b) =>
+                    {
+                        if (matched.Contains(testSlot.NodeId)) return false;
+
+                        foreach (NodeSlot slot in dependencyGraph[testSlot.NodeId].Dependencies)
+                            if (slot.NodeId == loopStart.Id && slot.SlotPos == 0)
+                            {
+                                matched.Add(testSlot.NodeId);
+                                return true;
+                            }
+
+                        return false;
+                    }).Count();
+                }
+
                 if (loopCount > 1)
                 {
+                    throw new NotImplementedException();
+
                     //multiple nodes linked so there must be nested loops sharing this start position
                     int[] ids = new int[loopCount];
                     for (int i = 0, c = 0; i < loopStart.Dependents.Length; i++)
                         if (loopStart.Dependents[i].SlotPos == 0)
                             ids[c++] = loopStart.Dependents[i].NodeId;
 
-                    //check if co dependent
+                    //check if co dependent nodes exist
                     List<int> dependencies = new List<int>();
                     for (int a = 0; a < ids.Length; a++)
                     {
@@ -113,8 +142,14 @@ namespace PipelineProcessor2.Pipeline.Detectors
                         LoopPair subPair = new LoopPair();
                         subPair.Id = loopIdCount++;
                         subPair.Depth = depth;
-                        subPair.Start = new LoopStart(loopEnd.Dependencies[0].NodeId);
-                        subPair.End = new LoopEnd(dependencyGraph[id].Id);
+                        subPair.End = new LoopEnd(dependencyGraph[id], subPair);
+                        if (loopStarts.ContainsKey(loopEnd.Dependencies[0].NodeId))
+                            subPair.Start = loopStarts[loopEnd.Dependencies[0].NodeId];
+                        else
+                        {
+                            instance.Start = new LoopStart(dependencyGraph[loopEnd.Dependencies[0].NodeId]);
+                            loopStarts.Add(loopEnd.Dependencies[0].NodeId, subPair.Start);
+                        }
 
                         int foundEnd;
                         if (ContainsLoop(instance, out foundEnd))
@@ -122,11 +157,16 @@ namespace PipelineProcessor2.Pipeline.Detectors
                             FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, subPair.Depth + 1);
 
                         foundEnds.Add(subPair.End.NodeId);
+                        subPair.Start.AddLoopPair(subPair);
                         loopPairs.Add(subPair);
                     }
 
                     //go back and handle the nodes which are dependent on each other
-                    //todo
+                    if (dependencies.Count > 1)
+                    {
+                        throw new NotImplementedException();
+                        //todo
+                    }
                 }
                 else
                 {
@@ -143,6 +183,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                         FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, instance.Depth + 1);
 
                     foundEnds.Add(instance.End.NodeId);
+                    instance.Start.AddLoopPair(instance);
                     loopPairs.Add(instance);
                 }
             }

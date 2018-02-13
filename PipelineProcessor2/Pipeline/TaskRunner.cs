@@ -13,19 +13,17 @@ namespace PipelineProcessor2.Pipeline
     public class TaskRunner
     {
         private int run;
-        private NodeSlot slot;
         private IPlugin plugin;
         private DependentNode link;
         private DataStore resultData;
         private PipelineExecutor executor;
 
-        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, PipelineExecutor pipe, NodeSlot slot, int run)
+        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, PipelineExecutor pipe, int run)
         {
             this.plugin = plugin;
             link = node;
             this.resultData = resultData;
             executor = pipe;
-            this.slot = slot;
             this.run = run;
         }
 
@@ -42,7 +40,7 @@ namespace PipelineProcessor2.Pipeline
             List<byte[]> data = null;
             List<byte[]> input = new List<byte[]>();
 
-            Console.WriteLine(link.Type + " Starting, slot: " + slot.NodeId + " of run " + run);
+            Console.WriteLine(link.Type + " Starting, slot: " + link.Id + " of run " + run);
 
             //gather input data
             foreach (NodeSlot id in link.Dependencies)
@@ -73,7 +71,7 @@ namespace PipelineProcessor2.Pipeline
                 else Console.WriteLine("Unknown plugin type");
 
                 stopwatch.Stop();
-                Console.WriteLine(link.Type + " Finished in " + stopwatch.Elapsed +" ms, slot: " + slot.NodeId + " of run " + run);
+                Console.WriteLine(link.Type + " Finished in " + stopwatch.Elapsed +" ms, slot: " + link.Id + " of run " + run);
             }
             catch (Exception e)
             {

@@ -17,36 +17,20 @@ namespace PipelineTests.Pipeline
             // S -> LoopStart -> LoopEnd -> End
 
             List<DependentNode> nodes = new List<DependentNode>();
-            { // start node
-                DependentNode dep = new DependentNode(0, "start");
-                dep.AddDependent(1, 0, 0);
-                nodes.Add(dep);
-            }
-            { // loop start
-                DependentNode dep = new DependentNode(1, LoopStart.TypeName);
-                dep.AddDependency(0, 0, 0);
-                dep.AddDependent(2, 0, 0);
-                dep.AddDependent(2, 2, 1);
-                nodes.Add(dep);
-            }
-            { // condition for end loop
-                DependentNode dep = new DependentNode(5, "condition");
-                dep.AddDependent(2, 1, 0);
-                nodes.Add(dep);
-            }
-            { // loop end
-                DependentNode dep = new DependentNode(2, LoopEnd.TypeName);
-                dep.AddDependency(1, 0, 0);
-                dep.AddDependency(5, 0, 1);
-                dep.AddDependency(1, 1, 2);
-                dep.AddDependent(3, 0, 0);
-                nodes.Add(dep);
-            }
-            { // end node
-                DependentNode dep = new DependentNode(3, "end");
-                dep.AddDependency(2, 0, 0);
-                nodes.Add(dep);
-            }
+            DependentNode start = new DependentNode(0, "start"),
+                loopStart = new DependentNode(1, LoopStart.TypeName),
+                loopEnd = new DependentNode(2, LoopEnd.TypeName),
+                end = new DependentNode(4, "end");
+
+            nodes.Add(start);
+            nodes.Add(loopStart);
+            nodes.Add(loopEnd);
+            nodes.Add(end);
+
+            MatchSlots(start, loopStart, 0, 0);
+            MatchSlots(loopStart, loopEnd, 0, 0);
+            MatchSlots(loopStart, loopEnd, 1, 2);
+            MatchSlots(loopEnd, end, 0, 0);
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
             List<LoopPair> loops = pipe.getLoops();
@@ -58,39 +42,26 @@ namespace PipelineTests.Pipeline
         [Test]
         public void SimpleExtendedLoop()
         {
-            // S -> LoopStart -> LoopEnd -> End
+            // S -> LoopStart -> LoopEnd -> Process -> End
 
             List<DependentNode> nodes = new List<DependentNode>();
-            { // start node
-                DependentNode dep = new DependentNode(0, "start");
-                dep.AddDependent(1, 0, 0);
-                nodes.Add(dep);
-            }
-            { // loop start
-                DependentNode dep = new DependentNode(1, LoopStart.TypeName);
-                dep.AddDependency(0, 0, 0);
-                dep.AddDependent(2, 0, 0);
-                dep.AddDependent(2, 2, 1);
-                nodes.Add(dep);
-            }
-            { // loop end
-                DependentNode dep = new DependentNode(2, LoopEnd.TypeName);
-                dep.AddDependency(1, 0, 0);
-                dep.AddDependency(1, 1, 2);
-                dep.AddDependent(4, 0, 0);
-                nodes.Add(dep);
-            }
-            { // process node
-                DependentNode dep = new DependentNode(4, "process");
-                dep.AddDependency(2, 0, 0);
-                dep.AddDependent(3, 0, 0);
-                nodes.Add(dep);
-            }
-            { // end node
-                DependentNode dep = new DependentNode(3, "end");
-                dep.AddDependency(4, 0, 0);
-                nodes.Add(dep);
-            }
+            DependentNode start = new DependentNode(0, "start"),
+                loopStart = new DependentNode(1, LoopStart.TypeName),
+                loopEnd = new DependentNode(2, LoopEnd.TypeName),
+                process = new DependentNode(3, ""),
+                end = new DependentNode(4, "end");
+
+            nodes.Add(start);
+            nodes.Add(loopStart);
+            nodes.Add(loopEnd);
+            nodes.Add(process);
+            nodes.Add(end);
+
+            MatchSlots(start, loopStart, 0, 0);
+            MatchSlots(loopStart, loopEnd, 0, 0);
+            MatchSlots(loopStart, loopEnd, 1, 2);
+            MatchSlots(loopEnd, process, 0, 0);
+            MatchSlots(process, end, 0, 0);
 
             PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
             List<LoopPair> loops = pipe.getLoops();
@@ -222,6 +193,7 @@ namespace PipelineTests.Pipeline
             Assert.AreEqual(1, loops[0].Depth);
             Assert.AreEqual(0, loops[1].Depth);
             Assert.AreNotSame(loops[0].Id, loops[1].Id);
+            Assert.AreNotSame(loops[0].End.NodeId, loops[1].End.NodeId);
         }
 
         [Test]
