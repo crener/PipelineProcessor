@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline.Detectors;
-using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Pipeline
@@ -19,7 +13,7 @@ namespace PipelineProcessor2.Pipeline
     public class PipelineExecutor
     {
         private readonly Dictionary<int, DependentNode> dependencyGraph;
-        private readonly DataStore data;
+        private readonly DataStore data, staticData;
         private string inputDirectory, outputDirectory;
         private int run;
 
@@ -34,10 +28,11 @@ namespace PipelineProcessor2.Pipeline
         /// <param name="depth">the iteration of input that that is being processed</param>
         /// <param name="input">input path</param>
         /// <param name="output">output path</param>
-        public PipelineExecutor(Dictionary<int, DependentNode> nodes, int depth, string input = "", string output = "")
+        public PipelineExecutor(Dictionary<int, DependentNode> nodes, DataStore staticData, int depth, string input = "", string output = "")
         {
             dependencyGraph = nodes;
             data = new DataStore(depth, output);
+            this.staticData = staticData;
             specialNodes = SpecialNodeSearch.CheckForSpecialNodes(nodes);
             ExtractSpecialNodeData(specialNodes);
 
@@ -49,8 +44,6 @@ namespace PipelineProcessor2.Pipeline
         private void ExtractSpecialNodeData(SpecialNodeData nodeData)
         {
             //loops
-            //LoopPairByStart = (Lookup<int, LoopPair>)nodeData.Loops.ToLookup(pair => pair.Start.NodeId, pair => pair);
-            //LoopPairByEnd = (Lookup<int, LoopPair>)nodeData.Loops.ToLookup(pair => pair.End.NodeId, pair => pair);
             LoopPairByStart = new Dictionary<int, LoopStart>();
             LoopPairByEnd = new Dictionary<int, LoopPair>();
 
@@ -86,6 +79,9 @@ namespace PipelineProcessor2.Pipeline
         /// <returns>Should the dependencies be triggered</returns>
         private void InternalPluginAction(int toTrigger, int triggeredBy)
         {
+            if (!ExecutionHelper.HasFulfilledDependency(dependencyGraph[toTrigger], data, staticData))
+                return;
+
             if (dependencyGraph[toTrigger].Type == LoopStart.TypeName)
             {
                 int[] startIds = LoopPairByStart[toTrigger].StartDependencies(triggeredBy, data);
@@ -111,7 +107,7 @@ namespace PipelineProcessor2.Pipeline
                     continue;
                 }
 
-                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[id], data, this, run);
+                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[id], data, staticData, this, run);
 
                 Task task = pluginTask.getTask();
                 if (task == null) continue;

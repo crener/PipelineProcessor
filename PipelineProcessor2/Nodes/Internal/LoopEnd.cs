@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PipelineProcessor2.Pipeline;
 
 namespace PipelineProcessor2.Nodes.Internal
@@ -83,10 +80,10 @@ namespace PipelineProcessor2.Nodes.Internal
                 byte[] result = data.getData(search);
                 if (result == null) return new int[0];
 
-                if (Convert.ToBoolean(result)) done = true;
+                if (Convert.ToBoolean(result[0])) done = true;
             }
 
-            //trigger dependencies and lower loop start depth
+            //trigger dependencies and iterate loop start depth
             if (done)
             {
                 //move the data through to the output of the node
@@ -104,14 +101,18 @@ namespace PipelineProcessor2.Nodes.Internal
                 return ids.ToArray();
             }
 
+
             //move loop end input data to the loop start output
             //so that it can be used in the next cycle
 
             List<byte[]> outputData = new List<byte[]>();
             outputData.Add(new byte[0]); //loop start Link slot
-            //outputData.Add(new byte[0]); //loop start increment slot
+            outputData.Add(BitConverter.GetBytes(pair.Iteration)); //loop start increment slot
             for (var i = 2; i < node.Dependencies.Length; i++)
                 outputData.Add(data.getData(node.Dependencies[i]));
+
+            //todo clear all the results from the previous iteration from the data store so that the
+            //next run doesn't think it has the data dependencies calculated already
 
             data.StoreResults(outputData, pair.Start.NodeId);
 

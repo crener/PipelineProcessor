@@ -157,7 +157,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                             FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, subPair.Depth + 1);
 
                         foundEnds.Add(subPair.End.NodeId);
-                        subPair.Start.AddLoopPair(subPair);
+                        subPair.Start.AddLoopPair(ref subPair);
                         loopPairs.Add(subPair);
                     }
 
@@ -183,7 +183,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                         FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, instance.Depth + 1);
 
                     foundEnds.Add(instance.End.NodeId);
-                    instance.Start.AddLoopPair(instance);
+                    instance.Start.AddLoopPair(ref instance);
                     loopPairs.Add(instance);
                 }
             }

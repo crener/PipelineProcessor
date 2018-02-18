@@ -58,10 +58,21 @@ namespace PipelineProcessor2.Pipeline
                 }
             }
 
+            //gather static data
+            DataStore staticData = new DataStore(true);
+            foreach(KeyValuePair<int, DependentNode> pair in dependencyGraph)
+            {
+                if(PluginStore.isGeneratorPlugin(pair.Value.Type))
+                {
+                    IGeneratorPlugin plugin = PluginStore.getPlugin(pair.Value.Type) as IGeneratorPlugin;
+                    staticData.StoreResults(plugin.StaticData(), pair.Key, true);
+                }
+            }
+
             //create a pipeline executor for each 
             PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
             for (int i = 0; i < inputAmount; i++)
-                pipes[i] = new PipelineExecutor(dependencyGraph, i, InputDirectory, OutputDirectory);
+                pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, InputDirectory, OutputDirectory);
 
             //get the enumerators for the data and populate starting data
             IEnumerator<List<byte[]>>[] dataInputs = new IEnumerator<List<byte[]>>[inputIds.Length];

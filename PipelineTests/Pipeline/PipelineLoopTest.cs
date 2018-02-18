@@ -32,7 +32,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(loopStart, loopEnd, 1, 2);
             MatchSlots(loopEnd, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
@@ -63,7 +63,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(loopEnd, process, 0, 0);
             MatchSlots(process, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
@@ -87,7 +87,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(0, loops.Count, "incorrect amount of loops detected");
@@ -148,7 +148,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
@@ -186,7 +186,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(process, innerLoopEnd, 0, 1);
             MatchSlots(outerLoopEnd, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
@@ -251,7 +251,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
@@ -291,7 +291,7 @@ namespace PipelineTests.Pipeline
             MatchSlots(loopStart, loopEnd2, 1, 2);
             MatchSlots(loopEnd2, end2, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
@@ -345,7 +345,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), 0);
+            PipelineExecutor pipe = new PipelineExecutor(ConvertToDictionary(nodes), null, 0);
             List<LoopPair> loops = pipe.getLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
@@ -381,7 +381,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new PipelineExecutor(ConvertToDictionary(nodes), 0));
+            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new PipelineExecutor(ConvertToDictionary(nodes), null, 0));
             Assert.AreEqual("No link for loop start specified", exception.Message);
         }
 
@@ -421,7 +421,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new PipelineExecutor(ConvertToDictionary(nodes), 0));
+            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new PipelineExecutor(ConvertToDictionary(nodes), null, 0));
             Assert.AreEqual("Loop start and loop end only partly referencing each other!", exception.Message);
         }
 
@@ -462,7 +462,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            InvalidNodeException exception = Assert.Throws<InvalidNodeException>(() => new PipelineExecutor(ConvertToDictionary(nodes), 0));
+            InvalidNodeException exception = Assert.Throws<InvalidNodeException>(() => new PipelineExecutor(ConvertToDictionary(nodes), null, 0));
             Assert.AreEqual("Loop Start Link (slot 0) cannot link to anything but a Loop End", exception.Message);
         }
 

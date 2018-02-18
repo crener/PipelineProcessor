@@ -10,7 +10,7 @@ namespace PipelineProcessor2.Pipeline
     /// <summary>
     /// Structure for holding all special nodes found in the dependency graph
     /// </summary>
-    public struct LoopPair
+    public class LoopPair
     {
         public LoopStart Start;
         public LoopEnd End;

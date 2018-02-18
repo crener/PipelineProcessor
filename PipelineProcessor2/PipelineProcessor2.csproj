@@ -54,12 +54,16 @@
   <ItemGroup>
     <Compile Include="JsonTypes\GraphNode.cs" />
     <Compile Include="JsonTypes\NodeLink.cs" />
-    <Compile Include="Nodes\InternalNode.cs" />
+    <Compile Include="Nodes\BasicMaths\GreaterThanEqual.cs" />
+    <Compile Include="Nodes\BasicMaths\GreaterThan.cs" />
+    <Compile Include="Nodes\Generator\NumberGen.cs" />
+    <Compile Include="Nodes\InternalNodeAttribute.cs" />
     <Compile Include="Nodes\Internal\IRawPlugin.cs" />
     <Compile Include="Nodes\Internal\LoopStart.cs" />
     <Compile Include="Nodes\Internal\LoopEnd.cs" />
     <Compile Include="Nodes\Internal\LoopDurationLimit.cs" />
     <Compile Include="Nodes\IOutputPlugin.cs" />
+    <Compile Include="Nodes\IGeneratorPlugin.cs" />
     <Compile Include="Nodes\Sample\bluring.cs" />
     <Compile Include="Nodes\IInputPlugin.cs" />
     <Compile Include="Nodes\Sample\ExportJpg.cs" />
@@ -71,6 +75,7 @@
     <Compile Include="Pipeline\Detectors\LoopDetector.cs" />
     <Compile Include="Pipeline\Detectors\SpecialNodeSearch.cs" />
     <Compile Include="Pipeline\Exceptions.cs" />
+    <Compile Include="Pipeline\ExecutionHelper.cs" />
     <Compile Include="Pipeline\PipelineState.cs" />
     <Compile Include="Pipeline\PipelineExecutor.cs" />
     <Compile Include="Pipeline\SlotStructs.cs" />

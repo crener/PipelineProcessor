@@ -13,6 +13,7 @@ namespace PipelineProcessor2.PluginImporter
         static Dictionary<string, IInputPlugin> input = new Dictionary<string, IInputPlugin>();
         static Dictionary<string, IProcessPlugin> processor = new Dictionary<string, IProcessPlugin>();
         static Dictionary<string, IOutputPlugin> export = new Dictionary<string, IOutputPlugin>();
+        static Dictionary<string, IGeneratorPlugin> generator = new Dictionary<string, IGeneratorPlugin>();
         static List<string> internalPlugins = new List<string>();
         static List<Node> nodes = new List<Node>();
 
@@ -21,7 +22,8 @@ namespace PipelineProcessor2.PluginImporter
             inputLock = new object(),
             processorLock = new object(),
             outputLock = new object(),
-            internalLock = new object();
+            internalLock = new object(),
+            genLock = new object();
 
         public static void Init()
         {
@@ -64,6 +66,7 @@ namespace PipelineProcessor2.PluginImporter
             if (plugin is IInputPlugin) nodeData.category = "Input";
             else if (plugin is IOutputPlugin) nodeData.category = "Output";
             else if (plugin is IProcessPlugin) nodeData.category = "Process";
+            else if (plugin is IGeneratorPlugin) nodeData.category = "Generator";
 
             lock (pluginLock)
             {
@@ -105,6 +108,9 @@ namespace PipelineProcessor2.PluginImporter
 
             if (plugin is IOutputPlugin)
                 lock (outputLock) export.Add(type, plugin as IOutputPlugin);
+
+            if (plugin is IGeneratorPlugin)
+                lock (genLock) generator.Add(type, plugin as IGeneratorPlugin);
         }
 
         public static void AddInternal(IPlugin plugin)
@@ -170,6 +176,7 @@ namespace PipelineProcessor2.PluginImporter
                 return input.ContainsKey(pluginType);
             }
         }
+
         public static bool isOutputPlugin(string pluginType)
         {
 #if DEBUG
@@ -178,6 +185,17 @@ namespace PipelineProcessor2.PluginImporter
             lock (outputLock)
             {
                 return export.ContainsKey(pluginType);
+            }
+        }
+
+        public static bool isGeneratorPlugin(string pluginType)
+        {
+#if DEBUG
+            if (pluginType.StartsWith("gen")) return true;
+#endif
+            lock (genLock)
+            {
+                return generator.ContainsKey(pluginType);
             }
         }
     }

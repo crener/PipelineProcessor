@@ -12,11 +12,21 @@ namespace PipelineProcessor2.Pipeline
         private Dictionary<NodeSlot, byte[]> data = new Dictionary<NodeSlot, byte[]>();
         private int depth;
         private string cacheDir;
+        private bool disableWriting = true;
 
         public DataStore(int depth, string outputDir)
         {
             this.depth = depth;
             cacheDir = outputDir + Path.DirectorySeparatorChar + ".cache" + Path.DirectorySeparatorChar + depth + Path.DirectorySeparatorChar;
+        }
+        public DataStore(bool staticData)
+        {
+            if(!staticData)
+                throw new ArgumentException("A none-static data store needs an output directory, use another constructor!");
+
+            depth = -1;
+            cacheDir = "";
+            disableWriting = true;
         }
 
         public void StoreResults(List<byte[]> newData, int nodeId, bool preventCaching = false)
@@ -24,6 +34,8 @@ namespace PipelineProcessor2.Pipeline
             for (int i = 0; i < newData.Count; i++)
             {
                 NodeSlot slot = new NodeSlot(nodeId, i);
+
+                if(data.ContainsKey(slot)) data.Remove(slot);
                 data.Add(slot, newData[i]);
             }
 
@@ -32,6 +44,8 @@ namespace PipelineProcessor2.Pipeline
 
         private void SaveCache(List<byte[]> byteses, int node)
         {
+            if(disableWriting) return;
+
             string rawPath = cacheDir + node + Path.DirectorySeparatorChar;
             if (!Directory.Exists(rawPath)) Directory.CreateDirectory(rawPath);
 

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PipelineProcessor2.Pipeline;
 
 namespace PipelineProcessor2.Nodes.Internal
@@ -39,7 +36,7 @@ namespace PipelineProcessor2.Nodes.Internal
             return "";
         }
 
-        public void AddLoopPair(LoopPair pair)
+        public void AddLoopPair(ref LoopPair pair)
         {
             if (controllingPairs.ContainsKey(pair.Depth)) return;
 
@@ -91,7 +88,7 @@ namespace PipelineProcessor2.Nodes.Internal
             {
                 LoopPair pair = controllingPairs[currentDepth];
                 pair.Iteration++;
-                controllingPairs[currentDepth] = pair;
+                //controllingPairs[currentDepth] = pair;
 
                 Console.WriteLine("Loop iteration: " + pair.Iteration);
             }
@@ -101,7 +98,7 @@ namespace PipelineProcessor2.Nodes.Internal
             {
                 List<byte[]> outputData = new List<byte[]>();
                 outputData.Add(new byte[0]); //Link slot
-                //outputData.Add(new byte[0]); //increment slot
+                outputData.Add(BitConverter.GetBytes(controllingPairs[currentDepth].Iteration)); //increment slot
                 foreach (NodeSlot slot in dependencyNode.Dependencies)
                     outputData.Add(data.getData(slot));
 

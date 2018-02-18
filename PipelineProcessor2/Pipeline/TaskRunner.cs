@@ -15,14 +15,15 @@ namespace PipelineProcessor2.Pipeline
         private int run;
         private IPlugin plugin;
         private DependentNode link;
-        private DataStore resultData;
+        private DataStore resultData, staticData;
         private PipelineExecutor executor;
 
-        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, PipelineExecutor pipe, int run)
+        public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, DataStore staticData, PipelineExecutor pipe, int run)
         {
             this.plugin = plugin;
             link = node;
             this.resultData = resultData;
+            this.staticData = staticData;
             executor = pipe;
             this.run = run;
         }
@@ -30,7 +31,8 @@ namespace PipelineProcessor2.Pipeline
         //start the plugin task
         public Task getTask()
         {
-            if (!HasFulfilledDependency()) return null;
+            if (!ExecutionHelper.HasFulfilledDependency(link, resultData, staticData))
+                return null;
 
             return new Task(Execute);
         }
@@ -46,6 +48,9 @@ namespace PipelineProcessor2.Pipeline
             foreach (NodeSlot id in link.Dependencies)
             {
                 byte[] dependencyData = resultData.getData(id);
+
+                if(dependencyData == null) dependencyData = staticData.getData(id);
+
                 if (dependencyData == null)
                     throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " +
                                                          id.SlotPos + " for node " + link.Id + " run: " + run);
@@ -84,12 +89,5 @@ namespace PipelineProcessor2.Pipeline
             executor.TriggerDependencies(link.Id);
         }
 
-        public bool HasFulfilledDependency()
-        {
-            foreach (NodeSlot id in link.Dependencies)
-                if (resultData.getData(id) == null) return false;
-
-            return true;
-        }
     }
 }
