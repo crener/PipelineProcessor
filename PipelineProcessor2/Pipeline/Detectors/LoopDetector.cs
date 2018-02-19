@@ -110,8 +110,9 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 {
                     throw new NotImplementedException();
 
+                    #region
                     //multiple nodes linked so there must be nested loops sharing this start position
-                    int[] ids = new int[loopCount];
+                    /*int[] ids = new int[loopCount];
                     for (int i = 0, c = 0; i < loopStart.Dependents.Length; i++)
                         if (loopStart.Dependents[i].SlotPos == 0)
                             ids[c++] = loopStart.Dependents[i].NodeId;
@@ -166,7 +167,8 @@ namespace PipelineProcessor2.Pipeline.Detectors
                     {
                         throw new NotImplementedException();
                         //todo
-                    }
+                    }*/
+                    #endregion
                 }
                 else
                 {
@@ -190,11 +192,12 @@ namespace PipelineProcessor2.Pipeline.Detectors
             else if (loopEnd.Type == LoopStart.TypeName)
                 //abort as you are in the middle of a loop rather than at the end
                 if (instance.End == null) return;
+
+            instance.ContainedNodes = FindContainingNodeIds(instance.Start.NodeId, instance.End.NodeId);
         }
 
         private bool ContainsLoop(LoopPair instance, out int foundId)
         {
-            foundId = -1;
             List<int> ignore = new List<int>();
             ignore.AddRange(new[] { instance.Start.NodeId });
 
@@ -280,6 +283,46 @@ namespace PipelineProcessor2.Pipeline.Detectors
             tested.Add(node.Id);
             matchedNode = -1;
             return false;
+        }
+
+        private List<NodeSlot> FindContainingNodeIds(int loopStart, int loopEnd)
+        {
+            DependentNode start = dependencyGraph[loopStart];
+            List<NodeSlot> ids = new List<NodeSlot>();
+
+            for (int i = 1; i < start.Dependents.Length; i++)
+            {
+                List<NodeSlot> id = new List<NodeSlot>();
+                id.Add(new NodeSlot(start.Dependents[i].NodeId, start.Dependents[i].SlotPos));
+
+                Tuple<bool, List<NodeSlot>> traversed = TraverseNodeDependents(id, start.Dependents[i].NodeId, loopEnd);
+                if (traversed.Item1) ids.AddRange(traversed.Item2);
+            }
+
+            return ids;
+        }
+
+        private Tuple<bool, List<NodeSlot>> TraverseNodeDependents(List<NodeSlot> checkedNodes, int nextCheck, int endNode)
+        {
+            bool good = false;
+            List<NodeSlot> validated = new List<NodeSlot>();
+
+            foreach (NodeSlot node in dependencyGraph[nextCheck].Dependents)
+            {
+                if (node.NodeId == endNode) return new Tuple<bool, List<NodeSlot>>(true, checkedNodes);
+
+                List<NodeSlot> searched = new List<NodeSlot>(checkedNodes);
+                searched.Add(new NodeSlot(node.NodeId, node.SlotPos));
+
+                Tuple<bool, List<NodeSlot>> result = TraverseNodeDependents(searched, node.NodeId, endNode);
+                if (result.Item1)
+                {
+                    good = true;
+                    validated.AddRange(result.Item2);
+                }
+            }
+
+            return new Tuple<bool, List<NodeSlot>>(good, validated);
         }
     }
 }

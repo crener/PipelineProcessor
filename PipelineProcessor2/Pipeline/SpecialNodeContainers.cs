@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace PipelineProcessor2.Pipeline
         public LoopStart Start;
         public LoopEnd End;
         public int Iteration, Id, Depth;
+        public List<NodeSlot> ContainedNodes;
     }
 
     public struct SpecialNodeData

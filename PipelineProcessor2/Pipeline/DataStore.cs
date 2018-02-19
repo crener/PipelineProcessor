@@ -42,6 +42,12 @@ namespace PipelineProcessor2.Pipeline
             if (!preventCaching) SaveCache(newData, nodeId);
         }
 
+        public void ClearResults(List<NodeSlot> ids)
+        {
+            foreach(NodeSlot id in ids)
+                if(data.ContainsKey(id)) data.Remove(id);
+        }
+
         private void SaveCache(List<byte[]> byteses, int node)
         {
             if(disableWriting) return;

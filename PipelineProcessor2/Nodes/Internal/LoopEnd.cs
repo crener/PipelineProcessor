@@ -88,8 +88,15 @@ namespace PipelineProcessor2.Nodes.Internal
             {
                 //move the data through to the output of the node
                 List<byte[]> transferData = new List<byte[]>();
-                for (var i = 2; i < node.Dependencies.Length; i++)
-                    transferData.Add(data.getData(node.Dependencies[i]));
+                for(var i = 0; i < node.Dependencies.Length; i++)
+                {
+                    NodeSlot slot = node.Dependencies[i];
+                    int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
+
+                    //slot 0 and 1 are loop node slots, all other data must be passed on
+                    if(slotPos != 0 && slotPos != 1)
+                        transferData.Add(data.getData(node.Dependencies[i]));
+                }
 
                 data.StoreResults(transferData, NodeId);
 
@@ -101,7 +108,6 @@ namespace PipelineProcessor2.Nodes.Internal
                 return ids.ToArray();
             }
 
-
             //move loop end input data to the loop start output
             //so that it can be used in the next cycle
 
@@ -111,9 +117,7 @@ namespace PipelineProcessor2.Nodes.Internal
             for (var i = 2; i < node.Dependencies.Length; i++)
                 outputData.Add(data.getData(node.Dependencies[i]));
 
-            //todo clear all the results from the previous iteration from the data store so that the
-            //next run doesn't think it has the data dependencies calculated already
-
+            data.ClearResults(pair.ContainedNodes);
             data.StoreResults(outputData, pair.Start.NodeId);
 
             return pair.Start.StartDependencies(NodeId, data);

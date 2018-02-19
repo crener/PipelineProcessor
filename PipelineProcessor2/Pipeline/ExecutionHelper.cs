@@ -16,5 +16,21 @@ namespace PipelineProcessor2.Pipeline
 
             return true;
         }
+
+        public static int OtherNodeSlotDependents(DependentNode node, int targetNodeId)
+        {
+            foreach(NodeSlot slot in node.Dependents)
+                if(slot.NodeId == targetNodeId) return slot.SlotPos;
+
+            return -1;
+        }
+
+        public static int OtherNodeSlotDependencies(DependentNode node, int targetNodeId)
+        {
+            foreach(NodeSlot slot in node.Dependencies)
+                if(slot.NodeId == targetNodeId) return slot.SlotPos;
+
+            return -1;
+        }
     }
 }
