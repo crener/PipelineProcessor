@@ -63,16 +63,16 @@ namespace PipelineProcessor2.Nodes.Internal
                 foreach (NodeSlot slots in node.Dependencies)
                 {
                     DependentNode otherNode = dependencyGraph[slots.NodeId];
-                    foreach(NodeSlot otherSlot in otherNode.Dependents)
+                    foreach (NodeSlot otherSlot in otherNode.Dependents)
                     {
-                        if(otherSlot.NodeId == NodeId && otherSlot.SlotPos == 1)
+                        if (otherSlot.NodeId == NodeId && otherSlot.SlotPos == 1)
                         {
                             search = slots;
                             break;
                         }
                     }
 
-                    if(search.NodeId != -1) break;
+                    if (search.NodeId != -1) break;
                 }
 
                 if (search.NodeId == -1) return new int[0];
@@ -88,15 +88,19 @@ namespace PipelineProcessor2.Nodes.Internal
             {
                 //move the data through to the output of the node
                 List<byte[]> transferData = new List<byte[]>();
-                for(var i = 0; i < node.Dependencies.Length; i++)
-                {
-                    NodeSlot slot = node.Dependencies[i];
-                    int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
+                for (int j = 2; j < node.Dependencies.Length; j++)
+                    for (var i = 0; i < node.Dependencies.Length; i++)
+                    {
+                        NodeSlot slot = node.Dependencies[i];
+                        int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
 
-                    //slot 0 and 1 are loop node slots, all other data must be passed on
-                    if(slotPos != 0 && slotPos != 1)
-                        transferData.Add(data.getData(node.Dependencies[i]));
-                }
+                        //slot 0 and 1 are loop node slots, all other data must be passed on
+                        if(slotPos == j)
+                        {
+                            transferData.Add(data.getData(node.Dependencies[i]));
+                            break;
+                        }
+                    }
 
                 data.StoreResults(transferData, NodeId);
 
@@ -113,9 +117,21 @@ namespace PipelineProcessor2.Nodes.Internal
 
             List<byte[]> outputData = new List<byte[]>();
             outputData.Add(new byte[0]); //loop start Link slot
-            outputData.Add(BitConverter.GetBytes(pair.Iteration)); //loop start increment slot
-            for (var i = 2; i < node.Dependencies.Length; i++)
-                outputData.Add(data.getData(node.Dependencies[i]));
+            outputData.Add(BitConverter.GetBytes(++pair.Iteration)); //loop start increment slot
+
+            for (int j = 2; j < node.Dependencies.Length; j++)
+                for (var i = 0; i < node.Dependencies.Length; i++)
+                {
+                    NodeSlot slot = node.Dependencies[i];
+                    int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
+
+                    //slot 0 and 1 are loop node slots, all other data must be passed on
+                    if(slotPos == j)
+                    {
+                        outputData.Add(data.getData(node.Dependencies[i]));
+                        break;
+                    }
+                }
 
             data.ClearResults(pair.ContainedNodes);
             data.StoreResults(outputData, pair.Start.NodeId);

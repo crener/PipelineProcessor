@@ -85,17 +85,12 @@ namespace PipelineProcessor2.Nodes.Internal
 
             //iterate counters
             if (triggeredByEnd)
-            {
-                LoopPair pair = controllingPairs[currentDepth];
-                pair.Iteration++;
-                //controllingPairs[currentDepth] = pair;
-
-                Console.WriteLine("Loop iteration: " + pair.Iteration);
-            }
+                Console.WriteLine("Loop iteration: " + controllingPairs[currentDepth].Iteration);
             else ResetCounters();
 
             //move the data to the nodes output
-            {
+            if (!triggeredByEnd)
+            { // end node will have moved the data already
                 List<byte[]> outputData = new List<byte[]>();
                 outputData.Add(new byte[0]); //Link slot
                 outputData.Add(BitConverter.GetBytes(controllingPairs[currentDepth].Iteration)); //increment slot
@@ -105,7 +100,11 @@ namespace PipelineProcessor2.Nodes.Internal
                 data.StoreResults(outputData, NodeId);
             }
 
-            //gather ids to be triggered
+            return getTriggerNodes().ToArray();
+        }
+
+        private List<int> getTriggerNodes()
+        {
             List<int> ids = new List<int>();
             foreach (NodeSlot slot in dependencyNode.Dependents)
             {
@@ -123,7 +122,7 @@ namespace PipelineProcessor2.Nodes.Internal
                     ids.Add(slot.NodeId);
             }
 
-            return ids.ToArray();
+            return ids;
         }
     }
 }
