@@ -292,10 +292,12 @@ namespace PipelineProcessor2.Pipeline.Detectors
             DependentNode start = dependencyGraph[loopStart];
             List<NodeSlot> ids = new List<NodeSlot>();
 
-            for (int i = 1; i < start.Dependents.Length; i++)
+            for (int i = 0; i < start.Dependents.Length; i++)
             {
+                if(start.Dependents[i].NodeId == loopEnd) continue;
+
                 List<NodeSlot> id = new List<NodeSlot>();
-                id.Add(new NodeSlot(start.Dependents[i].NodeId, start.Dependents[i].SlotPos));
+                id.Add(start.Dependents[i]);
 
                 Tuple<bool, List<NodeSlot>> traversed = TraverseNodeDependents(id, start.Dependents[i].NodeId, loopEnd);
                 if (traversed.Item1) ids.AddRange(traversed.Item2);
