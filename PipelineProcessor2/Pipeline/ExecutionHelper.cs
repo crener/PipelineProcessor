@@ -32,5 +32,23 @@ namespace PipelineProcessor2.Pipeline
 
             return -1;
         }
+
+        public static NodeSlot FindNodeSlotInDependents(DependentNode searchNode, Dictionary<int, DependentNode> dependencyGraph, int searchSlot)
+        {
+            foreach (NodeSlot slot in searchNode.Dependents)
+                if (OtherNodeSlotDependencies(dependencyGraph[slot.NodeId], searchNode.Id) == searchSlot)
+                    return slot;
+
+            return new NodeSlot(-1, -1);
+        }
+
+        public static NodeSlot FindNodeSlotInDependencies(DependentNode searchNode, Dictionary<int, DependentNode> dependencyGraph, int searchSlot)
+        {
+            foreach (NodeSlot slot in searchNode.Dependencies)
+                if (OtherNodeSlotDependents(dependencyGraph[slot.NodeId], searchNode.Id) == searchSlot)
+                    return slot;
+
+            return new NodeSlot(-1, -1);
+        }
     }
 }

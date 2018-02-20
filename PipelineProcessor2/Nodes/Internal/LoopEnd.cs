@@ -57,24 +57,8 @@ namespace PipelineProcessor2.Nodes.Internal
             //check condition
             bool done = false;
             {
-                NodeSlot search = new NodeSlot(-1, -1);
-
                 //find the "done" result
-                foreach (NodeSlot slots in node.Dependencies)
-                {
-                    DependentNode otherNode = dependencyGraph[slots.NodeId];
-                    foreach (NodeSlot otherSlot in otherNode.Dependents)
-                    {
-                        if (otherSlot.NodeId == NodeId && otherSlot.SlotPos == 1)
-                        {
-                            search = slots;
-                            break;
-                        }
-                    }
-
-                    if (search.NodeId != -1) break;
-                }
-
+                NodeSlot search = ExecutionHelper.FindNodeSlotInDependencies(node, dependencyGraph, 1);
                 if (search.NodeId == -1) return new int[0];
 
                 byte[] result = data.getData(search);

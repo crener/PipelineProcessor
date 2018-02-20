@@ -16,8 +16,8 @@ namespace PipelineProcessor2.Nodes.BasicMaths
             else if (request == PluginInformationRequests.Description) return "Is greater than or Equal";
             else if (request == PluginInformationRequests.InputName)
             {
-                if (index == 0) return "Value";
-                if (index == 1) return "Check";
+                if (index == 0) return "Comparison";
+                if (index == 1) return ">=";
             }
             else if (request == PluginInformationRequests.InputType)
             {

@@ -63,16 +63,18 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 instance.End = new LoopEnd(loopEnd, instance);
                 instance.Depth = depth;
 
+                int startNode = ExecutionHelper.FindNodeSlotInDependencies(loopEnd, dependencyGraph, 0).NodeId;
+                if (startNode == -1) throw new MissingLinkException("No link for loop start specified");
+                DependentNode loopStart = dependencyGraph[startNode];
+
                 //try to keep one instance per unique loop start node Id
-                if (loopStarts.ContainsKey(loopEnd.Dependencies[0].NodeId))
-                    instance.Start = loopStarts[loopEnd.Dependencies[0].NodeId];
+                if (loopStarts.ContainsKey(startNode))
+                    instance.Start = loopStarts[startNode];
                 else
                 {
-                    instance.Start = new LoopStart(dependencyGraph[loopEnd.Dependencies[0].NodeId]);
-                    loopStarts.Add(loopEnd.Dependencies[0].NodeId, instance.Start);
+                    instance.Start = new LoopStart(loopStart);
+                    loopStarts.Add(startNode, instance.Start);
                 }
-
-                DependentNode loopStart = dependencyGraph[loopEnd.Dependencies[0].NodeId];
 
                 //ensure that only the start and end nodes are linked
                 if (loopStart.Dependents.Where((testSlot, b) =>
@@ -172,10 +174,10 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 }
                 else
                 {
-                    NodeSlot startLink;
-                    try { startLink = loopStart.Dependents.First(nodeSlot => nodeSlot.SlotPos == 0); }
-                    catch (Exception ex) { throw new MissingLinkException("No link for loop start specified", ex); }
+                    NodeSlot startLink = ExecutionHelper.FindNodeSlotInDependents(loopStart, dependencyGraph, 0);
 
+                    if(startLink.NodeId == -1)
+                        throw new MissingLinkException("No link for loop start specified");
                     if (startLink.NodeId != loopEnd.Id)
                         throw new MissingLinkException("Loop start and loop end only partly referencing each other!");
 

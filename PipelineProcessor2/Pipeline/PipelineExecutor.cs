@@ -51,6 +51,7 @@ namespace PipelineProcessor2.Pipeline
             {
                 if (!LoopPairByStart.ContainsKey(loopPair.Start.NodeId))
                     LoopPairByStart.Add(loopPair.Start.NodeId, loopPair.Start);
+
                 LoopPairByEnd.Add(loopPair.End.NodeId, loopPair);
             }
         }
