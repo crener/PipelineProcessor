@@ -1,71 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PipelineProcessor2.Pipeline.Exceptions
 {
-    public class PipelineException : System.Exception
+    public class PipelineException : Exception
     {
         public PipelineException() { }
         public PipelineException(string message) : base(message) { }
-        public PipelineException(string message, System.Exception innerException) : base(message, innerException) { }
+        public PipelineException(string message, Exception innerException) : base(message, innerException) { }
     }
 
-    public class MissingNodeException : PipelineException
+    public class NodeException: PipelineException
+    {
+        public NodeException() { }
+        public NodeException(string message) : base(message) { }
+        public NodeException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class MissingNodeException : NodeException
     {
         public MissingNodeException() { }
         public MissingNodeException(string message) : base(message) { }
-        public MissingNodeException(string message, System.Exception innerException) : base(message, innerException) { }
+        public MissingNodeException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class MissingLinkException : PipelineException
     {
         public MissingLinkException() { }
         public MissingLinkException(string message) : base(message) { }
-        public MissingLinkException(string message, System.Exception innerException) : base(message, innerException) { }
+        public MissingLinkException(string message, Exception innerException) : base(message, innerException) { }
     }
 
-    public class InvalidNodeException : PipelineException
+    public class InvalidNodeException : NodeException
     {
         public InvalidNodeException() { }
         public InvalidNodeException(string message) : base(message) { }
-        public InvalidNodeException(string message, System.Exception innerException) : base(message, innerException) { }
+        public InvalidNodeException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class MissingPluginException : PipelineException
     {
         public MissingPluginException() { }
         public MissingPluginException(string message) : base(message) { }
-        public MissingPluginException(string message, System.Exception innerException) : base(message, innerException) { }
+        public MissingPluginException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class InputPluginQuantityMismatchException : PipelineException
     {
         public InputPluginQuantityMismatchException() { }
         public InputPluginQuantityMismatchException(string message) : base(message) { }
-        public InputPluginQuantityMismatchException(string message, System.Exception innerException) : base(message, innerException) { }
+        public InputPluginQuantityMismatchException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class MissingPluginDataException : PipelineException
     {
         public MissingPluginDataException() { }
         public MissingPluginDataException(string message) : base(message) { }
-        public MissingPluginDataException(string message, System.Exception innerException) : base(message, innerException) { }
+        public MissingPluginDataException(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class DataSlotAlreadyInUseException : PipelineException
     {
         public DataSlotAlreadyInUseException() { }
         public DataSlotAlreadyInUseException(string message) : base(message) { }
-        public DataSlotAlreadyInUseException(string message, System.Exception innerException) : base(message, innerException) { }
+        public DataSlotAlreadyInUseException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class SlotLimitExceeded : PipelineException
+    {
+        public SlotLimitExceeded() { }
+        public SlotLimitExceeded(string message) : base(message) { }
+        public SlotLimitExceeded(string message, Exception innerException) : base(message, innerException) { }
     }
 
     public class CoDependentLoopException : PipelineException
     {
         public CoDependentLoopException() { }
         public CoDependentLoopException(string message) : base(message) { }
-        public CoDependentLoopException(string message, System.Exception innerException) : base(message, innerException) { }
+        public CoDependentLoopException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

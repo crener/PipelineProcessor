@@ -11,6 +11,8 @@ namespace PipelineProcessor2.Pipeline.Detectors
 {
     internal class LoopDetector
     {
+        private const string StartEndIdMismatch = "Loop start and loop end only partly referencing each other!";
+
         private Dictionary<int, DependentNode> dependencyGraph;
         private List<LoopPair> loopPairs = new List<LoopPair>();
         private int loopIdCount = 0;
@@ -63,7 +65,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 instance.End = new LoopEnd(loopEnd, instance);
                 instance.Depth = depth;
 
-                int startNode = ExecutionHelper.FindNodeSlotInDependencies(loopEnd, dependencyGraph, 0).NodeId;
+                int startNode = ExecutionHelper.FindFirstNodeSlotInDependencies(loopEnd, dependencyGraph, 0).NodeId;
                 if (startNode == -1) throw new MissingLinkException("No link for loop start specified");
                 DependentNode loopStart = dependencyGraph[startNode];
 
@@ -110,7 +112,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
                 if (loopCount > 1)
                 {
-                    throw new NotImplementedException();
+                    throw new SlotLimitExceeded("Loop Start may only have one loop end, use multiple loop starts for nesting or branching");
 
                     #region
                     //multiple nodes linked so there must be nested loops sharing this start position
@@ -174,12 +176,12 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 }
                 else
                 {
-                    NodeSlot startLink = ExecutionHelper.FindNodeSlotInDependents(loopStart, dependencyGraph, 0);
+                    NodeSlot startLink = ExecutionHelper.FindFirstNodeSlotInDependents(loopStart, dependencyGraph, 0);
 
                     if(startLink.NodeId == -1)
                         throw new MissingLinkException("No link for loop start specified");
                     if (startLink.NodeId != loopEnd.Id)
-                        throw new MissingLinkException("Loop start and loop end only partly referencing each other!");
+                        throw new MissingLinkException(StartEndIdMismatch);
 
                     int foundEnd;
                     if (ContainsLoop(instance, out foundEnd))

@@ -57,8 +57,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
+    <Compile Include="Pipeline\PipelineHelperTests.cs" />
     <Compile Include="Pipeline\PipelineStateTest.cs" />
     <Compile Include="Pipeline\PipelineLoopTest.cs" />
+    <Compile Include="Pipeline\TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
