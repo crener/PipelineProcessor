@@ -16,5 +16,12 @@ namespace PipelineProcessor2.Pipeline
             NodeId = nodeId;
             SlotPos = slotPos;
         }
+
+        public static NodeSlot Invalid => new NodeSlot(-1, -1);
+
+        public static bool isInvalid(NodeSlot check)
+        {
+            return check.NodeId < 0 || check.SlotPos < -1;
+        }
     }
 }

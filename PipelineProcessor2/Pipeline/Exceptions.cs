@@ -58,14 +58,21 @@ namespace PipelineProcessor2.Pipeline.Exceptions
         public MissingPluginDataException(string message, Exception innerException) : base(message, innerException) { }
     }
 
-    public class DataSlotAlreadyInUseException : PipelineException
+    public class DataSlotAlreadyInUseException : NodeException
     {
         public DataSlotAlreadyInUseException() { }
         public DataSlotAlreadyInUseException(string message) : base(message) { }
         public DataSlotAlreadyInUseException(string message, Exception innerException) : base(message, innerException) { }
     }
 
-    public class SlotLimitExceeded : PipelineException
+    public class InvalidConnectionException : NodeException
+    {
+        public InvalidConnectionException() { }
+        public InvalidConnectionException(string message) : base(message) { }
+        public InvalidConnectionException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    public class SlotLimitExceeded : NodeException
     {
         public SlotLimitExceeded() { }
         public SlotLimitExceeded(string message) : base(message) { }

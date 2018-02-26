@@ -5,7 +5,7 @@ using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
 using PipelineProcessor2.Nodes.Internal;
 
-namespace PipelineProcessor2.PluginImporter
+namespace PipelineProcessor2.Plugin
 {
     public static class PluginStore
     {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
+using PipelineProcessor2.Nodes.Internal;
+using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
-using PipelineProcessor2.PluginImporter;
+using PipelineProcessor2.Plugin;
 
 namespace PipelineProcessor2.Pipeline
 {
@@ -22,6 +24,7 @@ namespace PipelineProcessor2.Pipeline
 
         private static Dictionary<int, DependentNode> dependencyGraph;
         private static int[] inputIds;
+        private static SyncNode[] syncNodeNodes;
 
         public static void UpdateActiveGraph(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
         {
@@ -30,6 +33,7 @@ namespace PipelineProcessor2.Pipeline
 
             BuildDependencyGraph(ActiveNodes, ActiveLinks);
             inputIds = FindStartLocations();
+            syncNodeNodes = SyncBlockSearcher.FindSyncBlocks(dependencyGraph);
         }
 
         public static void Start()
@@ -60,9 +64,9 @@ namespace PipelineProcessor2.Pipeline
 
             //gather static data
             DataStore staticData = new DataStore(true);
-            foreach(KeyValuePair<int, DependentNode> pair in dependencyGraph)
+            foreach (KeyValuePair<int, DependentNode> pair in dependencyGraph)
             {
-                if(PluginStore.isGeneratorPlugin(pair.Value.Type))
+                if (PluginStore.isGeneratorPlugin(pair.Value.Type))
                 {
                     IGeneratorPlugin plugin = PluginStore.getPlugin(pair.Value.Type) as IGeneratorPlugin;
                     staticData.StoreResults(plugin.StaticData(), pair.Key, true);
@@ -72,19 +76,22 @@ namespace PipelineProcessor2.Pipeline
             //create a pipeline executor for each 
             PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
             for (int i = 0; i < inputAmount; i++)
-                pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, InputDirectory, OutputDirectory);
+                pipes[i] = new PipelineExecutor(dependencyGraph, staticData, syncNodeNodes, i, InputDirectory, OutputDirectory);
 
             //get the enumerators for the data and populate starting data
             IEnumerator<List<byte[]>>[] dataInputs = new IEnumerator<List<byte[]>>[inputIds.Length];
             bool quit = false;
-
             for (var i = 0; i < inputIds.Length; i++)
             {
                 dataInputs[i] = inputPlugins[i].RetrieveData(InputDirectory).GetEnumerator();
                 if (dataInputs[i] == null) quit = true;
             }
 
-            if (quit) return;
+            if (quit)
+            {
+                Console.WriteLine("Input data could not be fully gathered due to input node issue");
+                return;
+            }
 
             //store the input data
             for (int p = 0; p < pipes.Length; p++)
@@ -97,6 +104,10 @@ namespace PipelineProcessor2.Pipeline
                     }
                     pipes[p].StoreInputData(dataInputs[d].Current, inputIds[d]);
                 }
+
+            //share the pipelines with the sync nodes
+            foreach (SyncNode sync in syncNodeNodes)
+                sync.StateInfo(pipes);
 
             //Dispose of the input enumerators
             for (int i = 0; i < dataInputs.Length; i++)

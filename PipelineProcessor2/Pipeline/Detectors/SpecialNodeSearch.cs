@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PipelineProcessor2.PluginImporter;
 
 namespace PipelineProcessor2.Pipeline.Detectors
 {
@@ -18,11 +17,9 @@ namespace PipelineProcessor2.Pipeline.Detectors
         /// <param name="dependencyGraph"></param>
         public static SpecialNodeData CheckForSpecialNodes(Dictionary<int, DependentNode> dependencyGraph)
         {
-            List<LoopPair> loops = new LoopDetector(dependencyGraph).FindLoops();
-
             return new SpecialNodeData()
             {
-                Loops = loops
+                Loops = new LoopDetector(dependencyGraph).FindLoops()
             };
         }
     }

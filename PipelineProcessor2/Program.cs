@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using PipelineProcessor2.PluginImporter;
+using PipelineProcessor2.Plugin;
 using PipelineProcessor2.Server;
 
 namespace PipelineProcessor2

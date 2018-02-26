@@ -10,6 +10,7 @@ namespace PipelineProcessor2.Pipeline
     public class DataStore
     {
         private Dictionary<NodeSlot, byte[]> data = new Dictionary<NodeSlot, byte[]>();
+        private Dictionary<NodeSlot, List<byte[]>> syncData = new Dictionary<NodeSlot, List<byte[]>>();
         private int depth;
         private string cacheDir;
         private bool disableWriting = true;
@@ -19,9 +20,11 @@ namespace PipelineProcessor2.Pipeline
             this.depth = depth;
             cacheDir = outputDir + Path.DirectorySeparatorChar + ".cache" + Path.DirectorySeparatorChar + depth + Path.DirectorySeparatorChar;
         }
+
+
         public DataStore(bool staticData)
         {
-            if(!staticData)
+            if (!staticData)
                 throw new ArgumentException("A none-static data store needs an output directory, use another constructor!");
 
             depth = -1;
@@ -35,22 +38,30 @@ namespace PipelineProcessor2.Pipeline
             {
                 NodeSlot slot = new NodeSlot(nodeId, i);
 
-                if(data.ContainsKey(slot)) data.Remove(slot);
+                if (data.ContainsKey(slot)) data.Remove(slot);
                 data.Add(slot, newData[i]);
             }
 
             if (!preventCaching) SaveCache(newData, nodeId);
         }
 
+        public void StoreSyncResults(List<byte[]> newData, int nodeId, int slotPos)
+        {
+            NodeSlot slot = new NodeSlot(nodeId, slotPos);
+
+            if (syncData.ContainsKey(slot)) syncData.Remove(slot);
+            syncData.Add(slot, newData);
+        }
+
         public void ClearResults(List<NodeSlot> ids)
         {
-            foreach(NodeSlot id in ids)
-                if(data.ContainsKey(id)) data.Remove(id);
+            foreach (NodeSlot id in ids)
+                if (data.ContainsKey(id)) data.Remove(id);
         }
 
         private void SaveCache(List<byte[]> byteses, int node)
         {
-            if(disableWriting) return;
+            if (disableWriting) return;
 
             string rawPath = cacheDir + node + Path.DirectorySeparatorChar;
             if (!Directory.Exists(rawPath)) Directory.CreateDirectory(rawPath);
@@ -65,6 +76,13 @@ namespace PipelineProcessor2.Pipeline
         public byte[] getData(NodeSlot id)
         {
             if (data.ContainsKey(id)) return data[id];
+
+            return null;
+        }
+
+        public List<byte[]> getSyncData(NodeSlot id)
+        {
+            if (syncData.ContainsKey(id)) return syncData[id];
 
             return null;
         }

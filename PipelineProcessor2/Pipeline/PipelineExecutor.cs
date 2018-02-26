@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline.Detectors;
-using PipelineProcessor2.PluginImporter;
+using PipelineProcessor2.Plugin;
 
 namespace PipelineProcessor2.Pipeline
 {
@@ -18,42 +18,50 @@ namespace PipelineProcessor2.Pipeline
         private int run;
 
         private SpecialNodeData specialNodes;
-        private Dictionary<int, LoopPair> LoopPairByEnd;
-        private Dictionary<int, LoopStart> LoopPairByStart;
+        private Dictionary<int, LoopPair> loopPairByEnd;
+        private Dictionary<int, LoopStart> loopPairByStart;
+        private Dictionary<int, SyncNode> syncById;
 
         /// <summary>
         /// Initializes a standard Pipeline executor
         /// </summary>
         /// <param name="nodes">Nodes covered in the processing pipeline</param>
+        /// <param name="staticData">Data that is generated once and remains static through multiple pipeline executors</param>
+        /// <param name="syncNodeBlocks">sync blocks shared with other pipelines</param>
         /// <param name="depth">the iteration of input that that is being processed</param>
         /// <param name="input">input path</param>
         /// <param name="output">output path</param>
-        public PipelineExecutor(Dictionary<int, DependentNode> nodes, DataStore staticData, int depth, string input = "", string output = "")
+        public PipelineExecutor(Dictionary<int, DependentNode> nodes, DataStore staticData, SyncNode[] syncNodeBlocks, int depth, string input = "", string output = "")
         {
             dependencyGraph = nodes;
             data = new DataStore(depth, output);
             this.staticData = staticData;
             specialNodes = SpecialNodeSearch.CheckForSpecialNodes(nodes);
-            ExtractSpecialNodeData(specialNodes);
+            ExtractSpecialNodeData(specialNodes, syncNodeBlocks);
 
             inputDirectory = input;
             outputDirectory = output;
             run = depth;
         }
 
-        private void ExtractSpecialNodeData(SpecialNodeData nodeData)
+        private void ExtractSpecialNodeData(SpecialNodeData nodeData, SyncNode[] syncNodeBlocks)
         {
             //loops
-            LoopPairByStart = new Dictionary<int, LoopStart>();
-            LoopPairByEnd = new Dictionary<int, LoopPair>();
+            loopPairByStart = new Dictionary<int, LoopStart>();
+            loopPairByEnd = new Dictionary<int, LoopPair>();
 
             foreach (LoopPair loopPair in nodeData.Loops)
             {
-                if (!LoopPairByStart.ContainsKey(loopPair.Start.NodeId))
-                    LoopPairByStart.Add(loopPair.Start.NodeId, loopPair.Start);
+                if (!loopPairByStart.ContainsKey(loopPair.Start.NodeId))
+                    loopPairByStart.Add(loopPair.Start.NodeId, loopPair.Start);
 
-                LoopPairByEnd.Add(loopPair.End.NodeId, loopPair);
+                loopPairByEnd.Add(loopPair.End.NodeId, loopPair);
             }
+
+            //sync
+            syncById = new Dictionary<int, SyncNode>();
+            foreach(SyncNode sync in syncNodeBlocks)
+                syncById.Add(sync.NodeId, sync);
         }
 
         public void TriggerDependencies(int targetId)
@@ -85,13 +93,17 @@ namespace PipelineProcessor2.Pipeline
 
             if (dependencyGraph[toTrigger].Type == LoopStart.TypeName)
             {
-                int[] startIds = LoopPairByStart[toTrigger].StartDependencies(triggeredBy, data);
+                int[] startIds = loopPairByStart[toTrigger].StartDependencies(triggeredBy, data);
                 StartNodes(startIds, toTrigger);
             }
             else if (dependencyGraph[toTrigger].Type == LoopEnd.TypeName)
             {
-                int[] startIds = LoopPairByEnd[toTrigger].End.Finished(data, dependencyGraph);
+                int[] startIds = loopPairByEnd[toTrigger].End.Finished(data, dependencyGraph);
                 StartNodes(startIds, toTrigger);
+            }
+            else if (dependencyGraph[toTrigger].Type == SyncNode.TypeName)
+            {
+                syncById[toTrigger].StoreData(data, triggeredBy);
             }
         }
 
@@ -120,6 +132,11 @@ namespace PipelineProcessor2.Pipeline
         internal void StoreInputData(List<byte[]> current, int inputId)
         {
             data.StoreResults(current, inputId, true);
+        }
+
+        internal void StoreSyncData(List<byte[]> syncData, int inputId, int slot)
+        {
+            data.StoreSyncResults(syncData, inputId, slot);
         }
 
 #if DEBUG

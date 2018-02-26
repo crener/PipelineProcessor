@@ -2,13 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security;
+using System.Text;
 
 namespace PipelineProcessor2.Nodes.Sample
 {
     public class ImgInput : IInputPlugin
     {
         public int InputQty => 0;
-        public int OutputQty => 1;
+        public int OutputQty => 2;
 
         public IEnumerable<List<byte[]>> RetrieveData(string path)
         {
@@ -23,8 +25,17 @@ namespace PipelineProcessor2.Nodes.Sample
                     try
                     {
                         output.Add(File.ReadAllBytes(filePath));
+                        output.Add(Encoding.UTF8.GetBytes(fileName.Split('.')[0]));
                     }
-                    catch (IOException io)
+                    catch(SecurityException io)
+                    {
+                        Console.WriteLine(io);
+                    }
+                    catch(IOException io)
+                    {
+                        Console.WriteLine(io);
+                    }
+                    catch (UnauthorizedAccessException io)
                     {
                         Console.WriteLine(io);
                     }
@@ -52,11 +63,13 @@ namespace PipelineProcessor2.Nodes.Sample
             else if (request == PluginInformationRequests.Description) return "Imports all images of a given path";
             else if (request == PluginInformationRequests.OutputName)
             {
-                if (index == 0) return "image";
+                if (index == 0) return "Image";
+                if (index == 1) return "File Name";
             }
             else if (request == PluginInformationRequests.OutputType)
             {
                 if (index == 0) return "jpg";
+                if (index == 1) return "string";
             }
 
             return "";

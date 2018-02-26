@@ -58,6 +58,7 @@
     <Compile Include="Nodes\BasicMaths\GreaterThan.cs" />
     <Compile Include="Nodes\Generator\NumberGen.cs" />
     <Compile Include="Nodes\InternalNodeAttribute.cs" />
+    <Compile Include="Nodes\Internal\SyncNode.cs" />
     <Compile Include="Nodes\IRawPlugin.cs" />
     <Compile Include="Nodes\Internal\LoopStart.cs" />
     <Compile Include="Nodes\Internal\LoopEnd.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Pipeline\DataStore.cs" />
     <Compile Include="Pipeline\Detectors\LoopDetector.cs" />
     <Compile Include="Pipeline\Detectors\SpecialNodeSearch.cs" />
+    <Compile Include="Pipeline\Detectors\SyncBlockSearcher.cs" />
     <Compile Include="Pipeline\Exceptions.cs" />
     <Compile Include="Pipeline\ExecutionHelper.cs" />
     <Compile Include="Pipeline\PipelineState.cs" />
@@ -80,7 +82,7 @@
     <Compile Include="Pipeline\SlotStructs.cs" />
     <Compile Include="Pipeline\SpecialNodeContainers.cs" />
     <Compile Include="Pipeline\TaskRunner.cs" />
-    <Compile Include="PluginImporter\PluginStore.cs" />
+    <Compile Include="Plugin\PluginStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\AsyncServer.cs" />

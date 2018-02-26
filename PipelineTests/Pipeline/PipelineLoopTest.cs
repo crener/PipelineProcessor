@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
+using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 
 namespace PipelineTests.Pipeline
@@ -30,8 +31,7 @@ namespace PipelineTests.Pipeline
             TestHelpers.MatchSlots(loopStart, loopEnd, 1, 2);
             TestHelpers.MatchSlots(loopEnd, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0);
-            List<LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -61,8 +61,7 @@ namespace PipelineTests.Pipeline
             TestHelpers.MatchSlots(loopEnd, process, 0, 0);
             TestHelpers.MatchSlots(process, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0);
-            List<LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -85,8 +84,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0);
-            List<LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();
 
             Assert.AreEqual(0, loops.Count, "incorrect amount of loops detected");
         }
@@ -146,7 +144,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            Assert.Throws<SlotLimitExceeded>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            Assert.Throws<SlotLimitExceeded>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
 
 
             /*List<LoopPair> loops = pipe.getLoops();
@@ -186,8 +184,7 @@ namespace PipelineTests.Pipeline
             TestHelpers.MatchSlots(process, innerLoopEnd, 0, 1);
             TestHelpers.MatchSlots(outerLoopEnd, end, 0, 0);
 
-            PipelineExecutor pipe = new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0);
-            List<LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();
 
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(1, loops[0].Depth);
@@ -251,7 +248,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            Assert.Throws<SlotLimitExceeded>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            Assert.Throws<SlotLimitExceeded>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
 
 
             /*List<LoopPair> loops = pipe.getLoops();
@@ -292,7 +289,7 @@ namespace PipelineTests.Pipeline
             TestHelpers.MatchSlots(loopStart, loopEnd2, 1, 2);
             TestHelpers.MatchSlots(loopEnd2, end2, 0, 0);
 
-            Assert.Throws<SlotLimitExceeded>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            Assert.Throws<SlotLimitExceeded>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
 
             /*List<LoopPair> loops = pipe.getLoops();
             Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
@@ -346,8 +343,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            PipelineExecutor pipe = new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0);
-            List<LoopPair> loops = pipe.getLoops();
+            List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();
 
             Assert.AreEqual(1, loops.Count, "incorrect amount of loops detected");
             Assert.AreEqual(0, loops[0].Depth);
@@ -382,7 +378,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            MissingLinkException exception = Assert.Throws<MissingLinkException>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
             Assert.AreEqual("No link for loop start specified", exception.Message);
         }
 
@@ -422,7 +418,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            Assert.Throws<MissingLinkException>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            Assert.Throws<MissingLinkException>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
         }
 
         [Test]
@@ -462,7 +458,7 @@ namespace PipelineTests.Pipeline
                 nodes.Add(dep);
             }
 
-            InvalidNodeException exception = Assert.Throws<InvalidNodeException>(() => new PipelineExecutor(TestHelpers.ConvertToDictionary(nodes), null, 0));
+            InvalidNodeException exception = Assert.Throws<InvalidNodeException>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
             Assert.AreEqual("Loop Start Link (slot 0) cannot link to anything but a Loop End", exception.Message);
         }
     }

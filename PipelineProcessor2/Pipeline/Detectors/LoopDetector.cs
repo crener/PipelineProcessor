@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline.Exceptions;
-using PipelineProcessor2.PluginImporter;
+using PipelineProcessor2.Plugin;
 
 namespace PipelineProcessor2.Pipeline.Detectors
 {
-    internal class LoopDetector
+    public class LoopDetector
     {
         private const string StartEndIdMismatch = "Loop start and loop end only partly referencing each other!";
 

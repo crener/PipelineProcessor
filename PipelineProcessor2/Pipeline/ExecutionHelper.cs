@@ -46,7 +46,7 @@ namespace PipelineProcessor2.Pipeline
                 if (OtherNodeSlotDependencies(dependencyGraph[slot.NodeId], searchNode.Id) == searchSlot)
                     return slot;
 
-            return new NodeSlot(-1, -1);
+            return NodeSlot.Invalid;
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace PipelineProcessor2.Pipeline
                 if (OtherNodeSlotDependents(dependencyGraph[slot.NodeId], searchNode.Id) == searchSlot)
                     return slot;
 
-            return new NodeSlot(-1, -1);
+            return NodeSlot.Invalid;
         }
 
         /// <summary>

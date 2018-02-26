@@ -14,24 +14,27 @@ namespace PipelineProcessor2.Pipeline
     {
         private int run;
         private IPlugin plugin;
-        private DependentNode link;
+        private DependentNode node;
         private DataStore resultData, staticData;
         private PipelineExecutor executor;
 
         public TaskRunner(IPlugin plugin, DependentNode node, DataStore resultData, DataStore staticData, PipelineExecutor pipe, int run)
         {
             this.plugin = plugin;
-            link = node;
+            this.node = node;
             this.resultData = resultData;
             this.staticData = staticData;
             executor = pipe;
             this.run = run;
         }
 
-        //start the plugin task
+        /// <summary>
+        /// Creates the task for the plugin
+        /// </summary>
+        /// <returns>plugin task</returns>
         public Task getTask()
         {
-            if (!ExecutionHelper.HasFulfilledDependency(link, resultData, staticData))
+            if (!ExecutionHelper.HasFulfilledDependency(node, resultData, staticData))
                 return null;
 
             return new Task(Execute);
@@ -42,18 +45,32 @@ namespace PipelineProcessor2.Pipeline
             List<byte[]> data = null;
             List<byte[]> input = new List<byte[]>();
 
-            Console.WriteLine(link.Type + " Starting, slot: " + link.Id + " of run " + run);
+            Console.WriteLine(node.Type + " Starting, slot: " + node.Id + " of run " + run);
 
             //gather input data
-            foreach (NodeSlot id in link.Dependencies)
+            foreach (NodeSlot id in node.Dependencies)
             {
                 byte[] dependencyData = resultData.getData(id);
 
                 if(dependencyData == null) dependencyData = staticData.getData(id);
+                if(dependencyData == null)
+                {
+                    List<byte[]> syncData = resultData.getSyncData(id);
+                    if(syncData != null)
+                    {
+                        //add the sync data to the input data
+                        input.Add(BitConverter.GetBytes(syncData.Count));
+
+                        foreach(byte[] bytes in syncData)
+                            input.Add(bytes);
+
+                        continue;
+                    }
+                }
 
                 if (dependencyData == null)
                     throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " +
-                                                         id.SlotPos + " for node " + link.Id + " run: " + run);
+                                                         id.SlotPos + " for node " + node.Id + " run: " + run);
 
                 input.Add(dependencyData);
             }
@@ -76,7 +93,7 @@ namespace PipelineProcessor2.Pipeline
                 else Console.WriteLine("Unknown plugin type");
 
                 stopwatch.Stop();
-                Console.WriteLine(link.Type + " Finished in " + stopwatch.Elapsed +" ms, slot: " + link.Id + " of run " + run);
+                Console.WriteLine(node.Type + " Finished in " + stopwatch.Elapsed +" ms, slot: " + node.Id + " of run " + run);
             }
             catch (Exception e)
             {
@@ -85,9 +102,8 @@ namespace PipelineProcessor2.Pipeline
             }
 
             //post processing actions (triggering dependency, storing results)
-            if (data != null) resultData.StoreResults(data, link.Id);
-            executor.TriggerDependencies(link.Id);
+            if (data != null) resultData.StoreResults(data, node.Id);
+            executor.TriggerDependencies(node.Id);
         }
-
     }
 }
