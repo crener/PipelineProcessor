@@ -34,24 +34,30 @@ namespace PipelineProcessor2.Plugin
                 {
                     try
                     {
-                        if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
+                        if(typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
                         {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                            IPlugin plugin = (IPlugin) Activator.CreateInstance(type);
 
                             Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
-                            bool internalPlugin = internalAttribute != null && !((InternalNode)internalAttribute).ShowExternal;
+                            bool internalPlugin = internalAttribute != null &&
+                                                  !((InternalNode) internalAttribute).ShowExternal;
 
-                            if (internalPlugin)
+                            if(internalPlugin)
                             {
                                 AddInternal(plugin);
                                 continue;
                             }
 
-                            Console.WriteLine("Adding Plugin: " + plugin.PluginInformation(PluginInformationRequests.Name, 0));
+                            Console.WriteLine("Adding Plugin: " +
+                                              plugin.PluginInformation(PluginInformationRequests.Name, 0));
                             AddPlugin(plugin);
                         }
                     }
-                    catch (InvalidCastException) { } //ignore
+                    catch(InvalidCastException) { } //ignore
+                    catch(MissingMethodException mme)
+                    {
+                        Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
+                    }
                 }
             }
         }

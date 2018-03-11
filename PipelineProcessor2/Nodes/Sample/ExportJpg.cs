@@ -12,6 +12,8 @@ namespace PipelineProcessor2.Nodes.Sample
         public int InputQty => 1;
         public int OutputQty => 0;
 
+        private static Random rand = new Random();
+
         public string PluginInformation(PluginInformationRequests request, int index)
         {
             if (request == PluginInformationRequests.Name) return "Jpg Export";
@@ -33,18 +35,14 @@ namespace PipelineProcessor2.Nodes.Sample
             try
             {
                 path = path + (path.EndsWith(Path.DirectorySeparatorChar.ToString()) ? "" : Path.DirectorySeparatorChar.ToString());
-                Random rand = new Random();
                 string file;
-                for (int i = 0; i < saveData.Count; i++)
+                do
                 {
-                    do
-                    {
-                        file = path + rand.Next() + ".jpg";
-                    } while (File.Exists(file));
+                    file = path + rand.Next() + ".jpg";
+                } while (File.Exists(file));
 
-                    using (var stream = new FileStream(file, FileMode.Create))
-                        stream.Write(saveData[i], 0, saveData[i].Length);
-                }
+                using (var stream = new FileStream(file, FileMode.Create))
+                    stream.Write(saveData[0], 0, saveData[0].Length);
             }
             catch (Exception)
             {

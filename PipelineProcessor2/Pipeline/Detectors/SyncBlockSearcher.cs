@@ -11,7 +11,13 @@ namespace PipelineProcessor2.Pipeline.Detectors
 {
     public static class SyncBlockSearcher
     {
-        public static SyncNode[] FindSyncBlocks(Dictionary<int, DependentNode> dependencyGraph)
+        /// <summary>
+        /// Searches for sync blocks in the graph and initializes them in preparation for execution
+        /// </summary>
+        /// <param name="dependencyGraph">graph representation of the pipeline</param>
+        /// <param name="staticData">data object used by all pipelines for initialization of sync blocks</param>
+        /// <returns>array of initialized sync blocks</returns>
+        public static SyncNode[] PrepareSyncBlocks(Dictionary<int, DependentNode> dependencyGraph, DataStore staticData)
         {
             List<SyncNode> syncBlocks = new List<SyncNode>();
 
@@ -23,10 +29,10 @@ namespace PipelineProcessor2.Pipeline.Detectors
                     foreach(NodeSlot dependencies in node.Dependencies)
                     {
                         if(PluginStore.isGeneratorPlugin(dependencyGraph[dependencies.NodeId].Type))
-                            throw new InvalidConnectionException("Generators don't need to be synced as they are inherently identical");
+                            throw new InvalidConnectionException("Generators don't need to be synced as they are inherently consistant");
                     }
 
-                    syncBlocks.Add(new SyncNode(node));
+                    syncBlocks.Add(new SyncNode(node, staticData));
                 }
             }
 

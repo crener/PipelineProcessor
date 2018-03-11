@@ -5,7 +5,7 @@ using ImageProcessor.Imaging.Formats;
 
 namespace PipelineProcessor2.Nodes.Sample
 {
-    public class bluring : IProcessPlugin
+    public class ImageBlur : IProcessPlugin
     {
         public int InputQty => 1;
         public int OutputQty => 1;

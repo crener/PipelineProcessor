@@ -7,6 +7,7 @@ using PipelineProcessor2.Server.Responses;
 
 namespace PipelineProcessor2.Nodes.Internal
 {
+    [InternalNode(ShowExternal = false)]
     public class SyncNode : IRawPlugin
     {
         public const string TypeName = "Special/Sync";
@@ -18,20 +19,22 @@ namespace PipelineProcessor2.Nodes.Internal
 
         private readonly Dictionary<int, List<byte[]>> data = new Dictionary<int, List<byte[]>>();
         private readonly DependentNode graphNode = null;
+        private readonly DataStore staticData;
         private int parallelism = 0;
         private PipelineExecutor[] pipelines;
 
-        private object updateLock;
+        private object updateLock = new object();
 
-        private SyncNode()
+        public SyncNode()
         {
 
         }
 
-        public SyncNode(DependentNode nodeId)
+        public SyncNode(DependentNode nodeId, DataStore staticData)
         {
             NodeId = nodeId.Id;
             graphNode = nodeId;
+            this.staticData = staticData;
 
             //build dictionary
             foreach (NodeSlot node in nodeId.Dependencies)
@@ -91,8 +94,7 @@ namespace PipelineProcessor2.Nodes.Internal
                     if (slot == -1)
                         throw new InvalidDataException("Node slots have changed since initialization");
 
-                    foreach (PipelineExecutor pipe in pipelines)
-                        pipe.StoreSyncData(pair.Value, NodeId, slot);
+                    staticData.StoreSyncResults(pair.Value, NodeId, slot);
                 }
             }
         }
@@ -118,7 +120,11 @@ namespace PipelineProcessor2.Nodes.Internal
 
         public string PluginInformation(PluginInformationRequests request, int index = 0)
         {
-            throw new NotImplementedException();
+            if (request == PluginInformationRequests.Name) return "Sync Block";
+            else if (request == PluginInformationRequests.Description) return "Pauses execution for all pipelines and synchronizes data between them";
+
+
+            return "";
         }
     }
 }

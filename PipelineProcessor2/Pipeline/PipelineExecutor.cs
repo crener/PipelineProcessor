@@ -64,6 +64,10 @@ namespace PipelineProcessor2.Pipeline
                 syncById.Add(sync.NodeId, sync);
         }
 
+        /// <summary>
+        /// Triggers the dependencies of a node for execution
+        /// </summary>
+        /// <param name="targetId">Node that is needs its dependencies triggered</param>
         public void TriggerDependencies(int targetId)
         {
             //start the next set of tasks

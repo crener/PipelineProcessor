@@ -16,15 +16,15 @@ namespace PipelineProcessor2.Pipeline
 
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
-        public static PipelineExecutor PipelineExecutor { get; private set; }
-        public static string InputDirectory = "", OutputDirectory = "";
 
         private static GraphNode[] nodes;
         private static NodeLinkInfo[] links;
+        public static string InputDirectory = "", OutputDirectory = "";
 
         private static Dictionary<int, DependentNode> dependencyGraph;
         private static int[] inputIds;
         private static SyncNode[] syncNodeNodes;
+        private static DataStore staticData = new DataStore(true);
 
         public static void UpdateActiveGraph(GraphNode[] graphNodes, NodeLinkInfo[] graphLinks)
         {
@@ -33,7 +33,8 @@ namespace PipelineProcessor2.Pipeline
 
             BuildDependencyGraph(ActiveNodes, ActiveLinks);
             inputIds = FindStartLocations();
-            syncNodeNodes = SyncBlockSearcher.FindSyncBlocks(dependencyGraph);
+            staticData = new DataStore(true);
+            syncNodeNodes = SyncBlockSearcher.PrepareSyncBlocks(dependencyGraph, staticData);
         }
 
         public static void Start()
@@ -63,7 +64,6 @@ namespace PipelineProcessor2.Pipeline
             }
 
             //gather static data
-            DataStore staticData = new DataStore(true);
             foreach (KeyValuePair<int, DependentNode> pair in dependencyGraph)
             {
                 if (PluginStore.isGeneratorPlugin(pair.Value.Type))

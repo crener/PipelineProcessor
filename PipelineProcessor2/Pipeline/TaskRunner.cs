@@ -40,40 +40,15 @@ namespace PipelineProcessor2.Pipeline
             return new Task(Execute);
         }
 
+        /// <summary>
+        /// Executes a given nodes runtime code
+        /// </summary>
         private void Execute()
         {
             List<byte[]> data = null;
-            List<byte[]> input = new List<byte[]>();
+            List<byte[]> input = GatherInputData();
 
             Console.WriteLine(node.Type + " Starting, slot: " + node.Id + " of run " + run);
-
-            //gather input data
-            foreach (NodeSlot id in node.Dependencies)
-            {
-                byte[] dependencyData = resultData.getData(id);
-
-                if(dependencyData == null) dependencyData = staticData.getData(id);
-                if(dependencyData == null)
-                {
-                    List<byte[]> syncData = resultData.getSyncData(id);
-                    if(syncData != null)
-                    {
-                        //add the sync data to the input data
-                        input.Add(BitConverter.GetBytes(syncData.Count));
-
-                        foreach(byte[] bytes in syncData)
-                            input.Add(bytes);
-
-                        continue;
-                    }
-                }
-
-                if (dependencyData == null)
-                    throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " +
-                                                         id.SlotPos + " for node " + node.Id + " run: " + run);
-
-                input.Add(dependencyData);
-            }
 
             // execute plugin task
             try
@@ -93,7 +68,7 @@ namespace PipelineProcessor2.Pipeline
                 else Console.WriteLine("Unknown plugin type");
 
                 stopwatch.Stop();
-                Console.WriteLine(node.Type + " Finished in " + stopwatch.Elapsed +" ms, slot: " + node.Id + " of run " + run);
+                Console.WriteLine(node.Type + " Finished in " + stopwatch.Elapsed + " ms, slot: " + node.Id + " of run " + run);
             }
             catch (Exception e)
             {
@@ -104,6 +79,44 @@ namespace PipelineProcessor2.Pipeline
             //post processing actions (triggering dependency, storing results)
             if (data != null) resultData.StoreResults(data, node.Id);
             executor.TriggerDependencies(node.Id);
+        }
+
+        /// <summary>
+        /// Fetches input data for a node
+        /// </summary>
+        /// <returns>input data</returns>
+        private List<byte[]> GatherInputData()
+        {
+            List<byte[]> input = new List<byte[]>();
+
+            foreach (NodeSlot id in node.Dependencies)
+            {
+                byte[] dependencyData = resultData.getData(id);
+
+                if (dependencyData == null) dependencyData = staticData.getData(id);
+                if (dependencyData == null)
+                {
+                    List<byte[]> syncData = staticData.getSyncData(id);
+                    if (syncData != null)
+                    {
+                        //add the sync data to the input data
+                        input.Add(BitConverter.GetBytes(syncData.Count));
+
+                        foreach (byte[] bytes in syncData)
+                            input.Add(bytes);
+
+                        continue;
+                    }
+                }
+
+                if (dependencyData == null)
+                    throw new MissingPluginDataException("Missing data from id: " + id.NodeId + ", slot: " +
+                                                         id.SlotPos + " for node " + node.Id + " run: " + run);
+
+                input.Add(dependencyData);
+            }
+
+            return input;
         }
     }
 }

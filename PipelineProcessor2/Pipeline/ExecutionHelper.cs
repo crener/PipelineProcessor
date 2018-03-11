@@ -11,7 +11,9 @@ namespace PipelineProcessor2.Pipeline
         public static bool HasFulfilledDependency(DependentNode node, DataStore pipelineData, DataStore staticData)
         {
             foreach (NodeSlot id in node.Dependencies)
-                if (pipelineData.getData(id) == null && staticData.getData(id) == null)
+                if (pipelineData.getData(id) == null && 
+                    staticData.getData(id) == null && 
+                    staticData.getSyncData(id) == null)
                     return false;
 
             return true;

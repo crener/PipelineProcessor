@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -64,7 +65,8 @@
     <Compile Include="Nodes\Internal\LoopEnd.cs" />
     <Compile Include="Nodes\IOutputPlugin.cs" />
     <Compile Include="Nodes\IGeneratorPlugin.cs" />
-    <Compile Include="Nodes\Sample\bluring.cs" />
+    <Compile Include="Nodes\Sample\BlendArray.cs" />
+    <Compile Include="Nodes\Sample\ImageBlur.cs" />
     <Compile Include="Nodes\IInputPlugin.cs" />
     <Compile Include="Nodes\Sample\ExportJpg.cs" />
     <Compile Include="Nodes\Sample\ImgInput.cs" />
@@ -79,7 +81,6 @@
     <Compile Include="Pipeline\ExecutionHelper.cs" />
     <Compile Include="Pipeline\PipelineState.cs" />
     <Compile Include="Pipeline\PipelineExecutor.cs" />
-    <Compile Include="Pipeline\SlotStructs.cs" />
     <Compile Include="Pipeline\SpecialNodeContainers.cs" />
     <Compile Include="Pipeline\TaskRunner.cs" />
     <Compile Include="Plugin\PluginStore.cs" />
