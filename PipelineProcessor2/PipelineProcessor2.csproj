@@ -72,7 +72,6 @@
     <Compile Include="Nodes\Sample\ImgInput.cs" />
     <Compile Include="Nodes\IPlugin.cs" />
     <Compile Include="Nodes\IProcessPlugin.cs" />
-    <Compile Include="Pipeline\DependentNode.cs" />
     <Compile Include="Pipeline\DataStore.cs" />
     <Compile Include="Pipeline\Detectors\LoopDetector.cs" />
     <Compile Include="Pipeline\Detectors\SpecialNodeSearch.cs" />

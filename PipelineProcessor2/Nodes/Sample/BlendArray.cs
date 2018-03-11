@@ -68,14 +68,14 @@ namespace PipelineProcessor2.Nodes.Sample
             image.Load(new Bitmap(largestSize.Width, largestSize.Height));
 
             foreach(ImageLayer layer in layers) image.Overlay(layer);
-
+            
             using (MemoryStream outStream = new MemoryStream())
             {
                 image.Save(outStream);
                 image.Dispose();
 
                 List<byte[]> output = new List<byte[]>();
-                output.Add(outStream.GetBuffer());
+                output.Add(outStream.ToArray());
                 return output;
             }
         }

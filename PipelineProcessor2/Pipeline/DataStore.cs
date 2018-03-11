@@ -11,13 +11,11 @@ namespace PipelineProcessor2.Pipeline
     {
         private Dictionary<NodeSlot, byte[]> data = new Dictionary<NodeSlot, byte[]>();
         private Dictionary<NodeSlot, List<byte[]>> syncData = new Dictionary<NodeSlot, List<byte[]>>();
-        private int depth;
         private string cacheDir;
         private bool disableWriting = true;
 
         public DataStore(int depth, string outputDir)
         {
-            this.depth = depth;
             cacheDir = outputDir + Path.DirectorySeparatorChar + ".cache" + Path.DirectorySeparatorChar + depth + Path.DirectorySeparatorChar;
         }
 
@@ -27,7 +25,6 @@ namespace PipelineProcessor2.Pipeline
             if (!staticData)
                 throw new ArgumentException("A none-static data store needs an output directory, use another constructor!");
 
-            depth = -1;
             cacheDir = "";
             disableWriting = true;
         }
@@ -43,6 +40,37 @@ namespace PipelineProcessor2.Pipeline
             }
 
             if (!preventCaching) SaveCache(newData, nodeId);
+            ClearIrrelevantData(nodeId);
+        }
+
+        /// <summary>
+        /// Removes data from memory once it is no longer needed by the pipeline
+        /// </summary>
+        /// <param name="nodeId">node to check</param>
+        private void ClearIrrelevantData(int nodeId)
+        {
+            DependentNode node;
+            if (!PipelineState.DependencyGraph.TryGetValue(nodeId, out node)) return;
+
+            foreach (NodeSlot dependency in node.Dependencies)
+            {
+                DependentNode searchNode;
+                if (!PipelineState.DependencyGraph.TryGetValue(dependency.NodeId, out searchNode)) return;
+                if (!data.ContainsKey(dependency) || data[dependency] == null) continue;
+
+                bool needed = false;
+                foreach (NodeSlot searchSlot in searchNode.Dependents)
+                {
+                    if (searchSlot.NodeId == nodeId) continue;
+
+                    //todo identify if node dependents have already used this data and no longer require it
+                    needed = true;
+                }
+
+                if (!needed) data[dependency] = null;
+            }
+
+            GC.Collect();
         }
 
         public void StoreSyncResults(List<byte[]> newData, int nodeId, int slotPos)

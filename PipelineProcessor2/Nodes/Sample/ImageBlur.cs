@@ -43,7 +43,7 @@ namespace PipelineProcessor2.Nodes.Sample
                 }
 
                 List<byte[]> output = new List<byte[]>();
-                output.Add(outStream.GetBuffer());
+                output.Add(outStream.ToArray());
 
                 return output;
             }
