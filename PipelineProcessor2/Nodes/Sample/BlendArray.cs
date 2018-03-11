@@ -46,20 +46,17 @@ namespace PipelineProcessor2.Nodes.Sample
             int imageQty = BitConverter.ToInt32(input[0], 0),
                 opacity = 100 / imageQty;
 
-            List<ImageLayer> layers = new List<ImageLayer>();
+            //Work out required size of the final image
             Size largestSize = new Size(0, 0);
             for (var i = 1; i < input.Count; i++)
             {
-                //load image into layer
-                ImageLayer layer = new ImageLayer { Opacity = opacity };
                 using (MemoryStream inStream = new MemoryStream(input[i]))
-                    layer.Image = Image.FromStream(inStream);
-                layer.Size = layer.Image.Size;
+                {   //only use the size to save on memory
+                    Size imageSize = Image.FromStream(inStream).Size;
 
-                if (layer.Image.Size.Width > largestSize.Width) largestSize.Width = layer.Image.Size.Width;
-                if (layer.Image.Size.Height > largestSize.Height) largestSize.Height = layer.Image.Size.Height;
-
-                layers.Add(layer);
+                    if (imageSize.Width > largestSize.Width) largestSize.Width = imageSize.Width;
+                    if (imageSize.Height > largestSize.Height) largestSize.Height = imageSize.Height;
+                }
             }
 
             ImageFactory image = new ImageFactory();
@@ -67,8 +64,16 @@ namespace PipelineProcessor2.Nodes.Sample
             image.Quality(100);
             image.Load(new Bitmap(largestSize.Width, largestSize.Height));
 
-            foreach(ImageLayer layer in layers) image.Overlay(layer);
-            
+            for (var i = 1; i < input.Count; i++)
+            {
+                ImageLayer layer = new ImageLayer { Opacity = opacity };
+                using (MemoryStream inStream = new MemoryStream(input[i]))
+                    layer.Image = Image.FromStream(inStream);
+                layer.Size = layer.Image.Size;
+
+                image.Overlay(layer);
+            }
+
             using (MemoryStream outStream = new MemoryStream())
             {
                 image.Save(outStream);

@@ -44,20 +44,6 @@ namespace PipelineProcessor2.Nodes.Internal
             if (pair.Depth > maxDepth) maxDepth = pair.Depth;
         }
 
-        public void IterateDepth()
-        {
-            currentDepth--;
-
-            for (int i = 0; i < controllingPairs.Count; i++)
-            {
-                LoopPair pair = controllingPairs[i];
-                if (pair.Depth <= currentDepth) return;
-
-                pair.Iteration = 0;
-                controllingPairs[i] = pair;
-            }
-        }
-
         public void ResetCounters()
         {
             currentDepth = maxDepth;

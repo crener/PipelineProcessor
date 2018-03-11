@@ -217,25 +217,6 @@ namespace PipelineProcessor2.Pipeline.Detectors
             return false;
         }
 
-        private bool NodeDependentOn(int search, int target)
-        {
-            DependentNode node = dependencyGraph[search];
-            List<int> checkedNodes = new List<int>();
-
-            for (int i = 0; i < node.Dependencies.Length; i++)
-            {
-                int nodeId = node.Dependencies[i].NodeId;
-                if (checkedNodes.Contains(nodeId)) continue;
-
-                if (nodeId == target) return true;
-                if (NodeDependentOn(nodeId, target, ref checkedNodes)) return true;
-
-                checkedNodes.Add(nodeId);
-            }
-
-            return false;
-        }
-
         private bool NodeDependentOn(int search, int target, ref List<int> checkedNodes)
         {
             DependentNode node = dependencyGraph[search];
@@ -255,7 +236,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
         }
 
         /// <summary>
-        /// Looks at the dependencies of a node and checks if any 
+        /// Looks at the dependencies of a node and checks if any match the given types
         /// </summary>
         /// <param name="node">search node</param>
         /// <param name="matchedNode">id of the node that was of the given types, -1 if no match is found</param>

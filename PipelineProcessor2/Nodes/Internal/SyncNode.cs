@@ -27,7 +27,7 @@ namespace PipelineProcessor2.Nodes.Internal
 
         public SyncNode()
         {
-
+            //needed for plugin store
         }
 
         public SyncNode(DependentNode nodeId, DataStore staticData)
@@ -45,15 +45,6 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             parallelism = initialRuns.Length;
             pipelines = initialRuns;
-        }
-
-        public void ClearData()
-        {
-            lock (updateLock)
-            {
-                foreach (List<byte[]> list in data.Values)
-                    list.Clear();
-            }
         }
 
         public void StoreData(DataStore store, int triggeredBy)
@@ -122,7 +113,6 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             if (request == PluginInformationRequests.Name) return "Sync Block";
             else if (request == PluginInformationRequests.Description) return "Pauses execution for all pipelines and synchronizes data between them";
-
 
             return "";
         }
