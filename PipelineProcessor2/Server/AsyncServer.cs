@@ -23,7 +23,8 @@ namespace PipelineProcessor2.Server
             if (responses == null) responses = new ResponseFactory();
 
             if (listener.IsListening) listener.Stop();
-            listener.Prefixes.Add("http://*:" + Port + "/");
+            listener.Prefixes.Add("http://localhost:" + Port + "/");
+            listener.Prefixes.Add("http://127.0.0.1:" + Port + "/");
 
             listener.Start();
 
