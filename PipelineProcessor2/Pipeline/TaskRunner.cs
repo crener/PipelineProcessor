@@ -63,7 +63,7 @@ namespace PipelineProcessor2.Pipeline
                 else if (plugin is IOutputPlugin)
                 {
                     bool success = (plugin as IOutputPlugin).ExportData(PipelineState.OutputDirectory, input);
-                    if (!success) Console.WriteLine(plugin.PluginInformation(PluginInformationRequests.Name, 0) + " failed");
+                    if (!success) Console.WriteLine(plugin.Name + " failed");
                 }
                 else Console.WriteLine("Unknown plugin type");
 

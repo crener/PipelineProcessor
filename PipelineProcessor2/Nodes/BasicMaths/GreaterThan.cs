@@ -8,33 +8,34 @@ namespace PipelineProcessor2.Nodes.BasicMaths
 {
     public class GreaterThan : IProcessPlugin
     {
+        #region Node settings
         public int InputQty => 2;
         public int OutputQty => 1;
-        public string PluginInformation(PluginInformationRequests request, int index = 0)
+        public string Name => "Greater Than";
+        public string Description => "Is greater than";
+        public string OutputType(int index)
         {
-            if (request == PluginInformationRequests.Name) return "Greater Than";
-            else if (request == PluginInformationRequests.Description) return "Is greater than";
-            else if (request == PluginInformationRequests.InputName)
-            {
-                if (index == 0) return "Value";
-                if (index == 1) return "Check";
-            }
-            else if (request == PluginInformationRequests.InputType)
-            {
-                if (index == 0) return "int";
-                if (index == 1) return "int";
-            }
-            else if (request == PluginInformationRequests.OutputName)
-            {
-                if (index == 0) return "Result";
-            }
-            else if (request == PluginInformationRequests.OutputType)
-            {
-                if (index == 0) return "bool";
-            }
-
+            if (index == 0) return "bool";
             return "";
         }
+        public string OutputName(int index)
+        {
+            if (index == 0) return "Result";
+            return "";
+        }
+        public string InputType(int index)
+        {
+            if (index == 0) return "int";
+            if (index == 1) return "int";
+            return "";
+        }
+        public string InputName(int index)
+        {
+            if (index == 0) return "Value";
+            if (index == 1) return "Check";
+            return "";
+        }
+        #endregion
 
         public List<byte[]> ProcessData(List<byte[]> input)
         {

@@ -34,27 +34,26 @@ namespace PipelineProcessor2.Plugin
                 {
                     try
                     {
-                        if(typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
+                        if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
                         {
-                            IPlugin plugin = (IPlugin) Activator.CreateInstance(type);
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
 
                             Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
                             bool internalPlugin = internalAttribute != null &&
-                                                  !((InternalNode) internalAttribute).ShowExternal;
+                                                  !((InternalNode)internalAttribute).ShowExternal;
 
-                            if(internalPlugin)
+                            if (internalPlugin)
                             {
                                 AddInternal(plugin);
                                 continue;
                             }
 
-                            Console.WriteLine("Adding Plugin: " +
-                                              plugin.PluginInformation(PluginInformationRequests.Name, 0));
+                            Console.WriteLine("Adding Plugin: " + plugin.Name, 0);
                             AddPlugin(plugin);
                         }
                     }
-                    catch(InvalidCastException) { } //ignore
-                    catch(MissingMethodException mme)
+                    catch (InvalidCastException) { } //ignore
+                    catch (MissingMethodException mme)
                     {
                         Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
                     }
@@ -64,10 +63,7 @@ namespace PipelineProcessor2.Plugin
 
         public static void AddPlugin(IPlugin plugin)
         {
-            Node nodeData = new Node(
-                plugin.PluginInformation(PluginInformationRequests.Name, 0),
-                plugin.PluginInformation(PluginInformationRequests.Description, 0),
-                "C#");
+            Node nodeData = new Node(plugin.Name, plugin.Description, "C#");
 
             if (plugin is IInputPlugin) nodeData.category = "Input";
             else if (plugin is IOutputPlugin) nodeData.category = "Output";
@@ -86,8 +82,8 @@ namespace PipelineProcessor2.Plugin
             for (int i = 0; i < plugin.InputQty; i++)
             {
                 NodeInputOutput inOut = new NodeInputOutput();
-                inOut.name = plugin.PluginInformation(PluginInformationRequests.InputName, i);
-                inOut.type = plugin.PluginInformation(PluginInformationRequests.InputType, i);
+                inOut.name = plugin.InputName(i);
+                inOut.type = plugin.InputType(i);
 
                 nodeData.input.Add(inOut);
             }
@@ -95,8 +91,8 @@ namespace PipelineProcessor2.Plugin
             for (int i = 0; i < plugin.OutputQty; i++)
             {
                 NodeInputOutput inOut = new NodeInputOutput();
-                inOut.name = plugin.PluginInformation(PluginInformationRequests.OutputName, i);
-                inOut.type = plugin.PluginInformation(PluginInformationRequests.OutputType, i);
+                inOut.name = plugin.OutputName(i);
+                inOut.type = plugin.OutputType(i);
 
                 nodeData.output.Add(inOut);
             }
@@ -124,7 +120,7 @@ namespace PipelineProcessor2.Plugin
             string name = "";
 
             if (plugin is IRawPlugin) name = (plugin as IRawPlugin).FullName;
-            else name = "internal/" + plugin.PluginInformation(PluginInformationRequests.Name);
+            else name = "internal/" + plugin.Name;
 
             internalPlugins.Add(name);
         }

@@ -8,23 +8,24 @@ namespace PipelineProcessor2.Nodes.BasicMaths
 {
     public class NumberGen : IGeneratorPlugin
     {
+        #region Node settings
         public int InputQty => 0;
         public int OutputQty => 1;
-        public string PluginInformation(PluginInformationRequests request, int index = 0)
+        public string Name => "Number 8";
+        public string Description => "Number 8";
+        public string OutputType(int slot)
         {
-            if (request == PluginInformationRequests.Name) return "Number 8";
-            else if (request == PluginInformationRequests.Description) return "Number 8";
-            else if (request == PluginInformationRequests.OutputName)
-            {
-                if (index == 0) return "number";
-            }
-            else if (request == PluginInformationRequests.OutputType)
-            {
-                if (index == 0) return "int";
-            }
-
+            if (slot == 0) return "int";
             return "";
         }
+        public string OutputName(int slot)
+        {
+            if (slot == 0) return "number";
+            return "";
+        }
+        public string InputType(int slot) { return ""; }
+        public string InputName(int slot) { return ""; }
+        #endregion
 
         public List<byte[]> StaticData()
         {

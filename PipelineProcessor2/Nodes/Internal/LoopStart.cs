@@ -9,9 +9,17 @@ namespace PipelineProcessor2.Nodes.Internal
     {
         public const string TypeName = "Special/StartLoop";
 
+        #region Node settings
         public int InputQty => 1;
         public int OutputQty => 1;
+        public string Name => "Loop Start";
         public string FullName => TypeName;
+        public string Description => "Start of a loop";
+        public string OutputType(int slot) { return ""; }
+        public string OutputName(int slot) { return ""; }
+        public string InputType(int slot) { return ""; }
+        public string InputName(int slot) { return ""; }
+        #endregion
 
         public int NodeId { get; }
 

@@ -9,9 +9,25 @@ namespace PipelineProcessor2.Nodes.Internal
     {
         public const string TypeName = "Special/EndLoop";
 
+        #region Node settings
         public int InputQty => 1;
         public int OutputQty => 1;
+        public string Name => "Loop End";
         public string FullName => TypeName;
+        public string Description => "End of a loop";
+        public string OutputType(int slot) { return ""; }
+        public string OutputName(int slot) { return ""; }
+        public string InputType(int slot)
+        {
+            if (slot == 0) return "int";
+            return "";
+        }
+        public string InputName(int slot)
+        {
+            if (slot == 0) return "Limit";
+            return "";
+        }
+        #endregion
 
         public int NodeId { get; }
 
@@ -22,6 +38,7 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             NodeId = -1;
         }
+
 
         public LoopEnd(DependentNode node, LoopPair pair)
         {
@@ -79,7 +96,7 @@ namespace PipelineProcessor2.Nodes.Internal
                         int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
 
                         //slot 0 and 1 are loop node slots, all other data must be passed on
-                        if(slotPos == j)
+                        if (slotPos == j)
                         {
                             transferData.Add(data.getData(node.Dependencies[i]));
                             break;
@@ -110,7 +127,7 @@ namespace PipelineProcessor2.Nodes.Internal
                     int slotPos = ExecutionHelper.OtherNodeSlotDependents(dependencyGraph[slot.NodeId], node.Id);
 
                     //slot 0 and 1 are loop node slots, all other data must be passed on
-                    if(slotPos == j)
+                    if (slotPos == j)
                     {
                         outputData.Add(data.getData(node.Dependencies[i]));
                         break;

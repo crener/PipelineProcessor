@@ -14,32 +14,26 @@ namespace PipelineProcessor2.Nodes.Sample
 {
     public class BlendArray : IProcessPlugin
     {
+        #region Node settings
         public int InputQty => 1;
         public int OutputQty => 1;
-
-        public string PluginInformation(PluginInformationRequests request, int index)
+        public string Name => "Image Blend";
+        public string Description => "Blends all images in an array and overlays them";
+        public string OutputType(int index)
         {
-            if (request == PluginInformationRequests.Name) return "Image Blend";
-            else if (request == PluginInformationRequests.Description) return "Blends all images in an array and overlays them";
-            else if (request == PluginInformationRequests.InputName)
-            {
-                if (index == 0) return "Images";
-            }
-            else if (request == PluginInformationRequests.InputType)
-            {
-                if (index == 0) return "jpg[]";
-            }
-            else if (request == PluginInformationRequests.OutputName)
-            {
-                if (index == 0) return "Image";
-            }
-            else if (request == PluginInformationRequests.OutputType)
-            {
-                if (index == 0) return "jpg";
-            }
-
+            if (index == 0) return "jpg";
+            if (index == 1) return "string";
             return "";
         }
+        public string OutputName(int index)
+        {
+            if (index == 0) return "Image";
+            if (index == 1) return "File Name";
+            return "";
+        }
+        public string InputType(int index) { return ""; }
+        public string InputName(int index) { return ""; }
+        #endregion
 
         public List<byte[]> ProcessData(List<byte[]> input)
         {

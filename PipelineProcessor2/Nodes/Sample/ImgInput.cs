@@ -9,8 +9,32 @@ namespace PipelineProcessor2.Nodes.Sample
 {
     public class ImgInput : IInputPlugin
     {
+        #region Node settings
         public int InputQty => 0;
         public int OutputQty => 2;
+        public string Name => "Image Import";
+        public string Description => "Imports all images of a given path";
+        public string OutputType(int slot)
+        {
+            if (slot == 0) return "jpg";
+            return "";
+        }
+        public string OutputName(int slot)
+        {
+            if (slot == 0) return "image";
+            return "";
+        }
+        public string InputType(int slot)
+        {
+            if (slot == 0) return "jpg[]";
+            return "";
+        }
+        public string InputName(int slot)
+        {
+            if (slot == 0) return "image";
+            return "";
+        }
+        #endregion
 
         public IEnumerable<List<byte[]>> RetrieveData(string path)
         {
@@ -55,24 +79,6 @@ namespace PipelineProcessor2.Nodes.Sample
                 if(file.EndsWith(".jpg")) validCount++;
 
             return validCount;
-        }
-
-        public string PluginInformation(PluginInformationRequests request, int index)
-        {
-            if (request == PluginInformationRequests.Name) return "Image Import";
-            else if (request == PluginInformationRequests.Description) return "Imports all images of a given path";
-            else if (request == PluginInformationRequests.OutputName)
-            {
-                if (index == 0) return "Image";
-                if (index == 1) return "File Name";
-            }
-            else if (request == PluginInformationRequests.OutputType)
-            {
-                if (index == 0) return "jpg";
-                if (index == 1) return "string";
-            }
-
-            return "";
         }
     }
 }

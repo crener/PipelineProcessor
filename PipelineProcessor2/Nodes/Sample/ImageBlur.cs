@@ -7,24 +7,36 @@ namespace PipelineProcessor2.Nodes.Sample
 {
     public class ImageBlur : IProcessPlugin
     {
+        #region Node settings
         public int InputQty => 1;
         public int OutputQty => 1;
+        public string Name => "Image Blur";
+        public string Description => "Applies blurring to an image";
 
-        public string PluginInformation(PluginInformationRequests request, int index)
+        public string OutputType(int slot)
         {
-            if (request == PluginInformationRequests.Name) return "Image Blur";
-            else if (request == PluginInformationRequests.Description) return "Applies blurring to an image";
-            else if (request == PluginInformationRequests.InputName)
-                if (index == 0) return "image";
-            else if (request == PluginInformationRequests.InputType)
-                if (index == 0) return "jpg";
-            else if (request == PluginInformationRequests.OutputName)
-                if (index == 0) return "image";
-            else if (request == PluginInformationRequests.OutputType)
-                if (index == 0) return "jpg";
-
+            if (slot == 0) return "jpg";
             return "";
         }
+
+        public string OutputName(int slot)
+        {
+            if (slot == 0) return "image";
+            return "";
+        }
+
+        public string InputType(int slot)
+        {
+            if (slot == 0) return "jpg";
+            return "";
+        }
+
+        public string InputName(int slot)
+        {
+            if (slot == 0) return "image";
+            return "";
+        }
+        #endregion
 
         public List<byte[]> ProcessData(List<byte[]> input)
         {

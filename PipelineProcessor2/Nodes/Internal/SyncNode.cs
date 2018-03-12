@@ -12,9 +12,17 @@ namespace PipelineProcessor2.Nodes.Internal
     {
         public const string TypeName = "Special/Sync";
 
+        #region Node settings
         public int InputQty => 1;
-        public int OutputQty => 1;
+        public int OutputQty => 1; public string Name => "Sync Block";
         public string FullName => TypeName;
+        public string Description => "Pauses execution for all pipelines and synchronizes data between them";
+        public string OutputType(int slot) { return ""; }
+        public string OutputName(int slot) { return ""; }
+        public string InputType(int slot){return "";}
+        public string InputName(int slot){return "";}
+        #endregion
+
         public int NodeId { get; private set; }
 
         private readonly Dictionary<int, List<byte[]>> data = new Dictionary<int, List<byte[]>>();
@@ -107,14 +115,6 @@ namespace PipelineProcessor2.Nodes.Internal
             {
                 pipeline.TriggerDependencies(NodeId);
             }
-        }
-
-        public string PluginInformation(PluginInformationRequests request, int index = 0)
-        {
-            if (request == PluginInformationRequests.Name) return "Sync Block";
-            else if (request == PluginInformationRequests.Description) return "Pauses execution for all pipelines and synchronizes data between them";
-
-            return "";
         }
     }
 }

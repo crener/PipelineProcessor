@@ -9,26 +9,26 @@ namespace PipelineProcessor2.Nodes.Sample
 {
     public class ExportJpg : IOutputPlugin
     {
+        #region Node settings
         public int InputQty => 1;
         public int OutputQty => 0;
-
-        private static Random rand = new Random();
-
-        public string PluginInformation(PluginInformationRequests request, int index)
+        public string Name => "Jpg Export";
+        public string Description => "Saves image data to disk";
+        public string OutputType(int slot) { return ""; }
+        public string OutputName(int slot) { return ""; }
+        public string InputType(int slot)
         {
-            if (request == PluginInformationRequests.Name) return "Jpg Export";
-            else if (request == PluginInformationRequests.Description) return "Saves image data to disk";
-            else if (request == PluginInformationRequests.InputName)
-            {
-                if (index == 0) return "Jpg Image";
-            }
-            else if (request == PluginInformationRequests.InputType)
-            {
-                if (index == 0) return "jpg";
-            }
-
+            if (slot == 0) return "jpg";
             return "";
         }
+        public string InputName(int slot)
+        {
+            if (slot == 0) return "Jpg Image";
+            return "";
+        }
+        #endregion
+
+        private static Random rand = new Random();
 
         public bool ExportData(string path, List<byte[]> saveData)
         {
