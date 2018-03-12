@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using PipelineProcessor2.Pipeline;
 using PipelineProcessor2.Server.Responses;
+using PluginTypes;
 
 namespace PipelineProcessor2.Nodes.Internal
 {

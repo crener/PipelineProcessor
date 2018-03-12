@@ -7,6 +7,7 @@ using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
+using PluginTypes;
 
 namespace PipelineProcessor2.Pipeline
 {

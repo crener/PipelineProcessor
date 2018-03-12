@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
 using PipelineProcessor2.Nodes.Internal;
+using PluginTypes;
 
 namespace PipelineProcessor2.Plugin
 {
@@ -11,10 +14,10 @@ namespace PipelineProcessor2.Plugin
     {
         static Dictionary<string, IPlugin> plugins = new Dictionary<string, IPlugin>();
         static Dictionary<string, IInputPlugin> input = new Dictionary<string, IInputPlugin>();
-        static Dictionary<string, IProcessPlugin> processor = new Dictionary<string, IProcessPlugin>();
-        static Dictionary<string, IOutputPlugin> export = new Dictionary<string, IOutputPlugin>();
-        static Dictionary<string, IGeneratorPlugin> generator = new Dictionary<string, IGeneratorPlugin>();
-        static List<string> internalPlugins = new List<string>();
+        static List<string> generator = new List<string>(),
+            internalPlugins = new List<string>(),
+            export = new List<string>(),
+            processor = new List<string>();
         static List<Node> nodes = new List<Node>();
 
         private static object pluginLock = new object(),
@@ -22,7 +25,6 @@ namespace PipelineProcessor2.Plugin
             inputLock = new object(),
             processorLock = new object(),
             outputLock = new object(),
-            internalLock = new object(),
             genLock = new object();
 
         public static void Init()
@@ -30,33 +32,58 @@ namespace PipelineProcessor2.Plugin
             // get all available plugins defined within the assembly
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (Type type in assembly.GetTypes())
+                LoadPluginsFromAssembly(assembly);
+            }
+
+            //load external assemblies
+            Console.WriteLine("\nSearching for external plugin libraries");
+            string localPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugin";
+            if (Directory.Exists(localPath))
+            {
+                foreach (string path in Directory.GetFiles(localPath, "*.dll", SearchOption.AllDirectories))
                 {
                     try
                     {
-                        if (typeof(IPlugin).IsAssignableFrom(type) && !type.IsInterface)
-                        {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-
-                            Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
-                            bool internalPlugin = internalAttribute != null &&
-                                                  !((InternalNode)internalAttribute).ShowExternal;
-
-                            if (internalPlugin)
-                            {
-                                AddInternal(plugin);
-                                continue;
-                            }
-
-                            Console.WriteLine("Adding Plugin: " + plugin.Name, 0);
-                            AddPlugin(plugin);
-                        }
+                        Assembly file = Assembly.LoadFile(path);
+                        Console.WriteLine("\n-Loading from " + Path.GetFileName(path));
+                        LoadPluginsFromAssembly(file);
                     }
-                    catch (InvalidCastException) { } //ignore
-                    catch (MissingMethodException mme)
+                    catch (Exception) { }
+                }
+
+                Console.WriteLine("\nPlugin loading complete\n---------------");
+            }
+        }
+
+        private static void LoadPluginsFromAssembly(Assembly assembly)
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                try
+                {
+                    if (type.IsInterface || !typeof(IPlugin).IsAssignableFrom(type)) continue;
+
+                    IPlugin plugin = Activator.CreateInstance(type) as IPlugin;
+                    if (plugin == null) continue;
+
+                    Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
+                    if (internalAttribute != null && !((InternalNode)internalAttribute).ShowExternal)
                     {
-                        Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
+                        AddInternal(plugin);
+                        continue;
                     }
+
+                    Console.WriteLine("Adding Plugin: " + plugin.Name, 0);
+                    AddPlugin(plugin);
+                }
+                catch (InvalidCastException) { } //ignore
+                catch (MissingMethodException mme)
+                {
+                    Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Failed Adding: " + type.Name + ", " + ex.Message);
                 }
             }
         }
@@ -106,13 +133,13 @@ namespace PipelineProcessor2.Plugin
                 lock (inputLock) input.Add(type, plugin as IInputPlugin);
 
             if (plugin is IProcessPlugin)
-                lock (processorLock) processor.Add(type, plugin as IProcessPlugin);
+                lock (processorLock) processor.Add(type);
 
             if (plugin is IOutputPlugin)
-                lock (outputLock) export.Add(type, plugin as IOutputPlugin);
+                lock (outputLock) export.Add(type);
 
             if (plugin is IGeneratorPlugin)
-                lock (genLock) generator.Add(type, plugin as IGeneratorPlugin);
+                lock (genLock) generator.Add(type);
         }
 
         public static void AddInternal(IPlugin plugin)
@@ -186,7 +213,18 @@ namespace PipelineProcessor2.Plugin
 #endif
             lock (outputLock)
             {
-                return export.ContainsKey(pluginType);
+                return export.Contains(pluginType);
+            }
+        }
+
+        public static bool isProcessingPlugin(string pluginType)
+        {
+#if DEBUG
+            if (pluginType.StartsWith("pro")) return true;
+#endif
+            lock (processorLock)
+            {
+                return processor.Contains(pluginType);
             }
         }
 
@@ -197,7 +235,7 @@ namespace PipelineProcessor2.Plugin
 #endif
             lock (genLock)
             {
-                return generator.ContainsKey(pluginType);
+                return generator.Contains(pluginType);
             }
         }
     }

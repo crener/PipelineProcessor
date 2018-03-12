@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PipelineProcessor2.Pipeline;
+using PluginTypes;
 
 namespace PipelineProcessor2.Nodes.Internal
 {
@@ -36,12 +37,6 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             dependencyNode = graphNode;
             NodeId = graphNode.Id;
-        }
-
-        public string PluginInformation(PluginInformationRequests request, int index)
-        {
-            if (request == PluginInformationRequests.Name) return "Loop Start";
-            return "";
         }
 
         public void AddLoopPair(ref LoopPair pair)

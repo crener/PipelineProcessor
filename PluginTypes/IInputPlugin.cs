@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace PipelineProcessor2.Nodes
+namespace PluginTypes
 {
     public interface IInputPlugin : IPlugin
     {

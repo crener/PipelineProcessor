@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Text;
+using PluginTypes;
 
-namespace PipelineProcessor2.Nodes.Sample
+namespace ImageNodes
 {
     public class ImgInput : IInputPlugin
     {

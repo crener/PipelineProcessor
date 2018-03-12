@@ -71,6 +71,10 @@
       <Project>{45bcc721-c510-4b91-8b81-64bf3a0c6350}</Project>
       <Name>PipelineProcessor2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PluginTypes\PluginTypes.csproj">
+      <Project>{d7541074-1d30-45a7-997c-361de432c6fd}</Project>
+      <Name>PluginTypes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

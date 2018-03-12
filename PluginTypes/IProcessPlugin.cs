@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PipelineProcessor2.Nodes
+namespace PluginTypes
 {
     public interface IProcessPlugin : IPlugin
     {

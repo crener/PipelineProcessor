@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using ImageProcessor;
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
+using PluginTypes;
 
-namespace PipelineProcessor2.Nodes.Sample
+namespace ImageNodes
 {
     public class BlendArray : IProcessPlugin
     {

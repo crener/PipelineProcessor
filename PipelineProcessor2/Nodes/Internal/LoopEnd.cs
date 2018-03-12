@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PipelineProcessor2.Pipeline;
+using PluginTypes;
 
 namespace PipelineProcessor2.Nodes.Internal
 {
@@ -45,22 +46,6 @@ namespace PipelineProcessor2.Nodes.Internal
             NodeId = node.Id;
             this.node = node;
             this.pair = pair;
-        }
-
-        public string PluginInformation(PluginInformationRequests request, int index)
-        {
-            if (request == PluginInformationRequests.Name) return "Loop End";
-            else if (request == PluginInformationRequests.Description) return "End of a loop";
-            else if (request == PluginInformationRequests.InputName)
-            {
-                if (index == 0) return "Limit";
-            }
-            else if (request == PluginInformationRequests.InputType)
-            {
-                if (index == 0) return "int";
-            }
-
-            return "";
         }
 
         /// <summary>

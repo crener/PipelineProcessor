@@ -4,38 +4,34 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{45BCC721-C510-4B91-8B81-64BF3A0C6350}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{CC1B60EE-341A-415E-9688-6DF1BEEDF881}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PipelineProcessor2</RootNamespace>
-    <AssemblyName>PipelineProcessor2</AssemblyName>
+    <RootNamespace>ImageNodes</RootNamespace>
+    <AssemblyName>ImageNodes</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\PipelineProcessor2\bin\Debug\Plugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\PipelineProcessor2\bin\Release\Plugin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="ImageProcessor, Version=2.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.5.6\lib\net45\ImageProcessor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -49,44 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsonTypes\GraphNode.cs" />
-    <Compile Include="JsonTypes\NodeLink.cs" />
-    <Compile Include="Nodes\Generator\NumberGen.cs" />
-    <Compile Include="Nodes\InternalNodeAttribute.cs" />
-    <Compile Include="Nodes\Internal\SyncNode.cs" />
-    <Compile Include="Nodes\Internal\LoopStart.cs" />
-    <Compile Include="Nodes\Internal\LoopEnd.cs" />
-    <Compile Include="Pipeline\DataStore.cs" />
-    <Compile Include="Pipeline\Detectors\LoopDetector.cs" />
-    <Compile Include="Pipeline\Detectors\SpecialNodeSearch.cs" />
-    <Compile Include="Pipeline\Detectors\SyncBlockSearcher.cs" />
-    <Compile Include="Pipeline\Exceptions.cs" />
-    <Compile Include="Pipeline\ExecutionHelper.cs" />
-    <Compile Include="Pipeline\PipelineState.cs" />
-    <Compile Include="Pipeline\PipelineExecutor.cs" />
-    <Compile Include="Pipeline\SpecialNodeContainers.cs" />
-    <Compile Include="Pipeline\TaskRunner.cs" />
-    <Compile Include="Plugin\PluginStore.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="BlendArray.cs" />
+    <Compile Include="ExportJpg.cs" />
+    <Compile Include="ImageBlur.cs" />
+    <Compile Include="ImgInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Server\AsyncServer.cs" />
-    <Compile Include="Server\Exceptions\ResponseNotFoundException.cs" />
-    <Compile Include="Server\Exceptions\ServerException.cs" />
-    <Compile Include="Server\ResponseFactory.cs" />
-    <Compile Include="Server\Responses\UpdateNodeGraph.cs" />
-    <Compile Include="Server\Responses\AvailableNodes.cs" />
-    <Compile Include="Server\IResponse.cs" />
-    <Compile Include="JsonTypes\Node.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PluginTypes\PluginTypes.csproj">
       <Project>{d7541074-1d30-45a7-997c-361de432c6fd}</Project>
       <Name>PluginTypes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

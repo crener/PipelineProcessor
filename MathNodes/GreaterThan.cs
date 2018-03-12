@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PluginTypes;
 
 namespace PipelineProcessor2.Nodes.BasicMaths
 {
-    public class GreaterThanEqual : IProcessPlugin
+    public class GreaterThan : IProcessPlugin
     {
         #region Node settings
         public int InputQty => 2;
         public int OutputQty => 1;
-        public string Name => "Greater Than or Equal";
-        public string Description => "Is greater than or Equal";
+        public string Name => "Greater Than";
+        public string Description => "Is greater than";
         public string OutputType(int index)
         {
             if (index == 0) return "bool";
@@ -31,8 +32,8 @@ namespace PipelineProcessor2.Nodes.BasicMaths
         }
         public string InputName(int index)
         {
-            if (index == 0) return "Comparison";
-            if (index == 1) return ">=";
+            if (index == 0) return "Value";
+            if (index == 1) return "Check";
             return "";
         }
         #endregion
@@ -43,7 +44,7 @@ namespace PipelineProcessor2.Nodes.BasicMaths
             compair = BitConverter.ToInt32(input[1], 0);
 
             List<byte[]> output = new List<byte[]>();
-            output.Add(new byte[] { Convert.ToByte(val >= compair) });
+            output.Add(new byte[] { Convert.ToByte(val > compair) });
 
             return output;
         }

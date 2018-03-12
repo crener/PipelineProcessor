@@ -2,8 +2,9 @@
 using System.IO;
 using ImageProcessor;
 using ImageProcessor.Imaging.Formats;
+using PluginTypes;
 
-namespace PipelineProcessor2.Nodes.Sample
+namespace ImageNodes
 {
     public class ImageBlur : IProcessPlugin
     {

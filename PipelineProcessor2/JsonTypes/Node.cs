@@ -89,7 +89,7 @@ namespace PipelineProcessor2.JsonTypes
             throw new NotImplementedException();
             //todo http://blog.maskalik.com/asp-net/json-net-implement-custom-serialization/
 
-            JObject jsonObject = JObject.Load(reader);
+            /*JObject jsonObject = JObject.Load(reader);
             var properties = jsonObject.Properties().ToList();
             Node node = new Node();
 
@@ -102,7 +102,7 @@ namespace PipelineProcessor2.JsonTypes
             node.category = type[0];
             node.menuName = type[1];
 
-            return node;
+            return node;*/
         }
 
         public override bool CanConvert(Type objectType)

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes;
 using PipelineProcessor2.Pipeline.Exceptions;
+using PluginTypes;
 
 namespace PipelineProcessor2.Pipeline
 {
