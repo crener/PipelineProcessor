@@ -15,7 +15,6 @@ namespace PipelineProcessor2.Pipeline
     public static class PipelineState
     {
         public static Dictionary<int, DependentNode> DependencyGraph => dependencyGraph;
-
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
 
@@ -39,6 +38,9 @@ namespace PipelineProcessor2.Pipeline
             specialNodes = SpecialNodeSearch.CheckForSpecialNodes(dependencyGraph, staticData);
         }
 
+        /// <summary>
+        /// Start processing the active graph
+        /// </summary>
         public static void Start()
         {
             if (inputs.Length == 0)
@@ -72,15 +74,25 @@ namespace PipelineProcessor2.Pipeline
                     pipes[p].TriggerDependencies(inputs[i].nodeId);
         }
 
+        /// <summary>
+        /// Builds pipelines for data processing, will perform segregation of nodes to minimize node processing duplication
+        /// </summary>
+        /// <returns>prepared pipelines</returns>
         private static PipelineExecutor[] BuildPipelines()
         {
-            if (specialNodes.SyncInformation.SyncNodes.Length == 0) return BuildLinearPipeline();
+            if (specialNodes.SyncInformation.SyncNodes.Length == 0)
+                return BuildLinearPipeline();
 
             //Build Pipelines with sync node segregation
+
 
             return null;
         }
 
+        /// <summary>
+        /// Builds a pipelines that is a consistent amount of pipelines throughout execution
+        /// </summary>
+        /// <returns>prepared pipelines</returns>
         private static PipelineExecutor[] BuildLinearPipeline()
         {
             int inputAmount = inputs[0].plugin.InputDataQuantity(InputDirectory);
@@ -102,6 +114,11 @@ namespace PipelineProcessor2.Pipeline
             return pipes;
         }
 
+        /// <summary>
+        /// Takes input data and feeds it into pipelines
+        /// </summary>
+        /// <param name="inputData">input plugins</param>
+        /// <param name="pipes">pipelines that will be filled with input data</param>
         private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
         {
             /* todo uncomment after thoroughly unit tested
@@ -110,7 +127,6 @@ namespace PipelineProcessor2.Pipeline
                 foreach (InputData data in inputData)
                 {
                     int count = 0;
-
                     foreach (List<byte[]> rawInputData in data.plugin.RetrieveData(InputDirectory))
                     {
                         pipes[count].StoreInputData(rawInputData, data.nodeId);
@@ -149,9 +165,9 @@ namespace PipelineProcessor2.Pipeline
             }
             finally
             {
-                for(int i = 0; i < dataInputs.Length; i++)
+                for (int i = 0; i < dataInputs.Length; i++)
                 {
-                    if(dataInputs[i] == null) continue;
+                    if (dataInputs[i] == null) continue;
                     dataInputs[i].Dispose();
                 }
             }
