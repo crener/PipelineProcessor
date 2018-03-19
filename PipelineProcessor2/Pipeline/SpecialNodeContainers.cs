@@ -139,10 +139,15 @@ namespace PipelineProcessor2.Pipeline
     /// <summary>
     /// Data for a single sync block node ground, used for determining how to split up pipelines for reduced duplication
     /// </summary>
-    public struct SyncSplitGroup
+    public class SyncSplitGroup
     {
         public int SyncNodeId;
-        public List<int> ControllingNodes;
+        public List<int> ControllingNodes = new List<int>();
         public int[] Dependents;
+
+        //pipeline build
+        public bool Input = false;
+        public int RequiredPipes = 1;
+        public PipelineExecutor[] pipes;
     }
 }

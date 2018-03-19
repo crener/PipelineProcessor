@@ -59,7 +59,8 @@
     <Compile Include="Pipeline\Detectors\SyncBlockDetectionTest.cs" />
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
     <Compile Include="Pipeline\PipelineHelperTests.cs" />
-    <Compile Include="Pipeline\PipelineStatePipelineBuildTest.cs" />
+    <Compile Include="Pipeline\PipelineStateSimplePipelineBuildTest.cs" />
+    <Compile Include="Pipeline\PipelineStateSyncPipelineBuildTest.cs" />
     <Compile Include="Pipeline\PipelineStateTest.cs" />
     <Compile Include="Pipeline\Detectors\PipelineLoopTest.cs" />
     <Compile Include="Pipeline\TestHelpers.cs" />

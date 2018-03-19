@@ -55,22 +55,20 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
             //find sync node to check
             foreach (DependentNode depNode in dependencyGraph.Values)
-            {
                 if (depNode.Type == SyncNode.TypeName && !syncChecked.Contains(depNode.Id))
                 {
                     syncChecked.Add(depNode.Id);
                     break;
                 }
-            }
 
             if (syncChecked.Count == 0) return null;
+            List<int> used = new List<int>();
 
             //identify and collect sync blocks
             foreach (int syncNode in syncChecked)
             {
                 SyncSplitGroup group = new SyncSplitGroup();
                 group.SyncNodeId = syncNode;
-                group.ControllingNodes = new List<int>();
                 DependentNode syncInstance = dependencyGraph[syncNode];
 
                 //gather all dependencies
@@ -83,6 +81,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                     AggregateNodeDependencies(dependencyGraph, dependencyGraph[node.NodeId], ref group.ControllingNodes);
                 }
 
+                used.AddRange(group.ControllingNodes);
                 sync.Add(group);
             }
 
@@ -106,8 +105,17 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 }
 
                 splitGroup.Dependents = dependents.ToArray();
-                sync[index] = splitGroup;
             }
+
+            //find all nodes that haven't been allocated to a sync node
+            SyncSplitGroup nonSynced = new SyncSplitGroup();
+            nonSynced.SyncNodeId = -1;
+            foreach (int nodeId in dependencyGraph.Keys)
+            {
+                if (used.Contains(nodeId)) continue;
+                nonSynced.ControllingNodes.Add(nodeId);
+            }
+            sync.Add(nonSynced);
 
             return sync;
         }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Internal;
 using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Pipeline;
-using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
@@ -16,7 +10,7 @@ using PipelineTests.TestNodes;
 namespace PipelineTests.Pipeline
 {
     [TestFixture]
-    public class PipelineStatePipelineBuildTest
+    public class PipelineStateSimplePipelineBuildTest
     {
 #if DEBUG
 
@@ -138,7 +132,7 @@ namespace PipelineTests.Pipeline
             links.Add(TestHelpers.MatchSlots(nodes[2], nodes[3], 0, 0));
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
-            Assert.Throws<PipelineException>(() => PipelineState.BuildPipesTestOnly());
+            Assert.Throws<NodeException>(() => PipelineState.BuildPipesTestOnly());
         }
 
         private class BuildInputPlugin : TestInput
@@ -191,6 +185,7 @@ namespace PipelineTests.Pipeline
                 return displaySize;
             }
         }
+
         private class ErrorInputPlugin : TestInput
         {
             private int size;

@@ -84,8 +84,73 @@ namespace PipelineProcessor2.Pipeline
             if (specialNodes.SyncInformation.SyncNodes.Length == 0)
                 return BuildLinearPipeline();
 
-            //Build Pipelines with sync node segregation
+            //Build Pipelines with sync pipeline segregation
 
+            int[] inputNodeIds = new int[inputs.Length];
+            for (var i = 0; i < inputs.Length; i++) inputNodeIds[i] = inputs[i].nodeId;
+            Dictionary<int, InputData[]> groupInputLookup = new Dictionary<int, InputData[]>();
+            Dictionary<int, SyncSplitGroup> nodeToGroup = new Dictionary<int, SyncSplitGroup>();
+
+            //check if groups contain input nodes
+            foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
+            {
+                List<InputData> inputs = new List<InputData>();
+
+                foreach (int nodeId in group.ControllingNodes)
+                {
+                    if (inputNodeIds.Contains(nodeId))
+                    {
+                        IInputPlugin plugin = PluginStore.getInputPlugin(dependencyGraph[nodeId].Type);
+                        if (!group.Input)
+                        {
+                            // Gather initial quantity requirements
+                            group.Input = true;
+                            group.RequiredPipes = plugin.InputDataQuantity(InputDirectory);
+                        }
+                        else if (group.RequiredPipes != plugin.InputDataQuantity(InputDirectory))
+                            throw new InputPluginQuantityMismatchException();
+
+                        inputs.Add(new InputData(nodeId, plugin));
+                    }
+
+                    nodeToGroup.Add(nodeId, group);
+                }
+
+                groupInputLookup.Add(group.SyncNodeId, inputs.ToArray());
+            }
+
+            //check group dependencies
+            foreach (SyncSplitGroup groups in specialNodes.SyncInformation.NodeGroups)
+            {
+                if (groups.SyncNodeId == -1) continue; //nodes outside of sync blocks
+
+                foreach (int dependent in groups.Dependents)
+                {
+                    SyncSplitGroup otherGroup = nodeToGroup[dependent];
+                    if(otherGroup.Input)
+                        throw new PipelineException("Co-dependent sync nodes with inputs are currently not supported");
+                }
+            }
+
+
+            foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
+            {
+                /*if (group.Input)
+                {   //initialize single pipeline
+                    group.pipes = new PipelineExecutor[group.RequiredPipes];
+                    for (int i = 0; i < group.RequiredPipes; i++)
+                        group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
+                }*/
+
+                if (!group.Input) continue;
+                //Prepare pipelines
+                group.pipes = new PipelineExecutor[group.RequiredPipes];
+                for (int i = 0; i < group.RequiredPipes; i++)
+                    group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
+
+                PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
+
+            }
 
             return null;
         }
@@ -122,12 +187,11 @@ namespace PipelineProcessor2.Pipeline
         /// <param name="pipes">pipelines that will be filled with input data</param>
         private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
         {
-            // todo uncomment after thoroughly unit tested
             foreach (InputData data in inputData)
             {
                 IEnumerable<List<byte[]>> enumerable = data.plugin.RetrieveData(InputDirectory);
-                if(enumerable == null)
-                    throw new PipelineException("Input data could not be fully gathered due to input node issue in " + data.plugin.Name);
+                if (enumerable == null)
+                    throw new NodeException("Input data could not be fully gathered due to input node issue in " + data.plugin.Name);
 
                 int count = 0;
                 foreach (List<byte[]> rawInputData in enumerable)
