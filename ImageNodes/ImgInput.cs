@@ -11,7 +11,7 @@ namespace ImageNodes
     {
         #region Node settings
         public int InputQty => 0;
-        public int OutputQty => 2;
+        public int OutputQty => 1;
         public string Name => "Image Import";
         public string Description => "Imports all images of a given path";
         public string OutputType(int slot)
@@ -26,7 +26,7 @@ namespace ImageNodes
         }
         public string InputType(int slot)
         {
-            if (slot == 0) return "jpg[]";
+            if (slot == 0) return "jpg";
             return "";
         }
         public string InputName(int slot)

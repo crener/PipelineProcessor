@@ -20,6 +20,7 @@ namespace PipelineProcessor2.Pipeline
     public struct SpecialNodeData
     {
         public List<LoopPair> Loops;
+        public SyncData SyncInformation;
     }
 
     /// <summary>
@@ -123,5 +124,25 @@ namespace PipelineProcessor2.Pipeline
             dependents[originSlot].Add(nodeSlot);
             totalDependents++;
         }
+    }
+
+
+    /// <summary>
+    /// collected sync data
+    /// </summary>
+    public struct SyncData
+    {
+        public SyncNode[] SyncNodes;
+        public List<SyncSplitGroup> NodeGroups;
+    }
+
+    /// <summary>
+    /// Data for a single sync block node ground, used for determining how to split up pipelines for reduced duplication
+    /// </summary>
+    public struct SyncSplitGroup
+    {
+        public int SyncNodeId;
+        public List<int> ControllingNodes;
+        public int[] Dependents;
     }
 }

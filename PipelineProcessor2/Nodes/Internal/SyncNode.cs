@@ -46,16 +46,28 @@ namespace PipelineProcessor2.Nodes.Internal
             this.staticData = staticData;
 
             //build dictionary
-            foreach (NodeSlot node in nodeId.Dependencies)
+            foreach(NodeSlot node in nodeId.Dependencies)
+            {
+                if(data.ContainsKey(node.NodeId)) continue;
                 data.Add(node.NodeId, new List<byte[]>());
+            }
         }
 
-        public void StateInfo(PipelineExecutor[] initialRuns)
+        /// <summary>
+        /// Sets the pipelines used to trigger events once data is collected
+        /// </summary>
+        /// <param name="triggers">pipelines that will be triggered once data is done</param>
+        public void StateInfo(PipelineExecutor[] triggers)
         {
-            parallelism = initialRuns.Length;
-            pipelines = initialRuns;
+            parallelism = triggers.Length;
+            pipelines = triggers;
         }
 
+        /// <summary>
+        /// Triggers data to be retrieved from a pipeline for aggregation
+        /// </summary>
+        /// <param name="store">pipelines data store</param>
+        /// <param name="triggeredBy">node who's data will be collected</param>
         public void StoreData(DataStore store, int triggeredBy)
         {
             NodeSlot slot = NodeSlot.Invalid;

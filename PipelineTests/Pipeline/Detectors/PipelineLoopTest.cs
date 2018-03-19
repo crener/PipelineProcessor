@@ -5,7 +5,7 @@ using PipelineProcessor2.Pipeline;
 using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 
-namespace PipelineTests.Pipeline
+namespace PipelineTests.Pipeline.Detectors
 {
     [TestFixture]
     public class PipelineLoopTest

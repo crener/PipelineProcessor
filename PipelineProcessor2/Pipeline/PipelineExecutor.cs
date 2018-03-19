@@ -31,13 +31,13 @@ namespace PipelineProcessor2.Pipeline
         /// <param name="depth">the iteration of input that that is being processed</param>
         /// <param name="input">input path</param>
         /// <param name="output">output path</param>
-        public PipelineExecutor(Dictionary<int, DependentNode> nodes, DataStore staticData, SyncNode[] syncNodeBlocks, int depth, string input = "", string output = "")
+        public PipelineExecutor(Dictionary<int, DependentNode> nodes, DataStore staticData, int depth, SpecialNodeData specialNodes, string input = "", string output = "")
         {
             dependencyGraph = nodes;
             data = new DataStore(depth, output);
             this.staticData = staticData;
-            specialNodes = SpecialNodeSearch.CheckForSpecialNodes(nodes);
-            ExtractSpecialNodeData(specialNodes, syncNodeBlocks);
+            this.specialNodes = specialNodes;
+            ExtractSpecialNodeData(specialNodes, specialNodes.SyncInformation.SyncNodes);
 
             inputDirectory = input;
             outputDirectory = output;

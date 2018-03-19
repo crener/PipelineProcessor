@@ -15,11 +15,12 @@ namespace PipelineProcessor2.Pipeline.Detectors
         /// Initializes any special nodes that are used in the pipeline
         /// </summary>
         /// <param name="dependencyGraph"></param>
-        public static SpecialNodeData CheckForSpecialNodes(Dictionary<int, DependentNode> dependencyGraph)
+        public static SpecialNodeData CheckForSpecialNodes(Dictionary<int, DependentNode> dependencyGraph, DataStore staticData)
         {
-            return new SpecialNodeData()
+            return new SpecialNodeData
             {
-                Loops = new LoopDetector(dependencyGraph).FindLoops()
+                Loops = new LoopDetector(dependencyGraph).FindLoops(),
+                SyncInformation = SyncBlockSearcher.GatherData(dependencyGraph, staticData)
             };
         }
     }

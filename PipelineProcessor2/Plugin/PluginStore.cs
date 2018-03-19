@@ -30,13 +30,14 @@ namespace PipelineProcessor2.Plugin
         public static void Init()
         {
             // get all available plugins defined within the assembly
+            Console.WriteLine("Searching for internal Plugins");
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 LoadPluginsFromAssembly(assembly);
             }
 
             //load external assemblies
-            Console.WriteLine("\nSearching for external plugin libraries");
+            Console.WriteLine("\nSearching for external Plugin libraries");
             string localPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugin";
             if (Directory.Exists(localPath))
             {

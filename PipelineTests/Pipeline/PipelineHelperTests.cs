@@ -32,6 +32,7 @@ namespace PipelineTests.Pipeline
 
             Assert.AreEqual(c.Id, resultSlot.NodeId);
         }
+
         [Test]
         public void SimpleSlotDependencies()
         {

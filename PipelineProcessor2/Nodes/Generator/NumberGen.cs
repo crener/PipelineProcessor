@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PluginTypes;
 
-namespace PipelineProcessor2.Nodes.BasicMaths
+namespace PipelineProcessor2.Nodes.Generator
 {
     public class NumberGen : IGeneratorPlugin
     {
