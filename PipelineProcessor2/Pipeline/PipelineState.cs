@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
@@ -121,55 +122,22 @@ namespace PipelineProcessor2.Pipeline
         /// <param name="pipes">pipelines that will be filled with input data</param>
         private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
         {
-            /* todo uncomment after thoroughly unit tested
-            private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
+            // todo uncomment after thoroughly unit tested
+            foreach (InputData data in inputData)
             {
-                foreach (InputData data in inputData)
+                IEnumerable<List<byte[]>> enumerable = data.plugin.RetrieveData(InputDirectory);
+                if(enumerable == null)
+                    throw new PipelineException("Input data could not be fully gathered due to input node issue in " + data.plugin.Name);
+
+                int count = 0;
+                foreach (List<byte[]> rawInputData in enumerable)
                 {
-                    int count = 0;
-                    foreach (List<byte[]> rawInputData in data.plugin.RetrieveData(InputDirectory))
-                    {
-                        pipes[count].StoreInputData(rawInputData, data.nodeId);
-                        count++;
-                    }
-
-                    if (count != pipes.Length)
-                        throw new NodeException("Premature end of data from " + data.nodeId + ", " + data.plugin.Name + "!!");
-                }
-            }
-             */
-
-
-            IEnumerator<List<byte[]>>[] dataInputs = new IEnumerator<List<byte[]>>[inputData.Length];
-            try
-            {
-                //get the enumerators for the data
-                for (var i = 0; i < inputData.Length; i++)
-                {
-                    dataInputs[i] = inputData[i].plugin.RetrieveData(InputDirectory).GetEnumerator();
-                    if (dataInputs[i] == null)
-                        throw new PipelineException("Input data could not be fully gathered due to input node issue");
+                    pipes[count].StoreInputData(rawInputData, data.nodeId);
+                    count++;
                 }
 
-                //extract and place input data into each pipeline
-                for (int p = 0; p < pipes.Length; p++)
-                    for (int d = 0; d < dataInputs.Length; d++)
-                    {
-                        if (!dataInputs[d].MoveNext())
-                        {
-                            Console.WriteLine("Premature end of data!!");
-                            break;
-                        }
-                        pipes[p].StoreInputData(dataInputs[d].Current, inputData[d].nodeId);
-                    }
-            }
-            finally
-            {
-                for (int i = 0; i < dataInputs.Length; i++)
-                {
-                    if (dataInputs[i] == null) continue;
-                    dataInputs[i].Dispose();
-                }
+                if (count != pipes.Length)
+                    throw new InvalidDataException("Premature end of data from " + data.nodeId + ", " + data.plugin.Name + "!!");
             }
         }
 
@@ -234,6 +202,13 @@ namespace PipelineProcessor2.Pipeline
 
             return inputNodes.ToArray();
         }
+
+#if DEBUG
+        public static PipelineExecutor[] BuildPipesTestOnly()
+        {
+            return BuildPipelines();
+        }
+#endif
 
         public static void ClearAll()
         {

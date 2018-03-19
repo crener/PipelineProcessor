@@ -14,13 +14,13 @@ namespace PipelineProcessor2.Server.Responses
 
         public string Response(HttpListenerRequest request)
         {
-            string data = "";
-
-            using (StreamReader stream = new StreamReader(request.InputStream))
-                data = stream.ReadToEnd();
-
-
-            JObject information = JObject.Parse(data);
+            JObject information;
+            {   //Ensures that "data" goes out of scope to save a potentially large amount of memory for duration of request
+                string data = "";
+                using(StreamReader stream = new StreamReader(request.InputStream))
+                    data = stream.ReadToEnd();
+                information = JObject.Parse(data);
+            }
 
             List<NodeLinkInfo> links = new List<NodeLinkInfo>();
             {

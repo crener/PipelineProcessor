@@ -33,7 +33,7 @@ namespace PipelineTests.Pipeline
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
 
-            nodes.RemoveAt(3);
+            nodes.RemoveAt(3); //remove unused
 
             GraphNode[] result = PipelineState.ActiveNodes;
             Assert.AreEqual(nodes.ToArray(), result);

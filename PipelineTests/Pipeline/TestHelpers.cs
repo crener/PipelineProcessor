@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Pipeline;
 
 namespace PipelineTests.Pipeline
@@ -23,6 +25,16 @@ namespace PipelineTests.Pipeline
         {
             a.AddDependent(b.Id, bSlot, aSlot);
             b.AddDependency(a.Id, aSlot, bSlot);
+        }
+
+        public static GraphNode BuildGraphNode(int id, string title, string type ="" )
+        {
+            return new GraphNode { id = id, title = title, type = type };
+        }
+
+        public static NodeLinkInfo MatchSlots(GraphNode a, GraphNode b, int aSlot, int bSlot)
+        {
+            return new NodeLinkInfo(0, a.id, aSlot, b.id, bSlot);
         }
     }
 }

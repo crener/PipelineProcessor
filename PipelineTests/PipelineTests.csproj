@@ -59,10 +59,12 @@
     <Compile Include="Pipeline\Detectors\SyncBlockDetectionTest.cs" />
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
     <Compile Include="Pipeline\PipelineHelperTests.cs" />
+    <Compile Include="Pipeline\PipelineStatePipelineBuildTest.cs" />
     <Compile Include="Pipeline\PipelineStateTest.cs" />
     <Compile Include="Pipeline\Detectors\PipelineLoopTest.cs" />
     <Compile Include="Pipeline\TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestNodes\TestInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

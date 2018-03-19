@@ -89,6 +89,10 @@ namespace PipelineProcessor2.Plugin
             }
         }
 
+        /// <summary>
+        /// Adds a new node to the node database
+        /// </summary>
+        /// <param name="plugin">Node to be added</param>
         public static void AddPlugin(IPlugin plugin)
         {
             Node nodeData = new Node(plugin.Name, plugin.Description, "C#");
