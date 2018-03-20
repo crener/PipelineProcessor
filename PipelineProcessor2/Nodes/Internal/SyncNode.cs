@@ -25,6 +25,8 @@ namespace PipelineProcessor2.Nodes.Internal
         #endregion
 
         public int NodeId { get; private set; }
+        public PipelineExecutor[] TriggeredPipelines => pipelines;
+
 
         private readonly Dictionary<int, List<byte[]>> data = new Dictionary<int, List<byte[]>>();
         private readonly DependentNode graphNode = null;

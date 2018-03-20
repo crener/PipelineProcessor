@@ -64,9 +64,15 @@ namespace PipelineTests.Pipeline
             links.Add(TestHelpers.MatchSlots(nodes[3], nodes[4], 0, 0));
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
-            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
 
+            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize + 1, results.Length);
+
+            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
+            Assert.AreEqual(1,nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines);
+            Assert.AreNotSame(inputPlugin2.InputDataQuantity(""),
+                nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines);
         }
 
         [Test]
@@ -92,9 +98,14 @@ namespace PipelineTests.Pipeline
             links.Add(TestHelpers.MatchSlots(nodes[4], nodes[5], 0, 0));
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
-            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
 
+            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize + (DataSize * 2), results.Length);
+
+            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
+            Assert.AreEqual(inputPlugin2.InputDataQuantity(""),
+                nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines);
         }
 
         [Test]
@@ -119,9 +130,14 @@ namespace PipelineTests.Pipeline
             links.Add(TestHelpers.MatchSlots(nodes[3], nodes[4], 0, 0));
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
-            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
 
+            PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize, results.Length);
+
+            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
+            Assert.AreSame(nodeData.SyncInformation.NodeGroups[0].pipes,
+                nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines);
         }
 
         [Test]
@@ -150,6 +166,9 @@ namespace PipelineTests.Pipeline
 
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
             Assert.Throws<PipelineException>(() => PipelineState.BuildPipesTestOnly());
+
+            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
         }
 
 

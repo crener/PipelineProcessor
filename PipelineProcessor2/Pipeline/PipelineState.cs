@@ -269,6 +269,8 @@ namespace PipelineProcessor2.Pipeline
         {
             return BuildPipelines();
         }
+
+        public static SpecialNodeData SpecialNodeData => specialNodes;
 #endif
 
         public static void ClearAll()
