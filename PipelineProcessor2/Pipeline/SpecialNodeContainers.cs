@@ -149,5 +149,6 @@ namespace PipelineProcessor2.Pipeline
         public bool Input = false;
         public int RequiredPipes = 1;
         public PipelineExecutor[] pipes;
+        public SyncSplitGroup linked;
     }
 }

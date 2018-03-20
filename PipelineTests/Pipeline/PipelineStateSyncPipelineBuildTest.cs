@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Internal;
 using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
-using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
@@ -20,9 +14,9 @@ namespace PipelineTests.Pipeline
     public class PipelineStateSyncPipelineBuildTest
     {
 #if DEBUG
-
         private const int DataSize = 5;
-        private static BuildInputPlugin inputPlugin = new BuildInputPlugin(DataSize),
+
+        private static BuildInputPlugin inputPlugin = new BuildInputPlugin(DataSize, "TestInput1"),
             inputPlugin2 = new BuildInputPlugin(DataSize * 2, "TestInput2");
         private static PrematureEndPlugin
             EarlyEnd = new PrematureEndPlugin(DataSize, DataSize / 2, "LowShow"),
@@ -72,7 +66,7 @@ namespace PipelineTests.Pipeline
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
             PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
 
-            Assert.AreEqual(DataSize, results.Length + 1);
+            Assert.AreEqual(DataSize + 1, results.Length);
         }
 
         [Test]
@@ -158,76 +152,6 @@ namespace PipelineTests.Pipeline
             Assert.Throws<PipelineException>(() => PipelineState.BuildPipesTestOnly());
         }
 
-        private class BuildInputPlugin : TestInput
-        {
-            private int size;
-
-            public BuildInputPlugin(int resultSize)
-            {
-                size = resultSize;
-            }
-            public BuildInputPlugin(int resultSize, string name) : base(name)
-            {
-                size = resultSize;
-            }
-
-            public override IEnumerable<List<byte[]>> RetrieveData(string path)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    yield return new List<byte[]>();
-                }
-            }
-
-            public override int InputDataQuantity(string path)
-            {
-                return size;
-            }
-        }
-
-        private class PrematureEndPlugin : TestInput
-        {
-            private int size, displaySize;
-
-            public PrematureEndPlugin(int resultSize, int advertizedSize, string name) : base(name)
-            {
-                size = resultSize;
-                displaySize = advertizedSize;
-            }
-
-            public override IEnumerable<List<byte[]>> RetrieveData(string path)
-            {
-                for (int i = 0; i < size; i++)
-                {
-                    yield return new List<byte[]>();
-                }
-            }
-
-            public override int InputDataQuantity(string path)
-            {
-                return displaySize;
-            }
-        }
-
-        private class ErrorInputPlugin : TestInput
-        {
-            private int size;
-
-            public ErrorInputPlugin(int resultSize, string name) : base(name)
-            {
-                size = resultSize;
-            }
-
-            public override IEnumerable<List<byte[]>> RetrieveData(string path)
-            {
-                return null;
-            }
-
-            public override int InputDataQuantity(string path)
-            {
-                return size;
-            }
-        }
 
 #endif
     }

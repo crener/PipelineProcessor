@@ -120,39 +120,36 @@ namespace PipelineProcessor2.Pipeline
             }
 
             //check group dependencies
-            foreach (SyncSplitGroup groups in specialNodes.SyncInformation.NodeGroups)
+            foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
-                if (groups.SyncNodeId == -1) continue; //nodes outside of sync blocks
+                if (group.SyncNodeId == -1) continue; //nodes outside of sync blocks
 
-                foreach (int dependent in groups.Dependents)
+                foreach (int dependent in group.Dependents)
                 {
                     SyncSplitGroup otherGroup = nodeToGroup[dependent];
-                    if(otherGroup.Input)
+                    if (otherGroup.Input)
                         throw new PipelineException("Co-dependent sync nodes with inputs are currently not supported");
+
+                    if (group.linked == null) otherGroup.linked = group;
+                    else throw new PipelineException("Multi-Sync segmentation is currently not supported");
                 }
             }
 
-
+            List<PipelineExecutor> executors = new List<PipelineExecutor>();
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
-                /*if (group.Input)
-                {   //initialize single pipeline
-                    group.pipes = new PipelineExecutor[group.RequiredPipes];
-                    for (int i = 0; i < group.RequiredPipes; i++)
-                        group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
-                }*/
+                if (group.linked != null) continue;
 
-                if (!group.Input) continue;
                 //Prepare pipelines
                 group.pipes = new PipelineExecutor[group.RequiredPipes];
                 for (int i = 0; i < group.RequiredPipes; i++)
                     group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
 
-                PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
-
+                if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
+                executors.AddRange(group.pipes);
             }
 
-            return null;
+            return executors.ToArray();
         }
 
         /// <summary>
