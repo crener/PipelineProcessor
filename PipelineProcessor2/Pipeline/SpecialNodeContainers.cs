@@ -147,8 +147,9 @@ namespace PipelineProcessor2.Pipeline
 
         //pipeline build
         public bool Input = false;
-        public int RequiredPipes = 1;
+        public int RequiredPipes = 0;
         public PipelineExecutor[] pipes;
         public SyncSplitGroup linked;
+        public List<int> CalledBy = new List<int>();
     }
 }

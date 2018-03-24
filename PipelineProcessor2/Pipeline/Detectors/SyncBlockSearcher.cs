@@ -58,7 +58,6 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 if (depNode.Type == SyncNode.TypeName && !syncChecked.Contains(depNode.Id))
                 {
                     syncChecked.Add(depNode.Id);
-                    break;
                 }
 
             if (syncChecked.Count == 0) return null;
@@ -116,6 +115,25 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 nonSynced.ControllingNodes.Add(nodeId);
             }
             sync.Add(nonSynced);
+
+            //gather information on what sync nodes call
+            foreach (SyncSplitGroup group in sync)
+            {
+                if (group.SyncNodeId == -1) continue;
+                DependentNode dependentNode = dependencyGraph[@group.SyncNodeId];
+
+                foreach (NodeSlot dep in dependentNode.Dependents)
+                {
+                    //find which sync group controls this node
+                    foreach (SyncSplitGroup depSync in sync)
+                        foreach (int nodes in depSync.ControllingNodes)
+                            if (dep.NodeId == nodes)
+                            {
+                                depSync.CalledBy.Add(group.SyncNodeId);
+                                break;
+                            }
+                }
+            }
 
             return sync;
         }

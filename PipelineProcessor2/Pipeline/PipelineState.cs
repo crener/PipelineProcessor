@@ -138,7 +138,8 @@ namespace PipelineProcessor2.Pipeline
             List<PipelineExecutor> executors = new List<PipelineExecutor>();
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
-                if (group.linked != null) continue;
+                if (group.linked == null && !group.Input)
+                    group.RequiredPipes = 1;
 
                 //Prepare pipelines
                 group.pipes = new PipelineExecutor[group.RequiredPipes];
@@ -147,6 +148,11 @@ namespace PipelineProcessor2.Pipeline
 
                 if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
                 executors.AddRange(group.pipes);
+
+                foreach (int called in group.CalledBy)
+                {
+                    ExtractNodeSlot(called).StateInfo(group.linked == null ? group.pipes : group.linked.pipes);
+                }
             }
 
             return executors.ToArray();
@@ -246,6 +252,13 @@ namespace PipelineProcessor2.Pipeline
                     dependencyGraph[info.TargetId].AddDependency(info.OriginId, info.OriginSlot, info.TargetSlot);
                 }
             }
+        }
+
+        private static SyncNode ExtractNodeSlot(int nodeId)
+        {
+            foreach (SyncNode node in specialNodes.SyncInformation.SyncNodes)
+                if (node.NodeId == nodeId) return node;
+            return null;
         }
 
         private static InputData[] FindStartLocations()

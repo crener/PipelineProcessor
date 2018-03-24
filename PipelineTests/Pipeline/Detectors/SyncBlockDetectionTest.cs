@@ -72,6 +72,8 @@ namespace PipelineTests.Pipeline.Detectors
 
             Assert.AreEqual(1, data.SyncInformation.SyncNodes.Length);
             Assert.AreEqual(0, data.SyncInformation.NodeGroups[0].Dependents.Length);
+
+            Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].CalledBy.Count);
         }
 
         [Test]
@@ -109,6 +111,8 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(1, data.SyncInformation.SyncNodes.Length);
             Assert.AreEqual(1, data.SyncInformation.NodeGroups[0].Dependents.Length);
             Assert.AreEqual(pro2.Id, data.SyncInformation.NodeGroups[0].Dependents[0]);
+            Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].CalledBy.Count);
+            Assert.AreEqual(sync.Id, data.SyncInformation.NodeGroups[1].CalledBy[0]);
         }
 
         [Test]
@@ -148,7 +152,14 @@ namespace PipelineTests.Pipeline.Detectors
                 SpecialNodeSearch.CheckForSpecialNodes(TestHelpers.ConvertToDictionary(nodes), staticData);
 
             Assert.AreEqual(2, data.SyncInformation.SyncNodes.Length);
-            //Assert.AreEqual(0, loops[0].Depth);
+            Assert.AreEqual(3, data.SyncInformation.NodeGroups.Count);
+
+            Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].CalledBy.Count);
+            Assert.AreEqual(sync.Id, data.SyncInformation.NodeGroups[1].CalledBy[0]);
+
+            Assert.AreEqual(1, data.SyncInformation.NodeGroups[2].CalledBy.Count);
+            Assert.AreEqual(sync2.Id, data.SyncInformation.NodeGroups[2].CalledBy[0]);
+            Assert.IsTrue(data.SyncInformation.NodeGroups[0].Dependents.Contains(pro3.Id));
         }
     }
 }
