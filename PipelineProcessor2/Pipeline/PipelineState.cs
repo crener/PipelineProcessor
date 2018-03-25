@@ -18,9 +18,11 @@ namespace PipelineProcessor2.Pipeline
         public static Dictionary<int, DependentNode> DependencyGraph => dependencyGraph;
         public static GraphNode[] ActiveNodes { get { return nodes; } }
         public static NodeLinkInfo[] ActiveLinks { get { return links; } }
+        public static PipelineScheduler Scheduler => scheduler;
 
         private static GraphNode[] nodes;
         private static NodeLinkInfo[] links;
+        private static readonly PipelineScheduler scheduler = new PipelineScheduler();
         public static string InputDirectory = "", OutputDirectory = "";
 
         private static Dictionary<int, DependentNode> dependencyGraph;
@@ -149,9 +151,18 @@ namespace PipelineProcessor2.Pipeline
                 if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
                 executors.AddRange(group.pipes);
 
-                foreach (int called in group.CalledBy)
+                if(group.CalledBy != -2)
                 {
-                    ExtractNodeSlot(called).StateInfo(group.linked == null ? group.pipes : group.linked.pipes);
+                    PipelineExecutor[] linkPipes = group.linked == null ? group.pipes : group.linked.pipes;
+                    int called = group.CalledBy;
+
+                    if (group.Input)
+                        ExtractNodeSlot(called).StateInfo(group.RequiredPipes, linkPipes);
+                    else
+                    {
+                        SyncSplitGroup linkedSync = ExtractSyncGroup(called);
+                        ExtractNodeSlot(called).StateInfo(linkedSync.RequiredPipes, linkPipes);
+                    }
                 }
             }
 
@@ -176,7 +187,8 @@ namespace PipelineProcessor2.Pipeline
             PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
             for (int i = 0; i < inputAmount; i++)
                 pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
-            foreach (SyncNode sync in specialNodes.SyncInformation.SyncNodes) sync.StateInfo(pipes);
+            foreach (SyncNode sync in specialNodes.SyncInformation.SyncNodes)
+                sync.StateInfo(pipes.Length, pipes);
 
             PrepareInputData(inputs, pipes);
 
@@ -258,6 +270,13 @@ namespace PipelineProcessor2.Pipeline
         {
             foreach (SyncNode node in specialNodes.SyncInformation.SyncNodes)
                 if (node.NodeId == nodeId) return node;
+            return null;
+        }
+
+        private static SyncSplitGroup ExtractSyncGroup(int nodeId)
+        {
+            foreach (SyncSplitGroup node in specialNodes.SyncInformation.NodeGroups)
+                if (node.SyncNodeId == nodeId) return node;
             return null;
         }
 

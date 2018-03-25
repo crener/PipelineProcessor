@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes.Internal;
-using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Plugin;
 
 namespace PipelineProcessor2.Pipeline
@@ -15,7 +14,7 @@ namespace PipelineProcessor2.Pipeline
         private readonly Dictionary<int, DependentNode> dependencyGraph;
         private readonly DataStore data, staticData;
         private string inputDirectory, outputDirectory;
-        private int run;
+        private int depth;
 
         private SpecialNodeData specialNodes;
         private Dictionary<int, LoopPair> loopPairByEnd;
@@ -27,7 +26,7 @@ namespace PipelineProcessor2.Pipeline
         /// </summary>
         /// <param name="nodes">Nodes covered in the processing pipeline</param>
         /// <param name="staticData">Data that is generated once and remains static through multiple pipeline executors</param>
-        /// <param name="syncNodeBlocks">sync blocks shared with other pipelines</param>
+        /// <param name="specialNodes">Unique node information form the pipeline state</param>
         /// <param name="depth">the iteration of input that that is being processed</param>
         /// <param name="input">input path</param>
         /// <param name="output">output path</param>
@@ -41,7 +40,7 @@ namespace PipelineProcessor2.Pipeline
 
             inputDirectory = input;
             outputDirectory = output;
-            run = depth;
+            this.depth = depth;
         }
 
         private void ExtractSpecialNodeData(SpecialNodeData nodeData, SyncNode[] syncNodeBlocks)
@@ -124,12 +123,12 @@ namespace PipelineProcessor2.Pipeline
                     continue;
                 }
 
-                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[id], data, staticData, this, run);
+                TaskRunner pluginTask = new TaskRunner(PluginStore.getPlugin(name), dependencyGraph[id], data, staticData, this, depth);
 
                 Task task = pluginTask.getTask();
                 if (task == null) continue;
 
-                task.Start();
+                task.Start(PipelineState.Scheduler);
             }
         }
 

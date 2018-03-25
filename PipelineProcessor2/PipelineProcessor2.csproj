@@ -66,6 +66,7 @@
     <Compile Include="Pipeline\PipelineExecutor.cs" />
     <Compile Include="Pipeline\SpecialNodeContainers.cs" />
     <Compile Include="Pipeline\TaskRunner.cs" />
+    <Compile Include="Pipeline\PipelineScheduler.cs" />
     <Compile Include="Plugin\PluginStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

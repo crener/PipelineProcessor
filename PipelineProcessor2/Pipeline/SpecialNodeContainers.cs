@@ -61,11 +61,11 @@ namespace PipelineProcessor2.Pipeline
 
                 int i = 0;
                 foreach (KeyValuePair<int, List<NodeSlot>> slot in dependents)
-                foreach (NodeSlot nodeSlot in slot.Value)
-                {
-                    deps[i] = nodeSlot;
-                    i++;
-                }
+                    foreach (NodeSlot nodeSlot in slot.Value)
+                    {
+                        deps[i] = nodeSlot;
+                        i++;
+                    }
 
                 return deps;
             }
@@ -147,9 +147,8 @@ namespace PipelineProcessor2.Pipeline
 
         //pipeline build
         public bool Input = false;
-        public int RequiredPipes = 0;
+        public int RequiredPipes = 0, CalledBy = -2;
         public PipelineExecutor[] pipes;
         public SyncSplitGroup linked;
-        public List<int> CalledBy = new List<int>();
     }
 }

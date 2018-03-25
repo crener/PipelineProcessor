@@ -129,7 +129,12 @@ namespace PipelineProcessor2.Pipeline.Detectors
                         foreach (int nodes in depSync.ControllingNodes)
                             if (dep.NodeId == nodes)
                             {
-                                depSync.CalledBy.Add(group.SyncNodeId);
+                                if(depSync.CalledBy == -2)
+                                    depSync.CalledBy = group.SyncNodeId;
+                                else
+                                {
+                                    
+                                }
                                 break;
                             }
                 }

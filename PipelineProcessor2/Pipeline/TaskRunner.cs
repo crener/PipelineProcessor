@@ -38,13 +38,13 @@ namespace PipelineProcessor2.Pipeline
             if (!ExecutionHelper.HasFulfilledDependency(node, resultData, staticData))
                 return null;
 
-            return new Task(Execute);
+            return new Task(Execute, run);
         }
 
         /// <summary>
         /// Executes a given nodes runtime code
         /// </summary>
-        private void Execute()
+        private void Execute(object ignore)
         {
             List<byte[]> data = null;
             List<byte[]> input = GatherInputData();

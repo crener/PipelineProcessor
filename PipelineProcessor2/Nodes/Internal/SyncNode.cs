@@ -20,8 +20,8 @@ namespace PipelineProcessor2.Nodes.Internal
         public string Description => "Pauses execution for all pipelines and synchronizes data between them";
         public string OutputType(int slot) { return ""; }
         public string OutputName(int slot) { return ""; }
-        public string InputType(int slot){return "";}
-        public string InputName(int slot){return "";}
+        public string InputType(int slot) { return ""; }
+        public string InputName(int slot) { return ""; }
         #endregion
 
         public int NodeId { get; private set; }
@@ -48,9 +48,9 @@ namespace PipelineProcessor2.Nodes.Internal
             this.staticData = staticData;
 
             //build dictionary
-            foreach(NodeSlot node in nodeId.Dependencies)
+            foreach (NodeSlot node in nodeId.Dependencies)
             {
-                if(data.ContainsKey(node.NodeId)) continue;
+                if (data.ContainsKey(node.NodeId)) continue;
                 data.Add(node.NodeId, new List<byte[]>());
             }
         }
@@ -58,10 +58,11 @@ namespace PipelineProcessor2.Nodes.Internal
         /// <summary>
         /// Sets the pipelines used to trigger events once data is collected
         /// </summary>
+        /// <param name="triggerAmount">The amount of data that is expected to go into the sync block</param>
         /// <param name="triggers">pipelines that will be triggered once data is done</param>
-        public void StateInfo(PipelineExecutor[] triggers)
+        public void StateInfo(int triggerAmount, PipelineExecutor[] triggers)
         {
-            parallelism = triggers.Length;
+            parallelism = triggerAmount;
             pipelines = triggers;
         }
 

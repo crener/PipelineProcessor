@@ -43,7 +43,7 @@ namespace ImageNodes
             foreach (string filePath in Directory.EnumerateFiles(path))
             {
                 string fileName = Path.GetFileName(filePath);
-                if (fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg"))
+                if (isValid(fileName))
                 {
                     List<byte[]> output = new List<byte[]>();
                     try
@@ -76,9 +76,14 @@ namespace ImageNodes
             string[] files = Directory.GetFiles(path);
             int validCount = 0;
             foreach(string file in files)
-                if(file.EndsWith(".jpg")) validCount++;
+                if(isValid(file)) validCount++;
 
             return validCount;
+        }
+
+        private bool isValid(string file)
+        {
+            return file.EndsWith(".jpg") || file.EndsWith(".jpeg");
         }
     }
 }
