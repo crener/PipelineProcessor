@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Pipeline;
 
@@ -27,7 +22,7 @@ namespace PipelineTests.Pipeline
             b.AddDependency(a.Id, aSlot, bSlot);
         }
 
-        public static GraphNode BuildGraphNode(int id, string title, string type ="" )
+        public static GraphNode BuildGraphNode(int id, string title, string type = "")
         {
             return new GraphNode { id = id, title = title, type = type };
         }

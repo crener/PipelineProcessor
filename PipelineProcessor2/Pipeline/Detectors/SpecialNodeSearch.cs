@@ -19,7 +19,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
         {
             return new SpecialNodeData
             {
-                Loops = new LoopDetector(dependencyGraph).FindLoops(),
+                Loops = null,
                 SyncInformation = SyncBlockSearcher.GatherData(dependencyGraph, staticData)
             };
         }

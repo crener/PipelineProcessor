@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
@@ -60,12 +61,9 @@ namespace PipelineTests.Pipeline
             Assert.AreEqual(DataSize, results.Length);
             Assert.AreEqual(1, results[0].getLoops().Count);
 
-            foreach (PipelineExecutor pipe in results)
-                foreach (PipelineExecutor pipe2 in results)
-                {
-                    Assert.AreEqual(pipe.getLoops(), pipe2.getLoops());
-                    Assert.AreNotSame(pipe.getLoops(), pipe2.getLoops());
-                }
+            for (int i = 0; i < results.Length; i++)
+                for (int j = i+1; j < results.Length; j++)
+                    Assert.AreNotSame(results[i], results[j]);
         }
 
 #endif

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PipelineProcessor2.Nodes.Internal;
+using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Plugin;
 
 namespace PipelineProcessor2.Pipeline
@@ -16,7 +17,6 @@ namespace PipelineProcessor2.Pipeline
         private string inputDirectory, outputDirectory;
         private int depth;
 
-        private SpecialNodeData specialNodes;
         private Dictionary<int, LoopPair> loopPairByEnd;
         private Dictionary<int, LoopStart> loopPairByStart;
         private Dictionary<int, SyncNode> syncById;
@@ -35,21 +35,22 @@ namespace PipelineProcessor2.Pipeline
             dependencyGraph = nodes;
             data = new DataStore(depth, output);
             this.staticData = staticData;
-            this.specialNodes = specialNodes;
-            ExtractSpecialNodeData(specialNodes, specialNodes.SyncInformation.SyncNodes);
+            ExtractSpecialNodeData(specialNodes.SyncInformation.SyncNodes);
 
             inputDirectory = input;
             outputDirectory = output;
             this.depth = depth;
         }
 
-        private void ExtractSpecialNodeData(SpecialNodeData nodeData, SyncNode[] syncNodeBlocks)
+        private void ExtractSpecialNodeData(SyncNode[] syncNodeBlocks)
         {
             //loops
             loopPairByStart = new Dictionary<int, LoopStart>();
             loopPairByEnd = new Dictionary<int, LoopPair>();
 
-            foreach (LoopPair loopPair in nodeData.Loops)
+            List<LoopPair> loops = new LoopDetector(dependencyGraph).FindLoops();
+
+            foreach (LoopPair loopPair in loops)
             {
                 if (!loopPairByStart.ContainsKey(loopPair.Start.NodeId))
                     loopPairByStart.Add(loopPair.Start.NodeId, loopPair.Start);
@@ -59,7 +60,7 @@ namespace PipelineProcessor2.Pipeline
 
             //sync
             syncById = new Dictionary<int, SyncNode>();
-            foreach(SyncNode sync in syncNodeBlocks)
+            foreach (SyncNode sync in syncNodeBlocks)
                 syncById.Add(sync.NodeId, sync);
         }
 
@@ -137,15 +138,10 @@ namespace PipelineProcessor2.Pipeline
             data.StoreResults(current, inputId, true);
         }
 
-        internal void StoreSyncData(List<byte[]> syncData, int inputId, int slot)
-        {
-            data.StoreSyncResults(syncData, inputId, slot);
-        }
-
 #if DEBUG
         public List<LoopPair> getLoops()
         {
-            return specialNodes.Loops;
+            return new List<LoopPair>(loopPairByEnd.Values);
         }
 #endif
     }
