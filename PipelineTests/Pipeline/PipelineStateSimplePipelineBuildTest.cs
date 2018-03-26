@@ -36,6 +36,18 @@ namespace PipelineTests.Pipeline
             PluginStore.AddPlugin(ErrorPlugin);
         }
 
+        [OneTimeTearDown]
+        public void Finish()
+        {
+            PluginStore.ClearAll();
+        }
+
+        [OneTimeTearDown]
+        public void Clear()
+        {
+            PluginStore.ClearAll();
+        }
+
         [TearDown]
         public void CleanUp()
         {

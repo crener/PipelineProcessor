@@ -97,16 +97,16 @@ namespace PipelineProcessor2.Plugin
         {
             Node nodeData = new Node(plugin.Name, plugin.Description, "C#");
 
-            if (plugin is IInputPlugin) nodeData.category = "Input";
-            else if (plugin is IOutputPlugin) nodeData.category = "Output";
-            else if (plugin is IProcessPlugin) nodeData.category = "Process";
-            else if (plugin is IGeneratorPlugin) nodeData.category = "Generator";
+            if (plugin is IInputPlugin) nodeData.Category = "Input";
+            else if (plugin is IOutputPlugin) nodeData.Category = "Output";
+            else if (plugin is IProcessPlugin) nodeData.Category = "Process";
+            else if (plugin is IGeneratorPlugin) nodeData.Category = "Generator";
 
             lock (pluginLock)
             {
                 if (plugins.ContainsKey(nodeData.getTypeVal()))
                 {
-                    Console.WriteLine("Plugin duplicate detected!! " + nodeData.title);
+                    Console.WriteLine("Plugin duplicate detected!! " + nodeData.Title);
                     return;
                 }
             }
@@ -117,7 +117,7 @@ namespace PipelineProcessor2.Plugin
                 inOut.name = plugin.InputName(i);
                 inOut.type = plugin.InputType(i);
 
-                nodeData.input.Add(inOut);
+                nodeData.Input.Add(inOut);
             }
 
             for (int i = 0; i < plugin.OutputQty; i++)
@@ -126,13 +126,10 @@ namespace PipelineProcessor2.Plugin
                 inOut.name = plugin.OutputName(i);
                 inOut.type = plugin.OutputType(i);
 
-                nodeData.output.Add(inOut);
+                nodeData.Output.Add(inOut);
             }
 
             string type = nodeData.getTypeVal();
-
-            lock (nodeLock) nodes.Add(nodeData);
-            lock (pluginLock) plugins.Add(type, plugin);
 
             if (plugin is IInputPlugin)
                 lock (inputLock) input.Add(type, plugin as IInputPlugin);
@@ -143,8 +140,16 @@ namespace PipelineProcessor2.Plugin
             if (plugin is IOutputPlugin)
                 lock (outputLock) export.Add(type);
 
-            if (plugin is IGeneratorPlugin)
+            if(plugin is IGeneratorPlugin)
+            {
                 lock (genLock) generator.Add(type);
+
+                nodeData.UseValue = true;
+                nodeData.DefaultValue = (plugin as IGeneratorPlugin).DefaultValue;
+            }
+
+            lock (nodeLock) nodes.Add(nodeData);
+            lock (pluginLock) plugins.Add(type, plugin);
         }
 
         public static void AddInternal(IPlugin plugin)
@@ -186,7 +191,11 @@ namespace PipelineProcessor2.Plugin
         public static bool isRegisteredPlugin(string pluginType)
         {
 #if DEBUG
-            if (pluginType == "") return true;
+            if (pluginType == "" || 
+                pluginType == "in" ||
+                pluginType == "end" ||
+                pluginType == "pro" ||
+                pluginType == "gen") return true;
 #endif
 
             lock (pluginLock) if (plugins.ContainsKey(pluginType)) return true;
@@ -203,7 +212,7 @@ namespace PipelineProcessor2.Plugin
         public static bool isInputPlugin(string pluginType)
         {
 #if DEBUG
-            if (pluginType == "") return true;
+            if (pluginType == "in") return true;
 #endif
             lock (inputLock)
             {
@@ -243,5 +252,19 @@ namespace PipelineProcessor2.Plugin
                 return generator.Contains(pluginType);
             }
         }
+
+#if DEBUG
+        public static void ClearAll()
+        {
+            generator.Clear();
+            processor.Clear();
+            internalPlugins.Clear();
+            export.Clear();
+            nodes.Clear();
+
+            plugins.Clear();
+            input.Clear();
+        }
+#endif
     }
 }

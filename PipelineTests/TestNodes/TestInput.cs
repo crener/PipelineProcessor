@@ -62,6 +62,8 @@ namespace PipelineTests.TestNodes
     {
         private int size;
 
+        public BuildInputPlugin() : base(){}
+
         public BuildInputPlugin(int resultSize)
         {
             size = resultSize;
@@ -90,6 +92,8 @@ namespace PipelineTests.TestNodes
     {
         private int size, displaySize;
 
+        public PrematureEndPlugin() : base() { }
+
         public PrematureEndPlugin(int resultSize, int advertizedSize, string name) : base(name)
         {
             size = resultSize;
@@ -113,6 +117,8 @@ namespace PipelineTests.TestNodes
     public class ErrorInputPlugin : TestInput
     {
         private int size;
+
+        public ErrorInputPlugin() : base() { }
 
         public ErrorInputPlugin(int resultSize, string name) : base(name)
         {

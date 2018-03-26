@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline.Exceptions;
 
@@ -84,8 +85,8 @@ namespace PipelineProcessor2.Pipeline
 
         public int Id { get; private set; }
         public string Type { get; private set; }
+        public string Value { get; private set; }
 
-        //private List<NodeSlot> dependents, dependencies;
         private Dictionary<int, NodeSlot> dependencies;
         private Dictionary<int, List<NodeSlot>> dependents;
         private int totalDependents = 0;
@@ -94,6 +95,17 @@ namespace PipelineProcessor2.Pipeline
         {
             Id = id;
             Type = type;
+            Value = "";
+
+            dependents = new Dictionary<int, List<NodeSlot>>();
+            dependencies = new Dictionary<int, NodeSlot>();
+        }
+
+        public DependentNode(GraphNode node)
+        {
+            Id = node.id;
+            Type = node.type;
+            Value = node.value;
 
             dependents = new Dictionary<int, List<NodeSlot>>();
             dependencies = new Dictionary<int, NodeSlot>();

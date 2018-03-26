@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="JsonTypes\GraphNode.cs" />
     <Compile Include="JsonTypes\NodeLink.cs" />
+    <Compile Include="Nodes\Generator\StringGen.cs" />
     <Compile Include="Nodes\Generator\NumberGen.cs" />
     <Compile Include="Nodes\InternalNodeAttribute.cs" />
     <Compile Include="Nodes\Internal\SyncNode.cs" />

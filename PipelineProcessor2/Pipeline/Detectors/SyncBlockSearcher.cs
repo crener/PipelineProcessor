@@ -132,9 +132,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                                 if(depSync.CalledBy == -2)
                                     depSync.CalledBy = group.SyncNodeId;
                                 else
-                                {
-                                    
-                                }
+                                    throw new PipelineException("Multi-Sync segmentation is currently not supported");
                                 break;
                             }
                 }

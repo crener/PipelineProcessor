@@ -61,7 +61,7 @@ namespace PipelineProcessor2.Pipeline
                 if (PluginStore.isGeneratorPlugin(pair.Value.Type))
                 {
                     IGeneratorPlugin plugin = PluginStore.getPlugin(pair.Value.Type) as IGeneratorPlugin;
-                    staticData.StoreResults(plugin.StaticData(), pair.Key, true);
+                    staticData.StoreResults(plugin.StaticData(pair.Value.Value), pair.Key, true);
                 }
 
             PipelineExecutor[] pipes = BuildPipelines();
@@ -243,12 +243,18 @@ namespace PipelineProcessor2.Pipeline
 
         private static void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
         {
+            if(nodes.Length == 0)
+            {
+                Console.WriteLine("No executable nodes found after unused node detection!");
+                return;
+            }
+
             dependencyGraph = new Dictionary<int, DependentNode>();
 
             //add valid nodes
             foreach (GraphNode node in nodes)
                 if (!dependencyGraph.ContainsKey(node.id))
-                    dependencyGraph.Add(node.id, new DependentNode(node.id, node.type));
+                    dependencyGraph.Add(node.id, new DependentNode(node));
 
             //setup dependencies
             foreach (NodeLinkInfo info in links)

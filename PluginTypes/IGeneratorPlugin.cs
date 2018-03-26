@@ -4,6 +4,7 @@ namespace PluginTypes
 {
     public interface IGeneratorPlugin : IPlugin
     {
-        List<byte[]> StaticData();
+        List<byte[]> StaticData(string nodeValue);
+        string DefaultValue { get; }
     }
 }

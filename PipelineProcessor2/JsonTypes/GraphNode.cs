@@ -5,7 +5,7 @@ namespace PipelineProcessor2.JsonTypes
     public class GraphNode
     {
         public int id;
-        public string title, type;
+        public string title, type, value;
 
         public GraphLinkReference[] inputs;
         public GraphLinkReference[] outputs;
@@ -24,6 +24,8 @@ namespace PipelineProcessor2.JsonTypes
             id = 0;
             title = "";
             type = "";
+            value = "";
+
             inputs = new GraphLinkReference[0];
             outputs = new GraphLinkReference[0];
         }

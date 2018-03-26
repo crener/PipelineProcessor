@@ -9,38 +9,43 @@ namespace PipelineProcessor2.JsonTypes
     [JsonConverter(typeof(NodeSerializer))]
     public struct Node
     {
-        public string title;
-        public string description;
-        public string category;
-        public string menuName;
-        public List<NodeInputOutput> input, output;
+        public string Title;
+        public string Description;
+        public string Category;
+        public string MenuName;
+        public bool UseValue;
+        public string DefaultValue;
+        public List<NodeInputOutput> Input, Output;
 
         public Node(string title, string description, string category)
         {
-            this.title = title;
-            this.description = description;
-            this.category = category;
+            this.Title = title;
+            this.Description = description;
+            this.Category = category;
 
-            input = new List<NodeInputOutput>();
-            output = new List<NodeInputOutput>();
-            menuName = "";
+            Input = new List<NodeInputOutput>();
+            Output = new List<NodeInputOutput>();
+            MenuName = "";
+
+            UseValue = false;
+            DefaultValue = "";
         }
 
         public string getTypeVal()
         {
-            if (menuName == "")
+            if (MenuName == "")
             {
-                string noSpace = category + "/";
+                string noSpace = Category + "/";
                 int pos = 0;
-                while (pos < title.Length)
+                while (pos < Title.Length)
                 {
-                    if (title[pos] != ' ') noSpace += title[pos];
+                    if (Title[pos] != ' ') noSpace += Title[pos];
                     ++pos;
                 }
                 return noSpace;
             }
 
-            return category + "/" + menuName;
+            return Category + "/" + MenuName;
         }
     }
 
@@ -64,22 +69,28 @@ namespace PipelineProcessor2.JsonTypes
             writer.WriteStartObject();
 
             writer.WritePropertyName("title");
-            serializer.Serialize(writer, node.title);
+            serializer.Serialize(writer, node.Title);
 
             writer.WritePropertyName("desc");
-            serializer.Serialize(writer, node.description);
+            serializer.Serialize(writer, node.Description);
 
             writer.WritePropertyName("category");
-            serializer.Serialize(writer, node.title);
+            serializer.Serialize(writer, node.Title);
 
             writer.WritePropertyName("type");
             serializer.Serialize(writer, node.getTypeVal());
 
             writer.WritePropertyName("input");
-            serializer.Serialize(writer, node.input);
+            serializer.Serialize(writer, node.Input);
 
             writer.WritePropertyName("output");
-            serializer.Serialize(writer, node.output);
+            serializer.Serialize(writer, node.Output);
+
+            writer.WritePropertyName("useValue");
+            serializer.Serialize(writer, node.UseValue);
+
+            writer.WritePropertyName("defaultValue");
+            serializer.Serialize(writer, node.DefaultValue);
 
             writer.WriteEndObject();
         }

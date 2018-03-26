@@ -5,7 +5,6 @@ using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
-using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
