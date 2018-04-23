@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using PipelineProcessor2.Pipeline;
 using PluginTypes;
 
@@ -51,11 +52,12 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             currentDepth = maxDepth;
 
-            for (int i = 0; i < controllingPairs.Count; i++)
+            int[] keys = controllingPairs.Keys.ToArray();
+            for (int i = 0; i < keys.Length; i++)
             {
-                LoopPair pair = controllingPairs[i];
+                LoopPair pair = controllingPairs[keys[i]];
                 pair.Iteration = 0;
-                controllingPairs[i] = pair;
+                controllingPairs[keys[i]] = pair;
             }
         }
 
