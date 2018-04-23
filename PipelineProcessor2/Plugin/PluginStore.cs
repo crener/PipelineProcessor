@@ -20,13 +20,6 @@ namespace PipelineProcessor2.Plugin
             processor = new List<string>();
         static List<Node> nodes = new List<Node>();
 
-        private static object pluginLock = new object(),
-            nodeLock = new object(),
-            inputLock = new object(),
-            processorLock = new object(),
-            outputLock = new object(),
-            genLock = new object();
-
         public static void Init()
         {
             // get all available plugins defined within the assembly
@@ -102,7 +95,7 @@ namespace PipelineProcessor2.Plugin
             else if (plugin is IProcessPlugin) nodeData.Category = "Process";
             else if (plugin is IGeneratorPlugin) nodeData.Category = "Generator";
 
-            lock (pluginLock)
+            lock (plugins)
             {
                 if (plugins.ContainsKey(nodeData.getTypeVal()))
                 {
@@ -132,24 +125,24 @@ namespace PipelineProcessor2.Plugin
             string type = nodeData.getTypeVal();
 
             if (plugin is IInputPlugin)
-                lock (inputLock) input.Add(type, plugin as IInputPlugin);
+                lock (input) input.Add(type, plugin as IInputPlugin);
 
             if (plugin is IProcessPlugin)
-                lock (processorLock) processor.Add(type);
+                lock (processor) processor.Add(type);
 
             if (plugin is IOutputPlugin)
-                lock (outputLock) export.Add(type);
+                lock (export) export.Add(type);
 
             if(plugin is IGeneratorPlugin)
             {
-                lock (genLock) generator.Add(type);
+                lock (generator) generator.Add(type);
 
                 nodeData.UseValue = true;
                 nodeData.DefaultValue = (plugin as IGeneratorPlugin).DefaultValue;
             }
 
-            lock (nodeLock) nodes.Add(nodeData);
-            lock (pluginLock) plugins.Add(type, plugin);
+            lock (nodes) nodes.Add(nodeData);
+            lock (plugins) plugins.Add(type, plugin);
         }
 
         public static void AddInternal(IPlugin plugin)
@@ -164,7 +157,7 @@ namespace PipelineProcessor2.Plugin
 
         public static Node[] AvailableNodes()
         {
-            lock (nodeLock)
+            lock (nodes)
             {
                 return nodes.ToArray();
             }
@@ -172,7 +165,7 @@ namespace PipelineProcessor2.Plugin
 
         public static IInputPlugin getInputPlugin(string pluginName)
         {
-            lock (inputLock)
+            lock (input)
             {
                 if (!input.ContainsKey(pluginName)) return null;
                 return input[pluginName];
@@ -181,7 +174,7 @@ namespace PipelineProcessor2.Plugin
 
         public static IPlugin getPlugin(string pluginName)
         {
-            lock (pluginLock)
+            lock (plugins)
             {
                 if (!plugins.ContainsKey(pluginName)) return null;
                 return plugins[pluginName];
@@ -198,7 +191,7 @@ namespace PipelineProcessor2.Plugin
                 pluginType == "gen") return true;
 #endif
 
-            lock (pluginLock) if (plugins.ContainsKey(pluginType)) return true;
+            lock (plugins) if (plugins.ContainsKey(pluginType)) return true;
             if (internalPlugins.Contains(pluginType)) return true;
 
             return false;
@@ -214,7 +207,7 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
             if (pluginType == "in") return true;
 #endif
-            lock (inputLock)
+            lock (input)
             {
                 return input.ContainsKey(pluginType);
             }
@@ -225,7 +218,7 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
             if (pluginType.StartsWith("end")) return true;
 #endif
-            lock (outputLock)
+            lock (export)
             {
                 return export.Contains(pluginType);
             }
@@ -236,7 +229,7 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
             if (pluginType.StartsWith("pro")) return true;
 #endif
-            lock (processorLock)
+            lock (processor)
             {
                 return processor.Contains(pluginType);
             }
@@ -247,7 +240,7 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
             if (pluginType.StartsWith("gen")) return true;
 #endif
-            lock (genLock)
+            lock (generator)
             {
                 return generator.Contains(pluginType);
             }
@@ -256,14 +249,14 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
         public static void ClearAll()
         {
-            generator.Clear();
-            processor.Clear();
+            lock(generator) generator.Clear();
+            lock (processor) processor.Clear();
             internalPlugins.Clear();
-            export.Clear();
-            nodes.Clear();
+            lock (export) export.Clear();
+            lock (nodes) nodes.Clear();
 
-            plugins.Clear();
-            input.Clear();
+            lock (plugins) plugins.Clear();
+            lock (input) input.Clear();
         }
 #endif
     }
