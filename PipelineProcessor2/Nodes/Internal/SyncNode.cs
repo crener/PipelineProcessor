@@ -5,6 +5,7 @@ using System.Threading;
 using PipelineProcessor2.Pipeline;
 using PipelineProcessor2.Server.Responses;
 using PluginTypes;
+using IRawPlugin = PipelineProcessor2.Plugin.IRawPlugin;
 
 namespace PipelineProcessor2.Nodes.Internal
 {

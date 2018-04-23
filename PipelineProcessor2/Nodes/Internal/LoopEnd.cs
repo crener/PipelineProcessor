@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using PipelineProcessor2.Pipeline;
 using PluginTypes;
+using IRawPlugin = PipelineProcessor2.Plugin.IRawPlugin;
 
 namespace PipelineProcessor2.Nodes.Internal
 {
