@@ -61,6 +61,7 @@ namespace PipelineProcessor2.Pipeline
                             if (list.Count == 0) tasks.RemoveAt(0);
                         }
 
+                        if(item == null) break;
                         TryExecuteTask(item);
                         --totalJobs;
                     }
