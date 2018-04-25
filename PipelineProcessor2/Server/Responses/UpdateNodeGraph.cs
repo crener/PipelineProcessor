@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
@@ -14,6 +15,7 @@ namespace PipelineProcessor2.Server.Responses
 
         public string Response(HttpListenerRequest request)
         {
+            Console.WriteLine(DateTime.UtcNow.ToString("mm:ss:fff") + " Starting");
             JObject information;
             {   //Ensures that "data" goes out of scope to save a potentially large amount of memory for duration of request
                 string data = "";

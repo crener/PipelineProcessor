@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageNodes", "ImageNodes\Im
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginTypes", "PluginTypes\PluginTypes.csproj", "{D7541074-1D30-45A7-997C-361DE432C6FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicPipeline", "BasicPipeline\BasicPipeline.csproj", "{C6BB7488-1038-43D7-A336-248259CA8015}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D7541074-1D30-45A7-997C-361DE432C6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7541074-1D30-45A7-997C-361DE432C6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7541074-1D30-45A7-997C-361DE432C6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6BB7488-1038-43D7-A336-248259CA8015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6BB7488-1038-43D7-A336-248259CA8015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6BB7488-1038-43D7-A336-248259CA8015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6BB7488-1038-43D7-A336-248259CA8015}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

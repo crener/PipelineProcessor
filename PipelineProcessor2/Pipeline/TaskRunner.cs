@@ -69,7 +69,7 @@ namespace PipelineProcessor2.Pipeline
                 else Console.WriteLine("Unknown plugin type");
 
                 stopwatch.Stop();
-                Console.WriteLine(node.Type + " Finished in " + stopwatch.Elapsed + " ms, slot: " + node.Id + " of run " + run);
+                Console.WriteLine(DateTime.UtcNow.ToString("mm:ss:fff") + " " + node.Type + " Finished in " + stopwatch.Elapsed + " ms, slot: " + node.Id + " of run " + run);
             }
             catch (Exception e)
             {
