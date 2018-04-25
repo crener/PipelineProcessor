@@ -32,8 +32,8 @@ namespace PipelineProcessor2.Nodes.BasicMaths
         }
         public string InputName(int index)
         {
-            if (index == 0) return "Comparison";
-            if (index == 1) return ">=";
+            if (index == 0) return "Compare";
+            if (index == 1) return "Value";
             return "";
         }
         #endregion
