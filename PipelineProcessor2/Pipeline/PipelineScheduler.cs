@@ -20,11 +20,14 @@ namespace PipelineProcessor2.Pipeline
         {
             int depth = task.AsyncState is int ? (int)task.AsyncState : int.MaxValue;
 
-            if (tasks.ContainsKey(depth)) tasks[depth].Add(task);
-            else
+            lock (task)
             {
-                tasks.Add(depth, new List<Task>());
-                tasks[depth].Add(task);
+                if (tasks.ContainsKey(depth)) tasks[depth].Add(task);
+                else
+                {
+                    tasks.Add(depth, new List<Task>());
+                    tasks[depth].Add(task);
+                }
             }
 
             if (totalJobs < MaximumConcurrencyLevel)
@@ -61,7 +64,7 @@ namespace PipelineProcessor2.Pipeline
                             if (list.Count == 0) tasks.RemoveAt(0);
                         }
 
-                        if(item == null) break;
+                        if (item == null) break;
                         TryExecuteTask(item);
                         --totalJobs;
                     }
@@ -87,9 +90,13 @@ namespace PipelineProcessor2.Pipeline
         protected override IEnumerable<Task> GetScheduledTasks()
         {
             List<Task> result = new List<Task>();
-            foreach (var lists in tasks.Values)
-                foreach (Task task in lists)
-                    result.Add(task);
+
+            lock (tasks)
+            {
+                foreach (var lists in tasks.Values)
+                    foreach (Task task in lists)
+                        result.Add(task);
+            }
 
             return result;
         }
