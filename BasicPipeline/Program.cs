@@ -15,6 +15,9 @@ namespace BasicPipeline
         static ExportJpg jpg = new ExportJpg();
         static ImageBlur blur = new ImageBlur();
 
+        private const string outDir = "D:\\out";
+        private const string inDir = "E:\\in3";
+
         static void Main(string[] args)
         {
             jpg = new ExportJpg();
@@ -22,12 +25,12 @@ namespace BasicPipeline
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
-            
-            //Parallel.ForEach(new ImgInput().RetrieveData("E:\\in3"), 
-            //    (input) => { jpg.ExportData("E:\\out", blur.ProcessData(input)); });
 
-            foreach(List<byte[]> input in new ImgInput().RetrieveData("E:\\in3"))
-                jpg.ExportData("E:\\out", blur.ProcessData(input));
+            //Parallel.ForEach(new ImgInput().RetrieveData(inDir), 
+            //    (input) => { jpg.ExportData(outDir, blur.ProcessData(input)); });
+
+            foreach (List<byte[]> input in new ImgInput().RetrieveData(inDir))
+                jpg.ExportData(outDir, blur.ProcessData(input));
 
             timer.Stop();
             Console.WriteLine("complete " + timer.Elapsed.ToString("g"));

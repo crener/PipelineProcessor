@@ -20,7 +20,7 @@ namespace PipelineProcessor2.Pipeline
         {
             int depth = task.AsyncState is int ? (int)task.AsyncState : int.MaxValue;
 
-            lock (task)
+            lock (tasks)
             {
                 if (tasks.ContainsKey(depth)) tasks[depth].Add(task);
                 else
