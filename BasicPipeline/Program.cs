@@ -17,21 +17,21 @@ namespace BasicPipeline
 
         static void Main(string[] args)
         {
+            jpg = new ExportJpg();
+            blur = new ImageBlur();
+
             Stopwatch timer = new Stopwatch();
             timer.Start();
+            
+            //Parallel.ForEach(new ImgInput().RetrieveData("E:\\in3"), 
+            //    (input) => { jpg.ExportData("E:\\out", blur.ProcessData(input)); });
 
-            IEnumerable<List<byte[]>> data = new ImgInput().RetrieveData("E:\\in3");
-            Parallel.ForEach(data, Process);
+            foreach(List<byte[]> input in new ImgInput().RetrieveData("E:\\in3"))
+                jpg.ExportData("E:\\out", blur.ProcessData(input));
 
             timer.Stop();
             Console.WriteLine("complete " + timer.Elapsed.ToString("g"));
             Console.ReadLine();
-        }
-
-        private static void Process(List<byte[]> data)
-        {
-            List<byte[]> list = blur.ProcessData(data);
-            jpg.ExportData("E:\\out", list);
         }
     }
 }
