@@ -26,10 +26,13 @@ namespace BasicPipeline
             Stopwatch timer = new Stopwatch();
             timer.Start();
 
-            //Parallel.ForEach(new ImgInput().RetrieveData(inDir), 
+            ImgInput inputNode = new ImgInput();
+            List<List<byte[]>> allData = new List<List<byte[]>>(inputNode.RetrieveData(inDir));
+
+            //Parallel.ForEach(allData,
             //    (input) => { jpg.ExportData(outDir, blur.ProcessData(input)); });
 
-            foreach (List<byte[]> input in new ImgInput().RetrieveData(inDir))
+            foreach (List<byte[]> input in allData)
                 jpg.ExportData(outDir, blur.ProcessData(input));
 
             timer.Stop();

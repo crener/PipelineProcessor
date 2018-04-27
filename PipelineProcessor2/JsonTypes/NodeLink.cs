@@ -28,7 +28,24 @@ namespace PipelineProcessor2.JsonTypes
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            NodeLinkInfo info = (NodeLinkInfo)value;
+
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("id");
+            serializer.Serialize(writer, info.Id);
+
+            writer.WritePropertyName("origin_id");
+            serializer.Serialize(writer, info.OriginId);
+            writer.WritePropertyName("origin_slot");
+            serializer.Serialize(writer, info.OriginSlot);
+
+            writer.WritePropertyName("target_id");
+            serializer.Serialize(writer, info.TargetId);
+            writer.WritePropertyName("target_slot");
+            serializer.Serialize(writer, info.TargetSlot);
+
+            writer.WriteEndObject();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

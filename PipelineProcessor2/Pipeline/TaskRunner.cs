@@ -49,7 +49,7 @@ namespace PipelineProcessor2.Pipeline
             List<byte[]> data = null;
             List<byte[]> input = GatherInputData();
 
-            Console.WriteLine(node.Type + " Starting, slot: " + node.Id + " of run " + run);
+            Console.WriteLine(DateTime.UtcNow.ToString("mm:ss:fff") + " " + node.Type + " Starting, slot: " + node.Id + " of run " + run);
 
             // execute plugin task
             try

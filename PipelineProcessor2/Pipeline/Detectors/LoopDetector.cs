@@ -24,9 +24,25 @@ namespace PipelineProcessor2.Pipeline.Detectors
         public List<LoopPair> FindLoops()
         {
             List<int> done = new List<int>();
+            DependentNode[] nodes = dependencyGraph.Values.ToArray();
+
+            //sanity check for existing loops
+            {
+                bool loopEnds = false;
+
+                foreach(DependentNode node in nodes)
+                {
+                    if(node.Type == LoopEnd.TypeName)
+                    {
+                        loopEnds = true;
+                        break;
+                    }
+                }
+
+                if(!loopEnds) return new List<LoopPair>();
+            }
 
             //find end points
-            DependentNode[] nodes = dependencyGraph.Values.ToArray();
             for (int i = nodes.Length - 1; i >= 0; i--)
             {
                 DependentNode node = nodes[i];
