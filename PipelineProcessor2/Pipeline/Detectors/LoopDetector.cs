@@ -27,20 +27,17 @@ namespace PipelineProcessor2.Pipeline.Detectors
             DependentNode[] nodes = dependencyGraph.Values.ToArray();
 
             //sanity check for existing loops
+            bool loopEnds = false;
+            foreach (DependentNode node in nodes)
             {
-                bool loopEnds = false;
-
-                foreach(DependentNode node in nodes)
+                if (node.Type == LoopEnd.TypeName)
                 {
-                    if(node.Type == LoopEnd.TypeName)
-                    {
-                        loopEnds = true;
-                        break;
-                    }
+                    loopEnds = true;
+                    break;
                 }
-
-                if(!loopEnds) return new List<LoopPair>();
             }
+
+            if (!loopEnds) return new List<LoopPair>();
 
             //find end points
             for (int i = nodes.Length - 1; i >= 0; i--)
@@ -192,7 +189,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 {
                     NodeSlot startLink = ExecutionHelper.FindFirstNodeSlotInDependents(loopStart, dependencyGraph, 0);
 
-                    if(startLink.NodeId == -1)
+                    if (startLink.NodeId == -1)
                         throw new MissingLinkException("No link for loop start specified");
                     if (startLink.NodeId != loopEnd.Id)
                         throw new MissingLinkException(StartEndIdMismatch);
@@ -291,7 +288,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
             for (int i = 0; i < start.Dependents.Length; i++)
             {
-                if(start.Dependents[i].NodeId == loopEnd) continue;
+                if (start.Dependents[i].NodeId == loopEnd) continue;
 
                 List<NodeSlot> id = new List<NodeSlot>();
                 id.Add(start.Dependents[i]);
