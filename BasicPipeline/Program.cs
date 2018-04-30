@@ -20,9 +20,6 @@ namespace BasicPipeline
 
         static void Main(string[] args)
         {
-            jpg = new ExportJpg();
-            blur = new ImageBlur();
-
             Stopwatch timer = new Stopwatch();
             timer.Start();
 

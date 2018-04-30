@@ -51,7 +51,7 @@ namespace PipelineProcessor2.Pipeline
                 Console.WriteLine("No start locations could be found");
                 return;
             }
-            else Console.WriteLine("Starting Execution Preparation");
+            else Console.WriteLine(DateTime.UtcNow.ToString("mm:ss:fff") + " Starting Execution Preparation");
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();

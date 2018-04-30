@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicPipeline", "BasicPipel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OverheadBenchmarks", "OverheadBenchmarks\OverheadBenchmarks.csproj", "{8FDB9126-EEAA-4B4E-A852-EC5385B9A3AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComplexPipeline", "ComplexPipeline\ComplexPipeline.csproj", "{2D999F8E-1C00-420A-956E-BC83C3124E61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,9 @@ Global
 		{8FDB9126-EEAA-4B4E-A852-EC5385B9A3AA}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{8FDB9126-EEAA-4B4E-A852-EC5385B9A3AA}.Debug|Any CPU.Build.0 = Debug|x64
 		{8FDB9126-EEAA-4B4E-A852-EC5385B9A3AA}.Release|Any CPU.ActiveCfg = Release|x64
+		{2D999F8E-1C00-420A-956E-BC83C3124E61}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{2D999F8E-1C00-420A-956E-BC83C3124E61}.Debug|Any CPU.Build.0 = Debug|x64
+		{2D999F8E-1C00-420A-956E-BC83C3124E61}.Release|Any CPU.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
