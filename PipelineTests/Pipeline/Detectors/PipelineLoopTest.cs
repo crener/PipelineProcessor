@@ -38,6 +38,42 @@ namespace PipelineTests.Pipeline.Detectors
         }
 
         [Test]
+        public void CodependentLoop()
+        {
+            //                      ᴧ >>       >>       >>  v
+            // S -> LoopStart -> LoopStart -> LoopEnd -> LoopEnd -> End
+            //          v >>    >>      >>      ᴧ
+
+            List<DependentNode> nodes = new List<DependentNode>();
+            DependentNode start = new DependentNode(0, "start"),
+                loopStart1 = new DependentNode(1, LoopStart.TypeName),
+                loopEnd1 = new DependentNode(2, LoopEnd.TypeName),
+                loopStart2 = new DependentNode(3, LoopStart.TypeName),
+                loopEnd2 = new DependentNode(4, LoopEnd.TypeName),
+                process = new DependentNode(6, "pro"),
+                end = new DependentNode(5, "end");
+
+            nodes.Add(start);
+            nodes.Add(loopStart1);
+            nodes.Add(loopStart2);
+            nodes.Add(loopEnd1);
+            nodes.Add(loopEnd2);
+            nodes.Add(process);
+            nodes.Add(end);
+
+            TestHelpers.MatchSlots(start, loopStart1, 0, 0);
+            TestHelpers.MatchSlots(loopStart1, loopEnd1, 0, 0);
+            TestHelpers.MatchSlots(loopStart1, loopStart2, 1, 2);
+            TestHelpers.MatchSlots(loopStart2, process, 2, 0);
+            TestHelpers.MatchSlots(loopStart2, loopEnd2, 0, 0);
+            TestHelpers.MatchSlots(process, loopEnd1, 0, 2);
+            TestHelpers.MatchSlots(loopEnd1, loopEnd2, 0, 2);
+            TestHelpers.MatchSlots(loopEnd2, end, 0, 0);
+
+            Assert.Throws<CoDependentLoopException>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
+        }
+
+        [Test]
         public void SimpleExtendedLoop()
         {
             // S -> LoopStart -> LoopEnd -> Process -> End
@@ -46,7 +82,7 @@ namespace PipelineTests.Pipeline.Detectors
             DependentNode start = new DependentNode(0, "start"),
                 loopStart = new DependentNode(1, LoopStart.TypeName),
                 loopEnd = new DependentNode(2, LoopEnd.TypeName),
-                process = new DependentNode(3, ""),
+                process = new DependentNode(3, "pro"),
                 end = new DependentNode(4, "end");
 
             nodes.Add(start);
@@ -70,7 +106,7 @@ namespace PipelineTests.Pipeline.Detectors
         [Test]
         public void NoLoop()
         {
-            // S -> -> End
+            // S -> End
 
             List<DependentNode> nodes = new List<DependentNode>();
             { // start node
@@ -90,68 +126,33 @@ namespace PipelineTests.Pipeline.Detectors
         }
 
         [Test]
-        public void NestedLoop()
+        public void SharedNestedLoopStart()
         {
             //          ᴧ  >>      >>      >>  v      
             // S -> LoopStart -> LoopEnd -> LoopEnd -> End
             // 0        1           2          4        3
 
             List<DependentNode> nodes = new List<DependentNode>();
-            { // start node
-                DependentNode dep = new DependentNode(0, "start");
-                dep.AddDependent(1, 0, 0);
-                nodes.Add(dep);
-            }
-            { // loop start
-                DependentNode dep = new DependentNode(1, LoopStart.TypeName);
-                dep.AddDependency(0, 0, 0);
-                dep.AddDependent(2, 0, 0);
-                dep.AddDependent(2, 2, 1);
-                dep.AddDependent(4, 0, 0);
-                dep.AddDependent(4, 2, 1);
-                nodes.Add(dep);
-            }
-            { // condition for inner end loop
-                DependentNode dep = new DependentNode(5, "condition");
-                dep.AddDependent(2, 1, 0);
-                nodes.Add(dep);
-            }
-            { // inner loop end
-                DependentNode dep = new DependentNode(2, LoopEnd.TypeName);
-                dep.AddDependency(1, 0, 0);
-                dep.AddDependency(5, 0, 1);
-                dep.AddDependency(1, 1, 2);
-                dep.AddDependent(4, 3, 0);
-                nodes.Add(dep);
-            }
-            { // condition for outer end loop
-                DependentNode dep = new DependentNode(6, "condition");
-                dep.AddDependent(4, 1, 0);
-                nodes.Add(dep);
-            }
-            { // outer loop end
-                DependentNode dep = new DependentNode(4, LoopEnd.TypeName);
-                dep.AddDependency(1, 0, 0);
-                dep.AddDependency(1, 1, 2);
-                dep.AddDependency(2, 0, 3);
-                dep.AddDependency(6, 0, 1);
-                dep.AddDependent(3, 0, 1);
-                nodes.Add(dep);
-            }
-            { // end node
-                DependentNode dep = new DependentNode(3, "end");
-                dep.AddDependency(4, 0, 1);
-                nodes.Add(dep);
-            }
+            DependentNode start = new DependentNode(0, "start"),
+                loopStart = new DependentNode(1, LoopStart.TypeName),
+                loopEnd1 = new DependentNode(2, LoopEnd.TypeName),
+                loopEnd2 = new DependentNode(3, LoopEnd.TypeName),
+                end = new DependentNode(4, "end");
+
+            nodes.Add(start);
+            nodes.Add(loopStart);
+            nodes.Add(loopEnd1);
+            nodes.Add(loopEnd2);
+            nodes.Add(end);
+
+            TestHelpers.MatchSlots(start, loopStart, 0, 0);
+            TestHelpers.MatchSlots(loopStart, loopEnd1, 0, 0);
+            TestHelpers.MatchSlots(loopStart, loopEnd1, 2, 2);
+            TestHelpers.MatchSlots(loopStart, loopEnd2, 0, 0);
+            TestHelpers.MatchSlots(loopEnd1, loopEnd2, 0, 2);
+            TestHelpers.MatchSlots(loopEnd2, end, 0, 0);
 
             Assert.Throws<SlotLimitExceeded>(() => new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops());
-
-
-            /*List<LoopPair> loops = pipe.getLoops();
-            Assert.AreEqual(2, loops.Count, "incorrect amount of loops detected");
-            Assert.AreEqual(0, loops[0].Depth);
-            Assert.AreEqual(1, loops[1].Depth);
-            Assert.AreNotSame(loops[1].Id, loops[0].Id);*/
         }
 
         [Test]
@@ -178,10 +179,11 @@ namespace PipelineTests.Pipeline.Detectors
 
             TestHelpers.MatchSlots(start, outerLoopStart, 0, 0);
             TestHelpers.MatchSlots(outerLoopStart, outerLoopEnd, 0, 0);
+            TestHelpers.MatchSlots(outerLoopStart, innerLoopStart, 2, 2);
             TestHelpers.MatchSlots(innerLoopStart, innerLoopEnd, 0, 0);
-            TestHelpers.MatchSlots(innerLoopStart, process, 1, 0);
-            TestHelpers.MatchSlots(innerLoopEnd, outerLoopEnd, 1, 1);
-            TestHelpers.MatchSlots(process, innerLoopEnd, 0, 1);
+            TestHelpers.MatchSlots(innerLoopStart, process, 2, 0);
+            TestHelpers.MatchSlots(process, innerLoopEnd, 0, 2);
+            TestHelpers.MatchSlots(innerLoopEnd, outerLoopEnd, 0, 2);
             TestHelpers.MatchSlots(outerLoopEnd, end, 0, 0);
 
             List<LoopPair> loops = new LoopDetector(TestHelpers.ConvertToDictionary(nodes)).FindLoops();

@@ -113,10 +113,10 @@ namespace PipelineProcessor2.Pipeline
 
         public void AddDependency(int originId, int originSlot, int targetSlot)
         {
-            NodeSlot nodeSlot = new NodeSlot(originId, originSlot);
             if (dependencies.ContainsKey(targetSlot))
                 throw new DataSlotAlreadyInUseException("Slot " + targetSlot + " of node " + Id + " has already been assigned");
 
+            NodeSlot nodeSlot = new NodeSlot(originId, originSlot);
             dependencies.Add(targetSlot, nodeSlot);
         }
 

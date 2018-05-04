@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using PipelineProcessor2.Nodes.Internal;
@@ -189,15 +190,25 @@ namespace PipelineProcessor2.Pipeline.Detectors
                 {
                     NodeSlot startLink = ExecutionHelper.FindFirstNodeSlotInDependents(loopStart, dependencyGraph, 0);
 
-                    if(startLink.NodeId == -1)
+                    if (startLink.NodeId == -1)
                         throw new MissingLinkException("No link for loop start specified");
                     if (startLink.NodeId != loopEnd.Id)
                         throw new MissingLinkException(StartEndIdMismatch);
 
                     int foundEnd;
+                    //contains internal loop?
                     if (ContainsLoop(instance, out foundEnd))
-                        //contains internal loop
                         FindLoopPairs(dependencyGraph[foundEnd], ref foundEnds, instance.Depth + 1);
+
+                    instance.ContainedNodes = FindContainingNodeIds(instance.Start.NodeId, instance.End.NodeId);
+
+                    int start = 0, end = 0;
+                    foreach (NodeSlot nodes in instance.ContainedNodes)
+                    {
+                        if (dependencyGraph[nodes.NodeId].Type == LoopStart.TypeName) start += 1;
+                        else if (dependencyGraph[nodes.NodeId].Type == LoopEnd.TypeName) end += 1;
+                    }
+                    if (start != end) throw new CoDependentLoopException();
 
                     foundEnds.Add(instance.End.NodeId);
                     instance.Start.AddLoopPair(ref instance);
@@ -207,8 +218,6 @@ namespace PipelineProcessor2.Pipeline.Detectors
             else if (loopEnd.Type == LoopStart.TypeName)
                 //abort as you are in the middle of a loop rather than at the end
                 if (instance.End == null) return;
-
-            instance.ContainedNodes = FindContainingNodeIds(instance.Start.NodeId, instance.End.NodeId);
         }
 
         private bool ContainsLoop(LoopPair instance, out int foundId)
@@ -288,7 +297,7 @@ namespace PipelineProcessor2.Pipeline.Detectors
 
             for (int i = 0; i < start.Dependents.Length; i++)
             {
-                if(start.Dependents[i].NodeId == loopEnd) continue;
+                if (start.Dependents[i].NodeId == loopEnd) continue;
 
                 List<NodeSlot> id = new List<NodeSlot>();
                 id.Add(start.Dependents[i]);
