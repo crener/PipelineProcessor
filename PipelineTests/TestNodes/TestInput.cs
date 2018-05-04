@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PluginTypes;
 
 namespace PipelineTests.TestNodes
@@ -57,12 +58,11 @@ namespace PipelineTests.TestNodes
         }
     }
 
-
     public class BuildInputPlugin : TestInput
     {
         private int size;
 
-        public BuildInputPlugin() : base(){}
+        public BuildInputPlugin() : base() { }
 
         public BuildInputPlugin(int resultSize)
         {
@@ -133,6 +133,37 @@ namespace PipelineTests.TestNodes
         public override int InputDataQuantity(string path)
         {
             return size;
+        }
+    }
+
+    public class InputPathPlugin : TestInput
+    {
+        public string InputRetrieveDataPath, InputDataQuantityPath;
+        public int FoundDataQuantity;
+
+        public InputPathPlugin() : base() { }
+
+        public InputPathPlugin(int dataQuantity, string type) : base(type)
+        {
+            FoundDataQuantity = dataQuantity;
+        }
+
+        public override IEnumerable<List<byte[]>> RetrieveData(string path)
+        {
+            InputRetrieveDataPath = path;
+
+            for (int i = 0; i < FoundDataQuantity; i++)
+            {
+                List<byte[]> output = new List<byte[]>();
+                output.Add(BitConverter.GetBytes(i));
+                yield return output;
+            }
+        }
+
+        public override int InputDataQuantity(string path)
+        {
+            InputDataQuantityPath = path;
+            return FoundDataQuantity;
         }
     }
 }

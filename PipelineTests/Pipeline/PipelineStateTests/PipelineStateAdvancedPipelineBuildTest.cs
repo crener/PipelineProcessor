@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
-using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
 
-namespace PipelineTests.Pipeline
+namespace PipelineTests.Pipeline.PipelineStateTests
 {
     [TestFixture]
     public class PipelineStateAdvancedPipelineBuildTest
@@ -22,6 +19,7 @@ namespace PipelineTests.Pipeline
         [OneTimeSetUp]
         public void Setup()
         {
+            PluginStore.ClearAll();
             PluginStore.AddPlugin(inputPlugin);
             PluginStore.Init();
         }
@@ -30,12 +28,6 @@ namespace PipelineTests.Pipeline
         public void Finish()
         {
             PluginStore.ClearAll();
-        }
-
-        [TearDown]
-        public void CleanUp()
-        {
-            PipelineState.ClearAll();
         }
 
         [Test]

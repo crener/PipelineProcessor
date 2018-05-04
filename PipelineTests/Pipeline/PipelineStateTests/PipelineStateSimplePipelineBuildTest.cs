@@ -7,7 +7,7 @@ using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
 
-namespace PipelineTests.Pipeline
+namespace PipelineTests.Pipeline.PipelineStateTests
 {
     [TestFixture]
     public class PipelineStateSimplePipelineBuildTest

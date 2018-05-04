@@ -111,6 +111,11 @@ namespace PipelineProcessor2.Pipeline
             }
         }
 
+        /// <summary>
+        /// Queues nodes for execution
+        /// </summary>
+        /// <param name="nodes">node ids that will be triggered</param>
+        /// <param name="triggeredBy">node that triggered the execution</param>
         private void StartNodes(int[] nodes, int triggeredBy)
         {
             foreach (int id in nodes)

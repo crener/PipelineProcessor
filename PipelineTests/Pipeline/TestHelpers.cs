@@ -15,6 +15,15 @@ namespace PipelineTests.Pipeline
 
             return dependent;
         }
+        public static List<DependentNode> ConvertToDependentNodes(List<GraphNode> deps)
+        {
+            List<DependentNode> outNodes = new List<DependentNode>();
+
+            foreach(GraphNode dep in deps)
+                outNodes.Add(new DependentNode(dep));
+
+            return outNodes;
+        }
 
         public static void MatchSlots(DependentNode a, DependentNode b, int aSlot, int bSlot)
         {
@@ -22,9 +31,9 @@ namespace PipelineTests.Pipeline
             b.AddDependency(a.Id, aSlot, bSlot);
         }
 
-        public static GraphNode BuildGraphNode(int id, string title, string type = "")
+        public static GraphNode BuildGraphNode(int id, string title, string type = "", string value = "")
         {
-            return new GraphNode { id = id, title = title, type = type };
+            return new GraphNode { id = id, title = title, type = type, value = value};
         }
 
         public static NodeLinkInfo MatchSlots(GraphNode a, GraphNode b, int aSlot, int bSlot)

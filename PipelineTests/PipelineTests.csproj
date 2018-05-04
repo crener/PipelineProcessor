@@ -59,14 +59,16 @@
     <Compile Include="Pipeline\Detectors\SyncBlockDetectionTest.cs" />
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
     <Compile Include="Pipeline\PipelineHelperTests.cs" />
-    <Compile Include="Pipeline\PipelineStateAdvancedPipelineBuildTest.cs" />
-    <Compile Include="Pipeline\PipelineStateSimplePipelineBuildTest.cs" />
-    <Compile Include="Pipeline\PipelineStateSyncPipelineBuildTest.cs" />
-    <Compile Include="Pipeline\PipelineStateTest.cs" />
+    <Compile Include="Pipeline\PipelineStateTests\PipelineStateAdvancedPipelineBuildTest.cs" />
+    <Compile Include="Pipeline\PipelineStateTests\PipelineDirectoryOverrideTests.cs" />
+    <Compile Include="Pipeline\PipelineStateTests\PipelineStateSimplePipelineBuildTest.cs" />
+    <Compile Include="Pipeline\PipelineStateTests\PipelineStateSyncPipelineBuildTest.cs" />
+    <Compile Include="Pipeline\PipelineStateTests\PipelineStateTest.cs" />
     <Compile Include="Pipeline\Detectors\PipelineLoopTest.cs" />
     <Compile Include="Pipeline\TestHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestNodes\TestInput.cs" />
+    <Compile Include="TestNodes\TestOutput.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

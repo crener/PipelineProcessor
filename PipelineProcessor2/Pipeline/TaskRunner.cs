@@ -63,10 +63,12 @@ namespace PipelineProcessor2.Pipeline
                 }
                 else if (plugin is IOutputPlugin)
                 {
-                    bool success = (plugin as IOutputPlugin).ExportData(PipelineState.OutputDirectory, input);
+                    string dir = string.IsNullOrWhiteSpace(node.Value) ? PipelineState.OutputDirectory : node.Value;
+
+                    bool success = (plugin as IOutputPlugin).ExportData(dir, input);
                     if (!success) Console.WriteLine(plugin.Name + " failed");
                 }
-                else Console.WriteLine("Unknown plugin type");
+                else Console.WriteLine("TaskRunner encountered unexpected plugin type");
 
                 stopwatch.Stop();
                 Console.WriteLine(node.Type + " Finished in " + stopwatch.Elapsed + " ms, slot: " + node.Id + " of run " + run);

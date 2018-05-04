@@ -107,9 +107,9 @@ namespace PipelineProcessor2.Pipeline
                         {
                             // Gather initial quantity requirements
                             group.Input = true;
-                            group.RequiredPipes = plugin.InputDataQuantity(InputDirectory);
+                            group.RequiredPipes = plugin.InputDataQuantity(NodeValueOrInput(nodeId));
                         }
-                        else if (group.RequiredPipes != plugin.InputDataQuantity(InputDirectory))
+                        else if (group.RequiredPipes != plugin.InputDataQuantity(NodeValueOrInput(nodeId)))
                             throw new InputPluginQuantityMismatchException();
 
                         inputs.Add(new InputData(nodeId, plugin));
@@ -140,8 +140,7 @@ namespace PipelineProcessor2.Pipeline
             List<PipelineExecutor> executors = new List<PipelineExecutor>();
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
-                if (group.linked == null && !group.Input)
-                    group.RequiredPipes = 1;
+                if (group.linked == null && !group.Input) group.RequiredPipes = 1;
 
                 //Prepare pipelines
                 group.pipes = new PipelineExecutor[group.RequiredPipes];
@@ -151,13 +150,12 @@ namespace PipelineProcessor2.Pipeline
                 if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
                 executors.AddRange(group.pipes);
 
-                if(group.CalledBy != -2)
+                if (group.CalledBy != -2)
                 {
                     PipelineExecutor[] linkPipes = group.linked == null ? group.pipes : group.linked.pipes;
                     int called = group.CalledBy;
 
-                    if (group.Input)
-                        ExtractNodeSlot(called).StateInfo(group.RequiredPipes, linkPipes);
+                    if (group.Input) ExtractNodeSlot(called).StateInfo(group.RequiredPipes, linkPipes);
                     else
                     {
                         SyncSplitGroup linkedSync = ExtractSyncGroup(called);
@@ -175,13 +173,15 @@ namespace PipelineProcessor2.Pipeline
         /// <returns>prepared pipelines</returns>
         private static PipelineExecutor[] BuildLinearPipeline()
         {
-            int inputAmount = inputs[0].plugin.InputDataQuantity(InputDirectory);
+            int inputAmount = inputs[0].plugin.InputDataQuantity(NodeValueOrInput(inputs[0].nodeId));
             Console.WriteLine(inputAmount + " valid files found!");
 
             //Ensure consistent input amount
             for (int i = 1; i < inputs.Length; i++)
-                if (inputAmount != inputs[i].plugin.InputDataQuantity(InputDirectory))
+            {
+                if (inputAmount != inputs[i].plugin.InputDataQuantity(NodeValueOrInput(inputs[i].nodeId)))
                     throw new InputPluginQuantityMismatchException();
+            }
 
             //create a pipeline for each input data
             PipelineExecutor[] pipes = new PipelineExecutor[inputAmount];
@@ -204,7 +204,7 @@ namespace PipelineProcessor2.Pipeline
         {
             foreach (InputData data in inputData)
             {
-                IEnumerable<List<byte[]>> enumerable = data.plugin.RetrieveData(InputDirectory);
+                IEnumerable<List<byte[]>> enumerable = data.plugin.RetrieveData(NodeValueOrInput(data.nodeId));
                 if (enumerable == null)
                     throw new NodeException("Input data could not be fully gathered due to input node issue in " + data.plugin.Name);
 
@@ -243,13 +243,13 @@ namespace PipelineProcessor2.Pipeline
 
         private static void BuildDependencyGraph(GraphNode[] nodes, NodeLinkInfo[] links)
         {
-            if(nodes.Length == 0)
+            dependencyGraph = new Dictionary<int, DependentNode>();
+
+            if (nodes.Length == 0)
             {
                 Console.WriteLine("No executable nodes found after unused node detection!");
                 return;
             }
-
-            dependencyGraph = new Dictionary<int, DependentNode>();
 
             //add valid nodes
             foreach (GraphNode node in nodes)
@@ -300,6 +300,12 @@ namespace PipelineProcessor2.Pipeline
             }
 
             return inputNodes.ToArray();
+        }
+
+        private static string NodeValueOrInput(int nodeId)
+        {
+            return string.IsNullOrWhiteSpace(dependencyGraph[nodeId].Value) ?
+                InputDirectory : dependencyGraph[nodeId].Value;
         }
 
 #if DEBUG

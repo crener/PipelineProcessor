@@ -5,13 +5,20 @@ using PipelineProcessor2;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Pipeline;
 using PipelineProcessor2.Pipeline.Exceptions;
+using PipelineProcessor2.Plugin;
 
-namespace PipelineTests.Pipeline
+namespace PipelineTests.Pipeline.PipelineStateTests
 {
     [TestFixture]
     public class PipelineStateTest
     {
-        [TearDown]
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            PluginStore.Init();
+        }
+
+        [OneTimeTearDown]
         public void CleanUp()
         {
             PipelineState.ClearAll();

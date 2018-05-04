@@ -125,15 +125,25 @@ namespace PipelineProcessor2.Plugin
             string type = nodeData.getTypeVal();
 
             if (plugin is IInputPlugin)
+            {
                 lock (input) input.Add(type, plugin as IInputPlugin);
+
+                nodeData.UseValue = true;
+                nodeData.DefaultValue = "";
+            }
 
             if (plugin is IProcessPlugin)
                 lock (processor) processor.Add(type);
 
             if (plugin is IOutputPlugin)
+            {
                 lock (export) export.Add(type);
 
-            if(plugin is IGeneratorPlugin)
+                nodeData.UseValue = true;
+                nodeData.DefaultValue = "";
+            }
+
+            if (plugin is IGeneratorPlugin)
             {
                 lock (generator) generator.Add(type);
 
@@ -184,7 +194,7 @@ namespace PipelineProcessor2.Plugin
         public static bool isRegisteredPlugin(string pluginType)
         {
 #if DEBUG
-            if (pluginType == "" || 
+            if (pluginType == "" ||
                 pluginType == "in" ||
                 pluginType == "end" ||
                 pluginType == "pro" ||
@@ -249,7 +259,7 @@ namespace PipelineProcessor2.Plugin
 #if DEBUG
         public static void ClearAll()
         {
-            lock(generator) generator.Clear();
+            lock (generator) generator.Clear();
             lock (processor) processor.Clear();
             internalPlugins.Clear();
             lock (export) export.Clear();
