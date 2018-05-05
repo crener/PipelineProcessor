@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes;
@@ -31,14 +32,14 @@ namespace PipelineProcessor2.Plugin
 
             //load external assemblies
             Console.WriteLine("\nSearching for external Plugin libraries");
-            string localPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugin";
+            string localPath = Directory.GetCurrentDirectory();
             if (Directory.Exists(localPath))
             {
                 foreach (string path in Directory.GetFiles(localPath, "*.dll", SearchOption.AllDirectories))
                 {
                     try
                     {
-                        Assembly file = Assembly.LoadFile(path);
+                        Assembly file = Assembly.LoadFrom(path);
                         Console.WriteLine("\n-Loading from " + Path.GetFileName(path));
                         LoadPluginsFromAssembly(file);
                     }
@@ -51,35 +52,39 @@ namespace PipelineProcessor2.Plugin
 
         private static void LoadPluginsFromAssembly(Assembly assembly)
         {
-            foreach (Type type in assembly.GetTypes())
+            try
             {
-                try
+                foreach(Type type in assembly.GetTypes())
                 {
-                    if (type.IsInterface || !typeof(IPlugin).IsAssignableFrom(type)) continue;
-
-                    IPlugin plugin = Activator.CreateInstance(type) as IPlugin;
-                    if (plugin == null) continue;
-
-                    Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
-                    if (internalAttribute != null && !((InternalNode)internalAttribute).ShowExternal)
+                    try
                     {
-                        AddInternal(plugin);
-                        continue;
-                    }
+                        if(type.IsInterface || !typeof(IPlugin).IsAssignableFrom(type)) continue;
 
-                    Console.WriteLine("Adding Plugin: " + plugin.Name, 0);
-                    AddPlugin(plugin);
-                }
-                catch (InvalidCastException) { } //ignore
-                catch (MissingMethodException mme)
-                {
-                    Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Failed Adding: " + type.Name + ", " + ex.Message);
+                        IPlugin plugin = Activator.CreateInstance(type) as IPlugin;
+                        if(plugin == null) continue;
+
+                        Attribute internalAttribute = type.GetCustomAttribute(typeof(InternalNode));
+                        if(internalAttribute != null && !((InternalNode) internalAttribute).ShowExternal)
+                        {
+                            AddInternal(plugin);
+                            continue;
+                        }
+
+                        Console.WriteLine("Adding Plugin: " + plugin.Name, 0);
+                        AddPlugin(plugin);
+                    }
+                    catch(InvalidCastException) { } //ignore
+                    catch(MissingMethodException mme)
+                    {
+                        Console.WriteLine("Failed Adding: " + type.Name + ", " + mme.Message);
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine("Failed Adding: " + type.Name + ", " + ex.Message);
+                    }
                 }
             }
+            catch (ReflectionTypeLoadException) { } //ignore
         }
 
         /// <summary>

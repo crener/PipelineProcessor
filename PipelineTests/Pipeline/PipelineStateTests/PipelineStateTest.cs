@@ -15,6 +15,7 @@ namespace PipelineTests.Pipeline.PipelineStateTests
         [OneTimeSetUp]
         public void Setup()
         {
+            PipelineState.ClearAll();
             PluginStore.Init();
         }
 

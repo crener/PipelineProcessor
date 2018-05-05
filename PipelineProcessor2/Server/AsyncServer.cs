@@ -26,7 +26,15 @@ namespace PipelineProcessor2.Server
             listener.Prefixes.Add("http://localhost:" + Port + "/");
             listener.Prefixes.Add("http://127.0.0.1:" + Port + "/");
 
-            listener.Start();
+            try
+            {
+                listener.Start();
+            }
+            catch(HttpListenerException hle)
+            {
+                Console.WriteLine("Could not start listening as target address are already in use!");
+                return;
+            }
 
             listenThread = new Task(Listen);
             listenThread.Start();

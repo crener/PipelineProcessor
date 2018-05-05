@@ -76,7 +76,7 @@ namespace PipelineProcessor2.Pipeline
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                throw new Exception("Task runner failed to execute node", e);
             }
 
             //post processing actions (triggering dependency, storing results)

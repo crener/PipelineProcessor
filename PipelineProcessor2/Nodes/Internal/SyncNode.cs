@@ -28,7 +28,6 @@ namespace PipelineProcessor2.Nodes.Internal
         public int NodeId { get; private set; }
         public PipelineExecutor[] TriggeredPipelines => pipelines;
 
-
         private readonly Dictionary<int, List<byte[]>> data = new Dictionary<int, List<byte[]>>();
         private readonly DependentNode graphNode = null;
         private readonly DataStore staticData;
@@ -100,6 +99,12 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             lock (updateLock)
             {
+                if (parallelism <= 1)
+                {
+                    //staticData.StoreResults(,NodeId);
+                    return;
+                }
+
                 foreach (KeyValuePair<int, List<byte[]>> pair in data)
                 {
                     int slot = -1;
