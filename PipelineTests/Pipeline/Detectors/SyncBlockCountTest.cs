@@ -60,6 +60,7 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].pipes.Length);
             Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].RequiredPipes);
             Assert.AreEqual(1, data.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
+            Assert.AreEqual(3, data.SyncInformation.SyncNodes[0].ParallelismTestOnly);
             Assert.IsFalse(data.SyncInformation.NodeGroups[1].Input);
         }
 
@@ -95,6 +96,7 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(3, data.SyncInformation.NodeGroups[1].pipes.Length);
             Assert.AreEqual(3, data.SyncInformation.NodeGroups[1].RequiredPipes);
             Assert.AreEqual(3, data.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
+            Assert.AreEqual(3, data.SyncInformation.SyncNodes[0].ParallelismTestOnly);
             Assert.IsFalse(data.SyncInformation.NodeGroups[1].Input);
 
             Assert.AreSame(data.SyncInformation.NodeGroups[0].pipes, data.SyncInformation.NodeGroups[1].pipes);
@@ -137,10 +139,12 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].pipes.Length);
             Assert.AreEqual(1, data.SyncInformation.NodeGroups[1].RequiredPipes);
             Assert.AreEqual(1, data.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
+            Assert.AreEqual(3, data.SyncInformation.SyncNodes[0].ParallelismTestOnly);
             Assert.IsFalse(data.SyncInformation.NodeGroups[1].Input);
             Assert.AreEqual(3, data.SyncInformation.NodeGroups[2].pipes.Length);
             Assert.AreEqual(3, data.SyncInformation.NodeGroups[2].RequiredPipes);
             Assert.AreEqual(3, data.SyncInformation.SyncNodes[1].TriggeredPipelines.Length);
+            Assert.AreEqual(1, data.SyncInformation.SyncNodes[1].ParallelismTestOnly);
             Assert.IsFalse(data.SyncInformation.NodeGroups[2].Input);
 
             Assert.AreSame(data.SyncInformation.NodeGroups[0].pipes, data.SyncInformation.NodeGroups[2].pipes);
@@ -184,6 +188,7 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(4, data.SyncInformation.NodeGroups[1].pipes.Length);
             Assert.AreEqual(4, data.SyncInformation.NodeGroups[1].RequiredPipes);
             Assert.AreEqual(4, data.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
+            Assert.AreEqual(3, data.SyncInformation.SyncNodes[0].ParallelismTestOnly);
             Assert.IsTrue(data.SyncInformation.NodeGroups[1].Input);
         }
     }

@@ -58,11 +58,11 @@ namespace PipelineProcessor2.Nodes.Internal
         /// <summary>
         /// Sets the pipelines used to trigger events once data is collected
         /// </summary>
+        /// <param name="incomingPipeQuantity">amount of data going into this node</param>
         /// <param name="toTrigger">pipelines that will be triggered once data is done</param>
-        /// 
-        public void StateInfo(PipelineExecutor[] toTrigger)
+        public void StateInfo(int incomingPipeQuantity, PipelineExecutor[] toTrigger)
         {
-            parallelism = toTrigger.Length;
+            parallelism = incomingPipeQuantity;
             pipelines = toTrigger;
         }
 
@@ -138,5 +138,9 @@ namespace PipelineProcessor2.Nodes.Internal
                 pipeline.TriggerDependencies(NodeId);
             }
         }
+
+#if DEBUG
+        public int ParallelismTestOnly => parallelism;
+#endif
     }
 }

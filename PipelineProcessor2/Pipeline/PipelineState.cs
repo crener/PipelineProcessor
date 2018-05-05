@@ -172,7 +172,8 @@ namespace PipelineProcessor2.Pipeline
                 SyncSplitGroup group = specialNodes.SyncInformation.NodeGroups[i];
                 if (group.CalledBy == -2) continue;
 
-                ExtractNodeSlot(group.CalledBy).StateInfo(group.pipes);
+                int expectedPipes = ExtractSyncGroup(group.CalledBy).RequiredPipes;
+                ExtractNodeSlot(group.CalledBy).StateInfo(expectedPipes, group.pipes);
             }
 
             return executors.ToArray();
@@ -199,7 +200,7 @@ namespace PipelineProcessor2.Pipeline
             for (int i = 0; i < inputAmount; i++)
                 pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
             foreach (SyncNode sync in specialNodes.SyncInformation.SyncNodes)
-                sync.StateInfo(pipes);
+                sync.StateInfo(pipes.Length, pipes);
 
             PrepareInputData(inputs, pipes);
 
