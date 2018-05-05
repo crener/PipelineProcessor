@@ -158,25 +158,21 @@ namespace PipelineProcessor2.Pipeline
 
                 if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
                 if (group.pipes != null) executors.AddRange(group.pipes);
-
-                if (group.CalledBy != -2)
-                {
-                    PipelineExecutor[] linkPipes = group.linked == null ? group.pipes : group.linked.pipes;
-                    int called = group.CalledBy;
-
-                    if (group.Input) ExtractNodeSlot(called).StateInfo(group.RequiredPipes, linkPipes);
-                    else
-                    {
-                        SyncSplitGroup linkedSync = ExtractSyncGroup(called);
-                        ExtractNodeSlot(called).StateInfo(linkedSync.RequiredPipes, linkPipes);
-                    }
-                }
             }
 
             if (postBuildLinkRequired)
             {
                 foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
                     if (group.linked != null && group.pipes == null) group.pipes = group.linked.pipes;
+            }
+
+            //Update sync nodes with trigger pipelines
+            for (var i = 0; i < specialNodes.SyncInformation.NodeGroups.Count; i++)
+            {
+                SyncSplitGroup group = specialNodes.SyncInformation.NodeGroups[i];
+                if (group.CalledBy == -2) continue;
+
+                ExtractNodeSlot(group.CalledBy).StateInfo(group.pipes);
             }
 
             return executors.ToArray();
@@ -203,7 +199,7 @@ namespace PipelineProcessor2.Pipeline
             for (int i = 0; i < inputAmount; i++)
                 pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
             foreach (SyncNode sync in specialNodes.SyncInformation.SyncNodes)
-                sync.StateInfo(pipes.Length, pipes);
+                sync.StateInfo(pipes);
 
             PrepareInputData(inputs, pipes);
 

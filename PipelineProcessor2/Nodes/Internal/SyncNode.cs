@@ -58,12 +58,12 @@ namespace PipelineProcessor2.Nodes.Internal
         /// <summary>
         /// Sets the pipelines used to trigger events once data is collected
         /// </summary>
-        /// <param name="triggerAmount">The amount of data that is expected to go into the sync block</param>
-        /// <param name="triggers">pipelines that will be triggered once data is done</param>
-        public void StateInfo(int triggerAmount, PipelineExecutor[] triggers)
+        /// <param name="toTrigger">pipelines that will be triggered once data is done</param>
+        /// 
+        public void StateInfo(PipelineExecutor[] toTrigger)
         {
-            parallelism = triggerAmount;
-            pipelines = triggers;
+            parallelism = toTrigger.Length;
+            pipelines = toTrigger;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             lock (updateLock)
             {
-                if (parallelism <= 1)
+                if (parallelism == 1)
                 {
                     //staticData.StoreResults(,NodeId);
                     return;
