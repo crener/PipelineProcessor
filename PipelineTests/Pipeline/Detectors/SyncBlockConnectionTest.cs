@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
 using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
+using PipelineProcessor2.Plugin;
 
 namespace PipelineTests.Pipeline.Detectors
 {
     [TestFixture]
-    public class SyncBlockDetectionTest
+    public class SyncBlockConnectionTest
     {
         [Test]
         public void NoSync()
@@ -157,28 +159,6 @@ namespace PipelineTests.Pipeline.Detectors
             Assert.AreEqual(sync.Id, data.SyncInformation.NodeGroups[1].CalledBy);
             Assert.AreEqual(sync2.Id, data.SyncInformation.NodeGroups[2].CalledBy);
             Assert.IsTrue(data.SyncInformation.NodeGroups[0].Dependents.Contains(pro3.Id));
-        }
-
-        [Test]
-        public void GeneratorException()
-        {
-            // S -> Sync -> End
-            //Gen-> 
-
-            List<DependentNode> nodes = new List<DependentNode>();
-            DependentNode start = new DependentNode(0, "start"),
-                gen = new DependentNode(1, "gen"),
-                sync2 = new DependentNode(6, SyncNode.TypeName);
-
-            nodes.Add(start);
-            nodes.Add(gen);
-            nodes.Add(sync2);
-
-            TestHelpers.MatchSlots(start, sync2, 0, 0);
-            TestHelpers.MatchSlots(gen, sync2, 0, 1);
-
-            DataStore staticData = new DataStore(true);
-            Assert.Throws<InvalidConnectionException>(() => SpecialNodeSearch.CheckForSpecialNodes(TestHelpers.ConvertToDictionary(nodes), staticData));
         }
     }
 }

@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using PipelineProcessor2.JsonTypes;
 using PipelineProcessor2.Nodes.Internal;
 using PipelineProcessor2.Pipeline;
+using PipelineProcessor2.Pipeline.Detectors;
 using PipelineProcessor2.Pipeline.Exceptions;
 using PipelineProcessor2.Plugin;
 using PipelineTests.TestNodes;
 
-namespace PipelineTests.Pipeline
+namespace PipelineTests.Pipeline.Detectors
 {
     [TestFixture]
-    public class PipelineStateSyncPipelineBuildTest
+    public class SyncBlockBuildTest
     {
 #if DEBUG
         private const int DataSize = 5;
@@ -69,7 +68,7 @@ namespace PipelineTests.Pipeline
             PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize + 1, results.Length);
 
-            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            SpecialNodeData nodeData = PipelineState.SpecialNodeDataTestOnly;
             Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
             Assert.AreNotSame(inputPlugin2.InputDataQuantity(""),
                 nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
@@ -102,7 +101,7 @@ namespace PipelineTests.Pipeline
             PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize + (DataSize * 2), results.Length);
 
-            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            SpecialNodeData nodeData = PipelineState.SpecialNodeDataTestOnly;
             Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
             Assert.AreEqual(inputPlugin2.InputDataQuantity(""),
                 nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines.Length);
@@ -134,7 +133,7 @@ namespace PipelineTests.Pipeline
             PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize, results.Length);
 
-            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            SpecialNodeData nodeData = PipelineState.SpecialNodeDataTestOnly;
             Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
             Assert.AreSame(nodeData.SyncInformation.NodeGroups[0].pipes,
                 nodeData.SyncInformation.SyncNodes[0].TriggeredPipelines);
@@ -167,7 +166,7 @@ namespace PipelineTests.Pipeline
             PipelineState.UpdateActiveGraph(nodes.ToArray(), links.ToArray());
             Assert.Throws<PipelineException>(() => PipelineState.BuildPipesTestOnly());
 
-            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            SpecialNodeData nodeData = PipelineState.SpecialNodeDataTestOnly;
             Assert.AreEqual(1, nodeData.SyncInformation.SyncNodes.Length);
         }
 
@@ -201,7 +200,7 @@ namespace PipelineTests.Pipeline
             PipelineExecutor[] results = PipelineState.BuildPipesTestOnly();
             Assert.AreEqual(DataSize + 1, results.Length);
 
-            SpecialNodeData nodeData = PipelineState.SpecialNodeData;
+            SpecialNodeData nodeData = PipelineState.SpecialNodeDataTestOnly;
 
             Assert.AreEqual(2, nodeData.SyncInformation.SyncNodes.Length);
             Assert.AreEqual(3, nodeData.SyncInformation.NodeGroups.Count);
@@ -210,7 +209,28 @@ namespace PipelineTests.Pipeline
                 nodeData.SyncInformation.SyncNodes[1].TriggeredPipelines);
         }
 
-
 #endif
+
+        [Test]
+        public void SyncGeneratorInputException()
+        {
+            // S -> Sync -> End
+            //Gen-> 
+
+            List<DependentNode> nodes = new List<DependentNode>();
+            DependentNode start = new DependentNode(0, "start"),
+                gen = new DependentNode(1, "gen"),
+                sync2 = new DependentNode(6, SyncNode.TypeName);
+
+            nodes.Add(start);
+            nodes.Add(gen);
+            nodes.Add(sync2);
+
+            TestHelpers.MatchSlots(start, sync2, 0, 0);
+            TestHelpers.MatchSlots(gen, sync2, 0, 1);
+
+            DataStore staticData = new DataStore(true);
+            Assert.Throws<InvalidConnectionException>(() => SpecialNodeSearch.CheckForSpecialNodes(TestHelpers.ConvertToDictionary(nodes), staticData));
+        }
     }
 }

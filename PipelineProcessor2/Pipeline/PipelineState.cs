@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using PipelineProcessor2.JsonTypes;
@@ -93,7 +94,7 @@ namespace PipelineProcessor2.Pipeline
             Dictionary<int, InputData[]> groupInputLookup = new Dictionary<int, InputData[]>();
             Dictionary<int, SyncSplitGroup> nodeToGroup = new Dictionary<int, SyncSplitGroup>();
 
-            //check if groups contain input nodes
+            //find groups which have input nodes
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
                 List<InputData> inputs = new List<InputData>();
@@ -121,7 +122,7 @@ namespace PipelineProcessor2.Pipeline
                 groupInputLookup.Add(group.SyncNodeId, inputs.ToArray());
             }
 
-            //check group dependencies
+            //check group dependencies are valid
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
                 if (group.SyncNodeId == -1) continue; //nodes outside of sync blocks
@@ -130,25 +131,33 @@ namespace PipelineProcessor2.Pipeline
                 {
                     SyncSplitGroup otherGroup = nodeToGroup[dependent];
                     if (otherGroup.Input)
-                        throw new PipelineException("Co-dependent sync nodes with inputs are currently not supported");
+                        throw new PipelineException("Co-dependent sync nodes with inputs are not supported");
 
                     if (group.linked == null) otherGroup.linked = group;
-                    else throw new PipelineException("Multi-Sync segmentation is currently not supported");
+                    else throw new PipelineException("Multi-Sync segmentation is not supported");
                 }
             }
 
+            //create new pipelines
+            bool postBuildLinkRequired = false;
             List<PipelineExecutor> executors = new List<PipelineExecutor>();
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {
-                if (group.linked == null && !group.Input) group.RequiredPipes = 1;
+                if (group.linked != null) group.RequiredPipes = group.linked.RequiredPipes;
+                else if (group.linked == null && !group.Input) group.RequiredPipes = 1;
 
                 //Prepare pipelines
-                group.pipes = new PipelineExecutor[group.RequiredPipes];
-                for (int i = 0; i < group.RequiredPipes; i++)
-                    group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes, InputDirectory, OutputDirectory);
+                if (group.linked == null)
+                {
+                    group.pipes = new PipelineExecutor[group.RequiredPipes];
+                    for (int i = 0; i < group.RequiredPipes; i++)
+                        group.pipes[i] = new PipelineExecutor(dependencyGraph, staticData, i, specialNodes,
+                            InputDirectory, OutputDirectory);
+                }
+                else postBuildLinkRequired = true;
 
                 if (group.Input) PrepareInputData(groupInputLookup[group.SyncNodeId], group.pipes);
-                executors.AddRange(group.pipes);
+                if (group.pipes != null) executors.AddRange(group.pipes);
 
                 if (group.CalledBy != -2)
                 {
@@ -162,6 +171,12 @@ namespace PipelineProcessor2.Pipeline
                         ExtractNodeSlot(called).StateInfo(linkedSync.RequiredPipes, linkPipes);
                     }
                 }
+            }
+
+            if (postBuildLinkRequired)
+            {
+                foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
+                    if (group.linked != null && group.pipes == null) group.pipes = group.linked.pipes;
             }
 
             return executors.ToArray();
@@ -314,7 +329,7 @@ namespace PipelineProcessor2.Pipeline
             return BuildPipelines();
         }
 
-        public static SpecialNodeData SpecialNodeData => specialNodes;
+        public static SpecialNodeData SpecialNodeDataTestOnly => specialNodes;
 #endif
 
         public static void ClearAll()

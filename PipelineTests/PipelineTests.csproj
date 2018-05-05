@@ -56,13 +56,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Pipeline\Detectors\SyncBlockDetectionTest.cs" />
+    <Compile Include="Pipeline\Detectors\SyncBlockCountTest.cs" />
+    <Compile Include="Pipeline\Detectors\SyncBlockConnectionTest.cs" />
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
     <Compile Include="Pipeline\PipelineHelperTests.cs" />
     <Compile Include="Pipeline\PipelineStateTests\PipelineStateAdvancedPipelineBuildTest.cs" />
     <Compile Include="Pipeline\PipelineStateTests\PipelineDirectoryOverrideTests.cs" />
     <Compile Include="Pipeline\PipelineStateTests\PipelineStateSimplePipelineBuildTest.cs" />
-    <Compile Include="Pipeline\PipelineStateTests\PipelineStateSyncPipelineBuildTest.cs" />
+    <Compile Include="Pipeline\Detectors\SyncBlockBuildTest.cs" />
     <Compile Include="Pipeline\PipelineStateTests\PipelineStateTest.cs" />
     <Compile Include="Pipeline\Detectors\PipelineLoopTest.cs" />
     <Compile Include="Pipeline\TestHelpers.cs" />
