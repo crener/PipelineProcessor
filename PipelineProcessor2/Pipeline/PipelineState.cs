@@ -305,6 +305,13 @@ namespace PipelineProcessor2.Pipeline
                 {
                     //todo check if slot types are compatible with the actual plugin
 
+                    /*
+                     * Type Key
+                     * []       array input from sync node (int[], string[])
+                     * @number  this type is whatever type the numbered slot is eg:
+                     *              @1 in an output slot means the type from slot 1 input
+                     */
+
                     //todo check if a node has X slot before adding
 
                     dependencyGraph[info.OriginId].AddDependent(info.TargetId, info.TargetSlot, info.OriginSlot);

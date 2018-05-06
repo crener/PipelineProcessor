@@ -11,29 +11,23 @@ namespace ImageNodes
     {
         #region Node settings
         public int InputQty => 0;
-        public int OutputQty => 1;
+        public int OutputQty => 2;
         public string Name => "Image Import";
         public string Description => "Imports all images of a given path";
         public string OutputType(int slot)
         {
             if (slot == 0) return "jpg";
+            if (slot == 1) return "string";
             return "";
         }
         public string OutputName(int slot)
         {
-            if (slot == 0) return "image";
+            if (slot == 0) return "Image";
+            if (slot == 1) return "Image Name";
             return "";
         }
-        public string InputType(int slot)
-        {
-            if (slot == 0) return "jpg";
-            return "";
-        }
-        public string InputName(int slot)
-        {
-            if (slot == 0) return "image";
-            return "";
-        }
+        public string InputType(int slot) { return ""; }
+        public string InputName(int slot) { return ""; }
         #endregion
 
         public IEnumerable<List<byte[]>> RetrieveData(string path)
@@ -51,11 +45,11 @@ namespace ImageNodes
                         output.Add(File.ReadAllBytes(filePath));
                         output.Add(Encoding.UTF8.GetBytes(fileName.Split('.')[0]));
                     }
-                    catch(SecurityException io)
+                    catch (SecurityException io)
                     {
                         Console.WriteLine(io);
                     }
-                    catch(IOException io)
+                    catch (IOException io)
                     {
                         Console.WriteLine(io);
                     }
@@ -71,12 +65,12 @@ namespace ImageNodes
 
         public int InputDataQuantity(string path)
         {
-            if(!Directory.Exists(path)) return 0;
+            if (!Directory.Exists(path)) return 0;
 
             string[] files = Directory.GetFiles(path);
             int validCount = 0;
-            foreach(string file in files)
-                if(isValid(file)) validCount++;
+            foreach (string file in files)
+                if (isValid(file)) validCount++;
 
             return validCount;
         }
