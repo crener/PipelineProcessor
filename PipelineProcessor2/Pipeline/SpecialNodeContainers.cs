@@ -79,7 +79,17 @@ namespace PipelineProcessor2.Pipeline
         {
             get
             {
-                return dependencies.Values.ToArray();
+                if(slots == null)
+                {
+                    List<int> keys = new List<int>(dependencies.Keys);
+                    keys.Sort();
+
+                    slots = new NodeSlot[keys.Count];
+                    for(int i = 0; i < keys.Count; i++)
+                        slots[i] = dependencies[keys[i]];
+                }
+
+                return slots;
             }
         }
 
@@ -87,6 +97,7 @@ namespace PipelineProcessor2.Pipeline
         public string Type { get; private set; }
         public string Value { get; private set; }
 
+        private NodeSlot[] slots = null;
         private Dictionary<int, NodeSlot> dependencies;
         private Dictionary<int, List<NodeSlot>> dependents;
         private int totalDependents = 0;

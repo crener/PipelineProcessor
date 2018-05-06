@@ -215,8 +215,11 @@ namespace PipelineProcessor2.Pipeline
         private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
         {
             if (specialNodes.SyncInformation.SyncNodes.Length == 0 ||
-                specialNodes.SyncInformation.NodeGroups.Select(group => group.Input).Any())
+               specialNodes.SyncInformation.NodeGroups.Select(group => group.Input).Any())
+            {
                 PrepareLinearInputData(inputData, pipes);
+                return;
+            }
 
             foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
             {

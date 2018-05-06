@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Pipeline\Detectors\SyncBlockCountTest.cs" />
     <Compile Include="Pipeline\Detectors\SyncBlockConnectionTest.cs" />
+    <Compile Include="Pipeline\NodeTests.cs" />
     <Compile Include="Pipeline\PipelineExecutorTest.cs" />
     <Compile Include="Pipeline\PipelineHelperTests.cs" />
     <Compile Include="Pipeline\PipelineStateTests\PipelineStateAdvancedPipelineBuildTest.cs" />

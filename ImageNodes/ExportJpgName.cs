@@ -36,16 +36,12 @@ namespace ImageNodes
             try
             {
                 path = path + (path.EndsWith(Path.DirectorySeparatorChar.ToString()) ? "" : Path.DirectorySeparatorChar.ToString());
-                string file;
-                do
-                {
-                    file = path + fileName + ".jpg";
-                } while (File.Exists(file));
+                string file = path + fileName + ".jpg";
 
                 using (var stream = new FileStream(file, FileMode.Create))
                     stream.Write(saveData[0], 0, saveData[0].Length);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
