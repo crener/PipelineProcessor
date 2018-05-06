@@ -99,12 +99,6 @@ namespace PipelineProcessor2.Nodes.Internal
         {
             lock (updateLock)
             {
-                if (parallelism == 1)
-                {
-                    //staticData.StoreResults(,NodeId);
-                    return;
-                }
-
                 foreach (KeyValuePair<int, List<byte[]>> pair in data)
                 {
                     int slot = -1;

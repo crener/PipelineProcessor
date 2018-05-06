@@ -214,6 +214,32 @@ namespace PipelineProcessor2.Pipeline
         /// <param name="pipes">pipelines that will be filled with input data</param>
         private static void PrepareInputData(InputData[] inputData, PipelineExecutor[] pipes)
         {
+            if (specialNodes.SyncInformation.SyncNodes.Length == 0 ||
+                specialNodes.SyncInformation.NodeGroups.Select(group => group.Input).Any())
+                PrepareLinearInputData(inputData, pipes);
+
+            foreach (SyncSplitGroup group in specialNodes.SyncInformation.NodeGroups)
+            {
+                if (!group.Input) continue;
+
+                List<InputData> groupInputs = new List<InputData>();
+                foreach (InputData input in inputData)
+                {
+                    if (group.ControllingNodes.Contains(input.nodeId))
+                        groupInputs.Add(input);
+                }
+
+                PrepareLinearInputData(groupInputs.ToArray(), group.pipes);
+            }
+        }
+
+        /// <summary>
+        /// Takes input data and feeds it into pipelines without taking into account sync groups
+        /// </summary>
+        /// <param name="inputData">input plugins</param>
+        /// <param name="pipes">pipelines that will be filled with input data</param>
+        private static void PrepareLinearInputData(InputData[] inputData, PipelineExecutor[] pipes)
+        {
             foreach (InputData data in inputData)
             {
                 IEnumerable<List<byte[]>> enumerable = data.plugin.RetrieveData(NodeValueOrInput(data.nodeId));
@@ -228,7 +254,7 @@ namespace PipelineProcessor2.Pipeline
                 }
 
                 if (count != pipes.Length)
-                    throw new InvalidDataException("Premature end of data from " + data.nodeId + ", " + data.plugin.Name + "!!");
+                    throw new InvalidDataException("Premature end of data from node " + data.nodeId + ", " + data.plugin.Name + "!!");
             }
         }
 

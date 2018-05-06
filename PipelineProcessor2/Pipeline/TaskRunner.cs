@@ -102,7 +102,14 @@ namespace PipelineProcessor2.Pipeline
                     List<byte[]> syncData = staticData.getSyncData(id);
                     if (syncData != null)
                     {
-                        //add the sync data to the input data
+                        if (syncData.Count == 1 && !plugin.InputType(id.SlotPos).Contains("[]"))
+                        {
+                            //adapt sync data to a node with no expectation of array data
+                            input.Add(syncData[0]);
+                            continue;
+                        }
+
+                        //arrange sync node data into an array for input
                         input.Add(BitConverter.GetBytes(syncData.Count));
 
                         foreach (byte[] bytes in syncData)

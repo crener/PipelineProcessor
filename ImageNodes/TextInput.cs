@@ -36,7 +36,7 @@ namespace ImageNodes
 
         public IEnumerable<List<byte[]>> RetrieveData(string path)
         {
-            if (!Directory.Exists(path)) yield break;
+            if (!File.Exists(path)) yield break;
 
             using (StreamReader text = new StreamReader(new FileStream(path, FileMode.Open)))
             {
@@ -52,19 +52,17 @@ namespace ImageNodes
 
         public int InputDataQuantity(string path)
         {
-            if (!Directory.Exists(path)) return 0;
-            if (isValid(path)) return 0;
+            if (!File.Exists(path) || !path.EndsWith(".txt"))
+            {
+                Console.WriteLine("Text input found no valid data at: " + path);
+                return 0;
+            }
 
             int count = 0;
             using (StreamReader text = new StreamReader(new FileStream(path, FileMode.Open)))
                 while (text.ReadLine() != null) count++;
 
             return count;
-        }
-
-        private bool isValid(string file)
-        {
-            return file.EndsWith(".txt");
         }
     }
 }
