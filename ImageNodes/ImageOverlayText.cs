@@ -26,7 +26,6 @@ namespace ImageNodes
         public string OutputName(int slot)
         {
             if (slot == 0) return "Image";
-            if (slot == 0) return "Overlay text";
             return "";
         }
 
@@ -40,7 +39,7 @@ namespace ImageNodes
         public string InputName(int slot)
         {
             if (slot == 0) return "image";
-            if (slot == 0) return "text";
+            if (slot == 1) return "text";
             return "";
         }
         #endregion
