@@ -45,7 +45,6 @@
     <Compile Include="IOutputPlugin.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IProcessPlugin.cs" />
-    <Compile Include="IRawPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
