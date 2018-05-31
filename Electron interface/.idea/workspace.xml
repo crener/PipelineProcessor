@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3ecbc4fb-aa2d-486e-8865-1c1ba82ad701" name="Default" comment="more example projects">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Loop to sync image blend.proj" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Loop Example.proj" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Basic Sync.proj" afterPath="$PROJECT_DIR$/Basic Sync.proj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Lib/litegraph.js" afterPath="$PROJECT_DIR$/app/Lib/litegraph.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Sync Additional Input.proj" afterPath="$PROJECT_DIR$/Sync Additional Input.proj" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <ignored mask="*.tlog" />
+    <ignored mask="*.idb" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="graphSetup.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/js/litegraph/graphSetup.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="425">
+              <caret line="25" column="67" lean-forward="false" selection-start-line="25" selection-start-column="67" selection-end-line="25" selection-end-column="67" />
+              <folding>
+                <marker date="1525540473051" expanded="true" signature="357:426" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NodeSync.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/js/NodeSync.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="918">
+              <caret line="54" column="19" lean-forward="true" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>load-progress-empty.png</find>
+      <find>png</find>
+      <find>audio</find>
+      <find>Input</find>
+      <find>graph</find>
+      <find>graph&quot;</find>
+      <find>&quot;graph/</find>
+      <find>LGraphNode</find>
+      <find>context</find>
+      <find>categories</find>
+      <find>createNode</find>
+      <find>add</find>
+      <find>this.root</find>
+      <find>resize</find>
+      <find>80</find>
+      <find>onShowMenuNodeProperties</find>
+      <find>collapse</find>
+      <find>click</find>
+      <find>highlight</find>
+      <find>selected</find>
+      <find>selected =</find>
+      <find>drawNode</find>
+      <find>registered_node_types</find>
+      <find>LGraphCanvas</find>
+      <find>addLoadCounter</find>
+      <find>title</find>
+      <find>onSelected</find>
+      <find>draw()</find>
+      <find>value</find>
+      <find>background</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/index.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/css/nodeEditorStyle.css" />
+        <option value="$PROJECT_DIR$/function/editor/editor-core.js" />
+        <option value="$PROJECT_DIR$/windows/index.html" />
+        <option value="$PROJECT_DIR$/function/editor/nodeEditorCore.js" />
+        <option value="$PROJECT_DIR$/function/litegraph/graphSetup.js" />
+        <option value="$PROJECT_DIR$/generic/litegraph/graph2.js" />
+        <option value="$PROJECT_DIR$/Lib/litegraph-editor.js" />
+        <option value="$PROJECT_DIR$/generic/litegraph/graphSetup.js" />
+        <option value="$PROJECT_DIR$/windows/editor.html" />
+        <option value="$PROJECT_DIR$/generic/litegraph/demoTypes.js" />
+        <option value="$PROJECT_DIR$/generic/SettingPane/settingExplorer.js" />
+        <option value="$PROJECT_DIR$/css/editorStyle.css" />
+        <option value="$PROJECT_DIR$/generic/settingPane/settingExplorer.js" />
+        <option value="$PROJECT_DIR$/binding.gyp" />
+        <option value="$PROJECT_DIR$/cpp/WebInterconnect/main.cpp" />
+        <option value="$PROJECT_DIR$/cpp/WebInterconnect/Responses/ActivePluginResponse.h" />
+        <option value="/Dummy.txt" />
+        <option value="$PROJECT_DIR$/js/staticTypes.js" />
+        <option value="$PROJECT_DIR$/css/litegraph-editor.css" />
+        <option value="$PROJECT_DIR$/js/settingPane/settingExplorer.js" />
+        <option value="$PROJECT_DIR$/windows/liteGraphEditor.html" />
+        <option value="$PROJECT_DIR$/js/NodeSync.js" />
+        <option value="$PROJECT_DIR$/Lib/litegraph.js" />
+        <option value="$PROJECT_DIR$/js/litegraph/graphSetup.js" />
+        <option value="$PROJECT_DIR$/js/NodeValue.js" />
+        <option value="$PROJECT_DIR$/main.js" />
+        <option value="$PROJECT_DIR$/app/package.json" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/app/windows/liteGraphEditor.html" />
+        <option value="$PROJECT_DIR$/app/main.js" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/app/js/litegraph/graphSetup.js" />
+        <option value="$PROJECT_DIR$/app/js/NodeValue.js" />
+        <option value="$PROJECT_DIR$/app/css/litegraph-editor.css" />
+        <option value="$PROJECT_DIR$/app/Lib/litegraph.js" />
+        <option value="$PROJECT_DIR$/app/js/NodeSync.js" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/node_modules" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1680" />
+    <option name="y" value="33" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Electron interface" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Electron interface" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Electron interface" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Electron interface" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Electron interface" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Electron interface" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Electron interface" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Electron interface" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="litegraph" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path" value="D:/Program Files/nodejs/node" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/node_modules/.bin/electron-packager.cmd" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="add_unversioned_files" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\app" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\css" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\Lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\app" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\js" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\Lib" />
+      <recent name="C:\Users\User\WebstormProjects\ElectronPipeline\function\editor" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Node.js.Start Electron">
+    <configuration name="Compile cpp" type="NodeJSConfigurationType" factoryName="Node.js" singleton="false" path-to-node="$PROJECT_DIR$/node_modules/.bin/node-gyp.cmd" node-parameters="clean configure build" working-dir="$PROJECT_DIR$">
+      <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">
+        <option name="envVars">
+          <list />
+        </option>
+        <option name="extraHosts">
+          <list />
+        </option>
+        <option name="links">
+          <list />
+        </option>
+        <option name="networkDisabled" value="false" />
+        <option name="networkMode" value="bridge" />
+        <option name="portBindings">
+          <list />
+        </option>
+        <option name="publishAllPorts" value="false" />
+        <option name="version" value="1" />
+        <option name="volumeBindings">
+          <list />
+        </option>
+      </EXTENSION>
+    </configuration>
+    <configuration name="Package" type="NodeJSConfigurationType" factoryName="Node.js" singleton="false" path-to-node="$PROJECT_DIR$/node_modules/.bin/electron-packager.cmd" node-parameters=". --overwrite" working-dir="$PROJECT_DIR$">
+      <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">
+        <option name="envVars">
+          <list />
+        </option>
+        <option name="extraHosts">
+          <list />
+        </option>
+        <option name="links">
+          <list />
+        </option>
+        <option name="networkDisabled" value="false" />
+        <option name="networkMode" value="bridge" />
+        <option name="portBindings">
+          <list />
+        </option>
+        <option name="publishAllPorts" value="false" />
+        <option name="version" value="1" />
+        <option name="volumeBindings">
+          <list />
+        </option>
+      </EXTENSION>
+    </configuration>
+    <configuration name="Rebuild for new Package" type="NodeJSConfigurationType" factoryName="Node.js" singleton="false" path-to-node="$PROJECT_DIR$/node_modules/.bin/electron-rebuild.cmd" working-dir="$PROJECT_DIR$">
+      <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">
+        <option name="envVars">
+          <list />
+        </option>
+        <option name="extraHosts">
+          <list />
+        </option>
+        <option name="links">
+          <list />
+        </option>
+        <option name="networkDisabled" value="false" />
+        <option name="networkMode" value="bridge" />
+        <option name="portBindings">
+          <list />
+        </option>
+        <option name="publishAllPorts" value="false" />
+        <option name="version" value="1" />
+        <option name="volumeBindings">
+          <list />
+        </option>
+      </EXTENSION>
+      <method>
+        <option name="RunConfigurationTask" enabled="true" run_configuration_name="Compile cpp" run_configuration_type="NodeJSConfigurationType" />
+      </method>
+    </configuration>
+    <configuration name="Start Electron" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="$PROJECT_DIR$/node_modules/.bin/electron.cmd" path-to-js-file="app/main.js" working-dir="$PROJECT_DIR$">
+      <EXTENSION ID="com.jetbrains.nodejs.remote.docker.NodeJSDockerRunConfigurationExtension">
+        <option name="envVars">
+          <list />
+        </option>
+        <option name="extraHosts">
+          <list />
+        </option>
+        <option name="links">
+          <list />
+        </option>
+        <option name="networkDisabled" value="false" />
+        <option name="networkMode" value="bridge" />
+        <option name="portBindings">
+          <list />
+        </option>
+        <option name="publishAllPorts" value="false" />
+        <option name="version" value="1" />
+        <option name="volumeBindings">
+          <list />
+        </option>
+      </EXTENSION>
+    </configuration>
+    <list size="4">
+      <item index="0" class="java.lang.String" itemvalue="Node.js.Start Electron" />
+      <item index="1" class="java.lang.String" itemvalue="Node.js.Package" />
+      <item index="2" class="java.lang.String" itemvalue="Node.js.Rebuild for new Package" />
+      <item index="3" class="java.lang.String" itemvalue="Node.js.Compile cpp" />
+    </list>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3ecbc4fb-aa2d-486e-8865-1c1ba82ad701" name="Default" comment="" />
+      <created>1509198516643</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1509198516643</updated>
+      <workItem from="1509198517820" duration="18780000" />
+      <workItem from="1509285608159" duration="9750000" />
+      <workItem from="1509366593844" duration="223000" />
+      <workItem from="1509379265685" duration="14828000" />
+      <workItem from="1509457750694" duration="105000" />
+      <workItem from="1509802250949" duration="20624000" />
+      <workItem from="1509887767700" duration="9959000" />
+      <workItem from="1509924092284" duration="2428000" />
+      <workItem from="1509977024870" duration="17738000" />
+      <workItem from="1510051537624" duration="598000" />
+      <workItem from="1510506637643" duration="2384000" />
+      <workItem from="1510515302540" duration="12701000" />
+      <workItem from="1510583979385" duration="1771000" />
+      <workItem from="1510595999729" duration="2094000" />
+      <workItem from="1510598904627" duration="7089000" />
+      <workItem from="1510614071433" duration="3247000" />
+      <workItem from="1510928412301" duration="5780000" />
+      <workItem from="1511027575878" duration="4166000" />
+      <workItem from="1511034934166" duration="8076000" />
+      <workItem from="1511202613474" duration="206000" />
+      <workItem from="1511816958558" duration="3945000" />
+      <workItem from="1512229496669" duration="2833000" />
+      <workItem from="1512341794130" duration="1917000" />
+      <workItem from="1512400608982" duration="1802000" />
+      <workItem from="1512477228336" duration="5806000" />
+      <workItem from="1513007929311" duration="1807000" />
+      <workItem from="1513359692782" duration="1457000" />
+      <workItem from="1515937884535" duration="1203000" />
+      <workItem from="1516064852684" duration="2483000" />
+      <workItem from="1516139315077" duration="1868000" />
+      <workItem from="1517075638848" duration="1222000" />
+      <workItem from="1517272275137" duration="623000" />
+      <workItem from="1517344079751" duration="292000" />
+      <workItem from="1517668749286" duration="4429000" />
+      <workItem from="1517782883565" duration="599000" />
+      <workItem from="1517846399624" duration="648000" />
+      <workItem from="1518218944865" duration="73000" />
+      <workItem from="1518280612401" duration="1198000" />
+      <workItem from="1518367025617" duration="1884000" />
+      <workItem from="1518434810470" duration="1861000" />
+      <workItem from="1518883917114" duration="1198000" />
+      <workItem from="1518971384510" duration="1307000" />
+      <workItem from="1519050848982" duration="3105000" />
+      <workItem from="1519255600515" duration="107000" />
+      <workItem from="1519576754693" duration="603000" />
+      <workItem from="1519653656109" duration="2042000" />
+      <workItem from="1520014217129" duration="832000" />
+      <workItem from="1520775807881" duration="1632000" />
+      <workItem from="1520979699179" duration="66000" />
+      <workItem from="1521385854780" duration="1516000" />
+      <workItem from="1521817395340" duration="893000" />
+      <workItem from="1521979314663" duration="8217000" />
+      <workItem from="1522085852658" duration="18416000" />
+      <workItem from="1522118569463" duration="7898000" />
+      <workItem from="1522174883964" duration="7206000" />
+      <workItem from="1523893029896" duration="1240000" />
+      <workItem from="1524532086671" duration="7760000" />
+      <workItem from="1525117458113" duration="874000" />
+      <workItem from="1525120009848" duration="772000" />
+      <workItem from="1525529994009" duration="5208000" />
+      <workItem from="1525617326299" duration="3331000" />
+      <workItem from="1527010313844" duration="2948000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial basic electron project">
+      <created>1509205097962</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1509205097963</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added liteGraph node library and made small demo">
+      <created>1509403236917</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1509403236917</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added ability to add graphs based on a json item rather than having to define an object, Fixed full screen button so it can exit full screen">
+      <created>1509837325212</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1509837325212</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixed the window scaling issue">
+      <created>1509905003691</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1509905003691</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added small icons into the expand buttons of a node, added section to the left of the nodes which will show settings in the future">
+      <created>1509990549194</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1509990549194</updated>
+    </task>
+    <task id="LOCAL-00006" summary="added info section on the left to show the setting of nodes">
+      <created>1510013379107</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1510013379107</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Got the JS to retrieve data from the C++">
+      <created>1510544959954</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1510544959954</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Setup a basic Http server in C++ in order to serve data to the">
+      <created>1510951739258</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1510951739258</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Setup a basic Http server in C++ in order to serve data to the front end. Also added POCO c++ library and json library">
+      <created>1510955637591</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1510955637591</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added node loading from C++ with basic example working">
+      <created>1511056080857</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1511056080857</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added plugin load code, Added data source and destination fields to front end">
+      <created>1512231420620</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1512231420623</updated>
+    </task>
+    <task id="LOCAL-00012" summary="C++ plugin-in intergration">
+      <created>1513360546471</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1513360546471</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added special node types">
+      <created>1517878056113</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1517878056113</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added loop limit node type">
+      <created>1518484980045</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1518484980045</updated>
+    </task>
+    <task id="LOCAL-00015" summary="updated the loop types as loop limit is now redundant">
+      <created>1518994573330</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1518994573330</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Added sync node to special plugins">
+      <created>1520776751319</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1520776751319</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Added project load and save">
+      <created>1522026371981</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1522026371981</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Change generator values in front end, fixed play bug where it would save instead">
+      <created>1522110052205</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1522110052206</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Removed legacy c++ code">
+      <created>1522110080239</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1522110080239</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Minor cleanup">
+      <created>1522127301440</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1522127301440</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Moved code and resource files so code can be packaged">
+      <created>1522175708505</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1522175708505</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Moved package.json">
+      <created>1522176739976</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1522176739976</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Packaging working">
+      <created>1522179693987</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1522179693987</updated>
+    </task>
+    <task id="LOCAL-00024" summary="App starts server if in same directory">
+      <created>1522180924182</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1522180924182</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Added console to builds. new project example">
+      <created>1525076978941</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1525076978941</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Minor fix for directory override getting the correct value">
+      <created>1525628004752</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1525628004752</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="257798000" />
+  </component>
+  <component name="TodoView" selected-index="4">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24973656" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14673913" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17065218" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24347825" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14891304" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934782" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18018967" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19673914" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11169652" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17179215" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24390244" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12407211" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18020834" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32979852" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17179215" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <MESSAGE value="Added ability to add graphs based on a json item rather than having to define an object, Fixed full screen button so it can exit full screen" />
+    <MESSAGE value="Fixed the window scaling issue" />
+    <MESSAGE value="Added small icons into the expand buttons of a node, added section to the left of the nodes which will show settings in the future" />
+    <MESSAGE value="added info section on the left to show the setting of nodes" />
+    <MESSAGE value="Got the JS to retrieve data from the C++" />
+    <MESSAGE value="Setup a basic Http server in C++ in order to serve data to the" />
+    <MESSAGE value="Setup a basic Http server in C++ in order to serve data to the front end. Also added POCO c++ library and json library" />
+    <MESSAGE value="Added node loading from C++ with basic example working" />
+    <MESSAGE value="Added plugin load code, Added data source and destination fields to front end" />
+    <MESSAGE value="C++ plugin-in intergration" />
+    <MESSAGE value="Added special node types" />
+    <MESSAGE value="Added loop limit node type" />
+    <MESSAGE value="updated the loop types as loop limit is now redundant" />
+    <MESSAGE value="Added sync node to special plugins" />
+    <MESSAGE value="Added project load and save" />
+    <MESSAGE value="Change generator values in front end, fixed play bug where it would save instead" />
+    <MESSAGE value="Removed legacy c++ code" />
+    <MESSAGE value="Minor cleanup" />
+    <MESSAGE value="Moved code and resource files so code can be packaged" />
+    <MESSAGE value="Moved package.json" />
+    <MESSAGE value="Packaging working" />
+    <MESSAGE value="App starts server if in same directory" />
+    <MESSAGE value="Added console to builds. new project example" />
+    <MESSAGE value="Minor fix for directory override getting the correct value" />
+    <MESSAGE value="more example projects" />
+    <option name="LAST_COMMIT_MESSAGE" value="more example projects" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="12" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/cpp/lib/poco/PocoXMLd.lib" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/CL.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/CL.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link-cvtres.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link-cvtres.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link-rc.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link-rc.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link.command.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/NodeInterconnect/x64/Debug/NodeInterconnect.tlog/link.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/PipelineProcessor/include/PluginImporter.h" />
+    <entry file="file://$PROJECT_DIR$/cpp/PipelineProcessor/plugin/PluginImporter.cpp" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/main.obj" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/vc140.idb" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/vc140.pdb" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.log" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/CL.command.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/CL.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/CL.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/link.command.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/link.read.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/link.write.1.tlog" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/x64/Debug/WebInterconnect.tlog/WebInterconnect.lastbuildstate" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/Responses/ActivePluginResponse.cpp" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/Responses/ActivePluginResponse.h" />
+    <entry file="file://$PROJECT_DIR$/cpp/WebInterconnect/main.cpp" />
+    <entry file="file://$PROJECT_DIR$/app/js/litegraph/imgs/icon-play.png" />
+    <entry file="file://$PROJECT_DIR$/js/litegraph/demoTypes.js" />
+    <entry file="file://$PROJECT_DIR$/../NewKrugerSite/node_modules/browser-sync/dist/server/snippet-server.js" />
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DOMCore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="292" column="0" lean-forward="false" selection-start-line="292" selection-start-column="0" selection-end-line="292" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/windows/liteGraphEditor.html" />
+    <entry file="file://$PROJECT_DIR$/Loop Example.proj" />
+    <entry file="file://$PROJECT_DIR$/package.json" />
+    <entry file="file://$PROJECT_DIR$/app/renderer.js" />
+    <entry file="file://$PROJECT_DIR$/app/main.js" />
+    <entry file="file://$PROJECT_DIR$/.gitattributes" />
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="32" lean-forward="false" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.git/info/exclude" />
+    <entry file="file://$PROJECT_DIR$/app/package.json" />
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/staticTypes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore" />
+    <entry file="file://H:/FYP-FINAL/Frontend/resources/app/app/js/NodeSync.js" />
+    <entry file="file://$PROJECT_DIR$/app/windows/liteGraphEditor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="7" lean-forward="false" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/css/litegraph-editor.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="73" column="22" lean-forward="true" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/NodeValue.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="35" lean-forward="false" selection-start-line="4" selection-start-column="35" selection-end-line="4" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Lib/litegraph.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="3865" column="33" lean-forward="false" selection-start-line="3865" selection-start-column="23" selection-end-line="3865" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/litegraph/imgs/grid.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/litegraph/graphSetup.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="67" lean-forward="false" selection-start-line="25" selection-start-column="67" selection-end-line="25" selection-end-column="67" />
+          <folding>
+            <marker date="1525540473051" expanded="true" signature="357:426" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/js/NodeSync.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="54" column="19" lean-forward="true" selection-start-line="54" selection-start-column="19" selection-end-line="54" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

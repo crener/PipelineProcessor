@@ -36,8 +36,11 @@ namespace PipelineProcessor2.Server
 
         public string BuildResponse(HttpListenerRequest request)
         {
-            if (responses.ContainsKey(request.RawUrl))
-                return responses[request.RawUrl].Response(request);
+            const int apiUrlPartLength = 4; // "/api".Length
+
+            string queryRequest = request.Url.LocalPath.Remove(0, apiUrlPartLength);
+            if (responses.ContainsKey(queryRequest))
+                return responses[queryRequest].Response(request);
 
             throw new ResponseNotFoundException();
         }

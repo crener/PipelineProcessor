@@ -1,0 +1,34 @@
+.infoPane {
+    display: inline-block;
+    vertical-align: top;
+
+    width: 200px;
+    height: 100%;
+}
+
+#editor {
+    display: inline-block;
+    width: calc(100% - 205px); /*205 comes from .infoPane -> width + 5*/
+}
+
+#setting h4 {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+#setting.field {
+    padding: 10px 0;
+    margin-right: 5px;
+}
+
+#setting .field div {
+    float: left;
+    max-width: 150px;
+    min-width: 50px;
+}
+
+#setting .field input {
+    float: right;
+    display: inline-block;
+    max-width: 146px;
+}
