@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lite Graph Editor</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/litegraph.css">
+    <link rel="stylesheet" type="text/css" href="../css/litegraph-editor.css">
+    <link rel="stylesheet" type="text/css" href="../css/editorStyle.css">
+
+    <style>
+        body {
+            background-color: #DDD;
+        }
+    </style>
+
+</head>
+<body>
+<div id="editor" style="width: 100%"></div>
+
+<!--Graph setup-->
+<script type="text/javascript" src="../Lib/litegraph.js"></script>
+<script type="text/javascript" src="../js/litegraph/graphSetup.js"></script>
+<script type="text/javascript" src="../js/NodeValue.js"></script>
+<script type="text/javascript" src="../js/NodeSync.js"></script>
+
+<script>
+    var editor = new LiteGraph.Editor("editor");
+    window.graphcanvas = editor.graphcanvas;
+    window.graph = editor.graph;
+    window.addEventListener("resize", function () {
+        editor.graphcanvas.resize();
+    });
+</script>
+<script>
+    document.addEventListener("keydown", function (e) {
+        if (e.which === 123) {
+            require('electron-debug')({ enabled: true, showDevTools: 'right' });
+        } else if (e.which === 116) {
+            location.reload();
+        }
+    });
+</script>
+
+<!--demo type setup-->
+<script type="text/javascript" src="../js/staticTypes.js"></script>
+</body>
+</html>
