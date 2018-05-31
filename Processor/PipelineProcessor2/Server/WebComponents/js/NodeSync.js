@@ -8,7 +8,7 @@ var updateNodes = function () {
     if (fetchingNodes) return;
     fetchingNodes = true;
 
-    rp("http://" + address + ":9980/nodes")
+    rp("http://" + address + ":9980/api/nodes")
         .then(function (result) {
             fetchingNodes = false;
             var cppNodes = JSON.parse(result);
@@ -53,7 +53,7 @@ var updateNodeGraph = function () {
 
     var options = {
         method: 'POST',
-        uri: "http://" + address + ":9980/graph/update",
+        uri: "http://" + address + ":9980/api/graph/update",
         body: returnData,
         json: true // Automatically stringifies the body to JSON
     };
